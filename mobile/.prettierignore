@@ -5,3 +5,5 @@ ios/
 coverage/
 package-lock.json
 src/services/api/schema.d.ts
+src/theme/tokens.generated.ts
+src/theme/tokens.generated.json

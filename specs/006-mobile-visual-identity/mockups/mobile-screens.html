@@ -1,0 +1,604 @@
+<title>Maquetas de ChePagame</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Inter:wght@400;500;600&family=Outfit:wght@600;700&family=Sora:wght@600;700&display=swap">
+<style>
+/* Layout: control bar on top, then one block per screen with the light and dark phones side by side. */
+:root {
+  --bg:#F2F4F6; --fg:#16202A; --muted:#566370; --line:#D9E0E6; --panel:#FFFFFF; --sel:#0B6FA8;
+  --page-font:"Inter","Segoe UI",system-ui,sans-serif; --brand:"Sora",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#10161C; --fg:#E7ECF0; --muted:#9FADB9; --line:#2A3540; --panel:#18212A; --sel:#6CC4F2; color-scheme:dark } }
+:root[data-theme="dark"] { --bg:#10161C; --fg:#E7ECF0; --muted:#9FADB9; --line:#2A3540; --panel:#18212A; --sel:#6CC4F2; color-scheme:dark }
+body { background:var(--bg); color:var(--fg); font-family:var(--page-font); font-size:15px; line-height:1.5; }
+.page[data-font="sora"] { --brand:"Sora",system-ui,sans-serif; }
+.page[data-font="outfit"] { --brand:"Outfit",system-ui,sans-serif; }
+.page[data-font="bricolage"] { --brand:"Bricolage Grotesque",system-ui,sans-serif; }
+.wrap { max-width:1180px; margin:0 auto; padding-block:32px 72px; padding-left:max(16px, env(safe-area-inset-left,0px)); padding-right:max(16px, env(safe-area-inset-right,0px)); display:grid; gap:40px; }
+.intro { display:grid; gap:10px; max-width:70ch; }
+.eyebrow-page { font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:600; }
+h1 { font:700 clamp(28px,4.4vw,40px)/1.1 var(--brand); margin:0; text-wrap:balance; }
+.intro p { margin:0; color:var(--muted); }
+.controls { position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--bg); padding-block:12px; border-bottom:1px solid var(--line); display:flex; flex-wrap:wrap; gap:12px 20px; align-items:center; }
+body::before { content:""; position:fixed; inset:0 0 auto; height:env(safe-area-inset-top,0px); z-index:10; background:var(--bg); }
+.controls fieldset { border:0; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+.controls legend { float:left; margin-right:8px; font-weight:600; font-size:13px; }
+.controls label { display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border:1px solid var(--line); border-radius:999px; background:var(--panel); cursor:pointer; font-size:14px; }
+.controls input { accent-color:var(--sel); }
+.controls label:has(input:checked) { border-color:var(--sel); box-shadow:inset 0 0 0 1px var(--sel); }
+.controls label:focus-within { outline:2px solid var(--sel); outline-offset:2px; }
+.toc { display:flex; flex-wrap:wrap; gap:6px 14px; font-size:13px; }
+.toc a { color:var(--fg); }
+.block { display:grid; gap:14px; }
+.block > h2, .logos > h2, .scale > h2 { font:700 22px/1.2 var(--brand); margin:0; }
+.block-note { margin:0; color:var(--muted); max-width:70ch; }
+.pair { display:flex; flex-wrap:wrap; gap:20px; }
+.ph-fig { margin:0; display:grid; gap:8px; justify-items:center; flex:0 1 330px; min-width:0; }
+.ph-fig figcaption { font-size:13px; color:var(--muted); }
+/* Phone */
+.phone { width:min(330px,100%); height:690px; border-radius:34px; background:var(--background); color:var(--text); border:1px solid var(--line); overflow:hidden; display:flex; flex-direction:column; box-shadow:0 18px 40px -26px rgba(0,0,0,.55); font-family:system-ui,"Segoe UI",Roboto,sans-serif; font-size:calc(14px * var(--scale)); line-height:1.4; }
+.status { display:flex; justify-content:space-between; padding:10px 22px 4px; font-size:12px; color:var(--text-muted); }
+.screen { flex:1; overflow:hidden; padding:8px 16px 12px; display:flex; flex-direction:column; gap:12px; }
+.no-tabs .screen { padding-bottom:16px; }
+.phone b { font-weight:600; }
+.phone small { display:block; font-size:.86em; }
+.muted { color:var(--text-muted); } .center { text-align:center; } .grow { flex:1; min-width:0; }
+.warn { color:var(--warning); font-weight:600; }
+.link { color:var(--primary); font-weight:600; }
+.h-display { font:700 calc(28px * var(--scale))/1.15 var(--brand); margin:0; }
+.h-title { font:600 calc(17px * var(--scale))/1.25 var(--brand); margin:0; }
+.num, .num-lg { font-family:var(--brand); font-variant-numeric:tabular-nums; white-space:nowrap; }
+.num-lg { font-size:1.6em; font-weight:700; display:block; }
+.top { display:grid; gap:0; } .top p { margin:0; }
+.ic { width:22px; height:22px; flex:none; } .ic.sm { width:18px; height:18px; } .ic.xs { width:14px; height:14px; } .rot { transform:rotate(90deg); margin-left:auto; }
+/* Cards and rows */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:14px; }
+.card.list > * + * { border-top:1px solid var(--border); }
+.card.pad { padding:12px; display:grid; gap:10px; }
+.acc, .exp, .row { display:flex; align-items:center; gap:10px; padding:11px 12px; min-height:48px; }
+.acc .grow b, .exp .grow b { display:block; overflow:hidden; text-overflow:ellipsis; }
+.acc-ic, .cat { width:38px; height:38px; border-radius:12px; display:grid; place-items:center; background:var(--primary-soft); color:var(--primary); flex:none; }
+.badge { display:inline-block; font-size:.78em; padding:0 6px; border-radius:6px; border:1px solid var(--control-border); color:var(--text-muted); }
+.hero-card { background:var(--level2); border:1px solid var(--border); border-radius:18px; padding:14px; display:grid; gap:8px; }
+.eyebrow { margin:0; font-size:.78em; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); font-weight:600; }
+.hero-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(118px,1fr)); gap:10px; }
+.hero-row > div { min-width:0; }
+.hero-card .amt b { font-size:1.22em; }
+.amt { display:inline-flex; align-items:flex-start; gap:6px; font-family:var(--brand); font-variant-numeric:tabular-nums; }
+.amt small { color:var(--text-muted); font-family:system-ui,sans-serif; font-weight:500; }
+.amt b { display:block; font-weight:700; white-space:nowrap; }
+.amt.pos { color:var(--positive); } .amt.neg { color:var(--negative); } .amt.zero { color:var(--text-muted); }
+.amt .ic { margin-top:2px; }
+.sec-head { display:flex; justify-content:space-between; align-items:baseline; }
+/* Buttons and fields */
+.btn { display:flex; align-items:center; justify-content:center; gap:8px; min-height:48px; border-radius:999px; font-weight:600; padding:0 18px; }
+.btn.primary { background:var(--primary); color:var(--on-primary); }
+.btn.outlined { border:1px solid var(--control-border); color:var(--primary); }
+.btn.text { color:var(--primary); } .btn.danger { color:var(--negative); }
+.google { color:var(--text); } .g { font-family:var(--brand); color:var(--primary); font-size:1.15em; }
+.field { display:flex; flex-direction:column; gap:2px; border:1px solid var(--control-border); border-radius:8px; padding:7px 12px; min-height:48px; justify-content:center; background:var(--surface); }
+.field small { color:var(--text-muted); }
+.field.select { flex-direction:row; flex-wrap:wrap; align-items:center; column-gap:6px; }
+.field.select small { flex-basis:100%; }
+.field .ic { display:inline; vertical-align:-3px; }
+.field.big .num-lg { font-size:1.75em; }
+.label { margin:0; font-weight:600; font-size:.9em; }
+.chips, .cats { display:flex; flex-wrap:wrap; gap:8px; }
+.chip { display:inline-flex; align-items:center; gap:4px; min-height:36px; padding:0 12px; border-radius:8px; border:1px solid var(--control-border); }
+.chip.on { background:var(--accent); color:var(--on-accent); border-color:var(--accent); font-weight:600; }
+.catpick { width:48px; height:48px; border-radius:14px; display:grid; place-items:center; border:1px solid var(--border); color:var(--text-muted); }
+.catpick.on { background:var(--primary); color:var(--on-primary); border-color:var(--primary); }
+.sticky { margin-top:auto; padding-top:8px; }
+.seg, .seg3 { display:flex; border:1px solid var(--control-border); border-radius:999px; overflow:hidden; }
+.seg span, .seg3 span { flex:1; text-align:center; padding:9px 4px; min-height:40px; display:flex; align-items:center; justify-content:center; gap:4px; font-weight:500; }
+.seg span.on, .seg3 span.on { background:var(--accent); color:var(--on-accent); font-weight:700; }
+.seg3 span + span, .seg span + span { border-left:1px solid var(--control-border); }
+.bar { display:flex; align-items:center; gap:10px; }
+.bar .grow b { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.total { display:grid; justify-items:start; }
+.day { margin:0; font-size:.85em; color:var(--text-muted); font-weight:600; }
+.notice { display:flex; gap:8px; align-items:flex-start; padding:10px 12px; border-radius:12px; font-size:.92em; }
+.notice b { display:block; }
+.notice.warning { background:var(--warning-soft); color:var(--text); border:1px solid var(--warning); }
+.notice.warning .ic, .notice.warning b { color:var(--warning); }
+.fab { align-self:flex-end; margin-top:auto; display:inline-flex; align-items:center; gap:6px; min-height:52px; padding:0 18px; border-radius:16px; background:var(--primary); color:var(--on-primary); font-weight:700; box-shadow:0 6px 16px -6px rgba(0,0,0,.45); }
+.sug { padding:12px; display:grid; gap:8px; } .sug .row { padding:0; min-height:0; }
+.chip-acc { background:var(--accent); color:var(--on-accent); font-weight:700; font-size:.8em; padding:2px 10px; border-radius:999px; }
+.login { display:flex; flex-direction:column; gap:12px; padding-top:18px; }
+.login-brand { display:grid; justify-items:center; gap:6px; margin-bottom:6px; text-align:center; }
+.slogan { margin:0; color:var(--text-muted); font-weight:500; }
+.links { display:flex; flex-direction:column; align-items:center; gap:6px; margin:0; }
+.wm { font:700 calc(27px * var(--scale, 1))/1.1 var(--brand); color:var(--text); letter-spacing:-.015em; display:inline-flex; align-items:baseline; white-space:nowrap; }
+.wm-che { color:var(--primary); }
+.wm-tick { width:.78em; height:.78em; margin-left:.06em; transform:translateY(-.32em); flex:none; }
+.wm-hl { display:inline-flex; align-items:center; gap:.08em; background:var(--accent); color:var(--on-accent); padding:0 .2em 0 .16em; margin-left:.06em; border-radius:.22em; }
+.wm-tick-in { width:.62em; height:.62em; flex:none; }
+.wm-tag { background:var(--primary); color:var(--on-primary); padding:0 .18em; border-radius:.2em; margin-right:.08em; }
+.wm-under { position:relative; padding-bottom:.18em; }
+.wm-swoosh { position:absolute; left:0; right:-.25em; bottom:-.22em; width:calc(100% + .25em); height:.42em; }
+.ai { position:relative; width:100%; height:100%; border-radius:inherit; display:grid; place-items:center; font:700 19px/1 var(--brand); letter-spacing:-.02em; }
+.ai-a, .ai-c { background:var(--primary); color:var(--on-primary); }
+.ai-tick { position:absolute; top:7px; right:6px; width:17px; height:17px; }
+.ai-b { background:var(--primary); }
+.ai-hl { display:inline-flex; align-items:center; gap:2px; background:var(--accent); color:var(--on-accent); padding:3px 5px; border-radius:6px; font-size:16px; }
+.ai-tick-in { width:12px; height:12px; }
+.ai-c .ai-che { transform:translateY(-3px); }
+.ai-swoosh { position:absolute; left:10px; right:8px; bottom:11px; width:calc(100% - 18px); height:9px; }
+/* Tab bar */
+.tabs { display:flex; background:var(--surface); border-top:1px solid var(--border); padding:8px 6px 14px; }
+.tab { flex:1; display:grid; justify-items:center; gap:3px; min-height:56px; color:var(--text-muted); font-size:.82em; font-weight:500; }
+.pill { width:58px; height:30px; border-radius:999px; display:grid; place-items:center; }
+.tab.on { color:var(--text); font-weight:700; }
+.tab.on .pill { background:var(--accent); color:var(--on-accent); }
+/* Logos */
+.logos { display:grid; gap:14px; }
+.logo-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; }
+.logo-card { background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:16px; display:grid; gap:10px; min-width:0; }
+.logo-card h3 { margin:0; font:700 18px/1.2 var(--brand); }
+.logo-idea { margin:0; color:var(--muted); font-size:14px; }
+.logo-modes { display:grid; gap:8px; }
+.logo-tile { display:flex; align-items:center; justify-content:center; gap:10px; padding:20px 14px; border-radius:12px; background:var(--background); border:1px solid var(--border); }
+.icons-row { display:flex; flex-wrap:wrap; align-items:center; gap:12px; font-size:12px; color:var(--muted); }
+.app-icon { width:60px; height:60px; border-radius:14px; display:grid; place-items:center; overflow:hidden; border:1px solid var(--border); flex:none; }
+.app-icon.round { border-radius:50%; }
+.app-icon.mono { border-radius:50%; background:var(--surface-variant); filter:grayscale(1) contrast(1.4); }
+.scale .pair { align-items:flex-start; }
+.scale .phone { height:auto; min-height:690px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior:auto !important; } }
+</style>
+<div class="page" data-font="sora">
+<main class="wrap">
+  <header class="intro">
+    <span class="eyebrow-page">Feature 006 · para aprobar</span>
+    <h1>Maquetas de la App ChePagame</h1>
+    <p>Pantallas clave con la paleta Celeste y sol en modo claro y oscuro, con la barra inferior. Elegí arriba la tipografía para títulos e importes; el texto corrido es la fuente del sistema del teléfono. Abajo están las tres propuestas de logo y el Dashboard y Saldos con el texto al 150%.</p>
+    <p>Los datos son de ejemplo.</p>
+  </header>
+  <div class="controls">
+    <fieldset>
+      <legend>Tipografía</legend>
+      <label for="font-sora"><input type="radio" id="font-sora" name="font" value="sora" checked> Sora</label><label for="font-outfit"><input type="radio" id="font-outfit" name="font" value="outfit"> Outfit</label><label for="font-bricolage"><input type="radio" id="font-bricolage" name="font" value="bricolage"> Bricolage Grotesque</label>
+    </fieldset>
+    <nav class="toc" aria-label="Secciones"><a href="#scr-login">Login</a><a href="#scr-dashboard">Dashboard</a><a href="#scr-expenses">Cuenta · Gastos</a><a href="#scr-balances">Cuenta · Saldos</a><a href="#scr-form">Formulario de gasto</a><a href="#scr-profile">Perfil</a><a href="#logos">Logo</a><a href="#scale">Texto 150%</a></nav>
+  </div>
+  
+  <section class="block" id="scr-login" aria-labelledby="h-login">
+    <h2 id="h-login">Login</h2>
+    <div class="pair">
+  <figure class="ph-fig">
+    <div class="phone no-tabs" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb;--scale:1" role="img" aria-label="Login, modo claro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <div class="login">
+      <div class="login-brand"><span class="wm wa"><span class="wm-che">Che</span>Pagame<svg class="wm-tick" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span><p class="slogan">Para que la guita no sea un problema</p></div>
+      <span class="btn outlined google"><b class="g">G</b> Entrar con Google</span>
+      <p class="muted center">o usá tu email</p>
+      <span class="field"><small>Email</small>ana@mail.com</span>
+      <span class="field"><small>Contraseña</small>••••••••••</span>
+      <span class="btn primary">Entrar</span>
+      <p class="links"><span class="link">Entrar con un código por email</span><span class="link">Olvidé mi contraseña</span></p>
+      <p class="muted center">¿No tenés cuenta? <span class="link">Registrate</span></p>
+    </div></div>
+      
+    </div>
+    <figcaption>Claro</figcaption>
+  </figure>
+  <figure class="ph-fig">
+    <div class="phone no-tabs" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f;--scale:1" role="img" aria-label="Login, modo oscuro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <div class="login">
+      <div class="login-brand"><span class="wm wa"><span class="wm-che">Che</span>Pagame<svg class="wm-tick" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span><p class="slogan">Para que la guita no sea un problema</p></div>
+      <span class="btn outlined google"><b class="g">G</b> Entrar con Google</span>
+      <p class="muted center">o usá tu email</p>
+      <span class="field"><small>Email</small>ana@mail.com</span>
+      <span class="field"><small>Contraseña</small>••••••••••</span>
+      <span class="btn primary">Entrar</span>
+      <p class="links"><span class="link">Entrar con un código por email</span><span class="link">Olvidé mi contraseña</span></p>
+      <p class="muted center">¿No tenés cuenta? <span class="link">Registrate</span></p>
+    </div></div>
+      
+    </div>
+    <figcaption>Oscuro</figcaption>
+  </figure></div>
+  </section>
+  <section class="block" id="scr-dashboard" aria-labelledby="h-dashboard">
+    <h2 id="h-dashboard">Dashboard</h2>
+    <div class="pair">
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb;--scale:1" role="img" aria-label="Dashboard, modo claro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="top"><p class="muted">Hola,</p><h3 class="h-display">Ana</h3></header>
+    <section class="hero-card">
+      <p class="eyebrow">Tus saldos</p>
+      <div class="hero-row">
+        <div><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Te deben</small><b>$ 58.450,50</b></span></span></div>
+        <div><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debés</small><b>US$ 120,00</b></span></span></div>
+      </div>
+    </section>
+    <div class="sec-head"><h4 class="h-title">Tus Cuentas</h4><span class="link">Ver todas</span></div>
+    <div class="card list">
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg></span><span class="grow"><b>Vacaciones en Bariloche</b><small class="muted">ARS · 3 participantes</small></span><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><b>+ $ 58.450,50</b></span></span></div>
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="grow"><b>Depto Palermo</b><small class="muted">USD · 2 participantes</small></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><b>− US$ 120,00</b></span></span></div>
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.9 0-6.5-2.6-6.5-6 0-3.7 3.4-5.6 4-9.5 2.6 1.8 3.4 4 3.3 5.8 1-.6 1.8-1.7 2-3 1.9 1.6 3.7 3.9 3.7 6.7 0 3.4-2.6 6-6.5 6z"/></svg></span><span class="grow"><b>Asados de los jueves</b><small class="muted">ARS · <span class="badge">Cerrada</span></small></span><span class="amt zero"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Al día</b></span></span></div>
+    </div>
+    <span class="btn primary"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Nueva Cuenta</span></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Claro</figcaption>
+  </figure>
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f;--scale:1" role="img" aria-label="Dashboard, modo oscuro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="top"><p class="muted">Hola,</p><h3 class="h-display">Ana</h3></header>
+    <section class="hero-card">
+      <p class="eyebrow">Tus saldos</p>
+      <div class="hero-row">
+        <div><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Te deben</small><b>$ 58.450,50</b></span></span></div>
+        <div><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debés</small><b>US$ 120,00</b></span></span></div>
+      </div>
+    </section>
+    <div class="sec-head"><h4 class="h-title">Tus Cuentas</h4><span class="link">Ver todas</span></div>
+    <div class="card list">
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg></span><span class="grow"><b>Vacaciones en Bariloche</b><small class="muted">ARS · 3 participantes</small></span><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><b>+ $ 58.450,50</b></span></span></div>
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="grow"><b>Depto Palermo</b><small class="muted">USD · 2 participantes</small></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><b>− US$ 120,00</b></span></span></div>
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.9 0-6.5-2.6-6.5-6 0-3.7 3.4-5.6 4-9.5 2.6 1.8 3.4 4 3.3 5.8 1-.6 1.8-1.7 2-3 1.9 1.6 3.7 3.9 3.7 6.7 0 3.4-2.6 6-6.5 6z"/></svg></span><span class="grow"><b>Asados de los jueves</b><small class="muted">ARS · <span class="badge">Cerrada</span></small></span><span class="amt zero"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Al día</b></span></span></div>
+    </div>
+    <span class="btn primary"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Nueva Cuenta</span></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Oscuro</figcaption>
+  </figure></div>
+  </section>
+  <section class="block" id="scr-expenses" aria-labelledby="h-expenses">
+    <h2 id="h-expenses">Cuenta · Gastos</h2>
+    <div class="pair">
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb;--scale:1" role="img" aria-label="Cuenta · Gastos, modo claro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="bar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span class="grow"><b class="h-title">Vacaciones en Bariloche</b><small class="muted">ARS</small></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 8.5L12 4l4.5 4.5M5 14v5h14v-5"/></svg></header>
+    <div class="seg"><span class="on">Gastos</span><span>Saldos</span></div>
+    <div class="total"><small class="muted">Total gastado</small><b class="num-lg">$ 283.350,50</b><small class="muted">4 gastos</small></div>
+    <div class="notice warning"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span><b>Pendiente de asignación</b> 1 gasto sin pagador o participantes</span></div>
+    <p class="day">Sábado 7 de noviembre</p>
+    <div class="card list">
+      <div class="exp"><span class="cat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.9 0-6.5-2.6-6.5-6 0-3.7 3.4-5.6 4-9.5 2.6 1.8 3.4 4 3.3 5.8 1-.6 1.8-1.7 2-3 1.9 1.6 3.7 3.9 3.7 6.7 0 3.4-2.6 6-6.5 6z"/></svg></span><span class="grow"><b>Asado del sábado</b><small class="warn">Pendiente de asignación</small></span><b class="num">$ 36.000,00</b></div>
+      <div class="exp"><span class="cat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-4l2-5h12l2 5v4M4 16h16M4 16v2M20 16v2"/><circle cx="7.5" cy="13.5" r=".6"/><circle cx="16.5" cy="13.5" r=".6"/></svg></span><span class="grow"><b>Nafta</b><small class="muted">Pagó Caro</small></span><b class="num">$ 25.000,00</b></div>
+    </div>
+    <p class="day">Jueves 5 de noviembre</p>
+    <div class="card list">
+      <div class="exp"><span class="cat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V7M3 13h18v5M21 13a3 3 0 0 0-3-3h-7v3"/><circle cx="7" cy="10.5" r="1.6"/></svg></span><span class="grow"><b>Cabaña</b><small class="muted">Pagó Ana (vos)</small></span><b class="num">$ 180.000,00</b></div>
+      <div class="exp"><span class="cat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg></span><span class="grow"><b>Súper</b><small class="muted">Pagó Juan</small></span><b class="num">$ 42.350,50</b></div>
+    </div>
+    <span class="fab"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Nuevo gasto</span></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Claro</figcaption>
+  </figure>
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f;--scale:1" role="img" aria-label="Cuenta · Gastos, modo oscuro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="bar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span class="grow"><b class="h-title">Vacaciones en Bariloche</b><small class="muted">ARS</small></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 8.5L12 4l4.5 4.5M5 14v5h14v-5"/></svg></header>
+    <div class="seg"><span class="on">Gastos</span><span>Saldos</span></div>
+    <div class="total"><small class="muted">Total gastado</small><b class="num-lg">$ 283.350,50</b><small class="muted">4 gastos</small></div>
+    <div class="notice warning"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span><b>Pendiente de asignación</b> 1 gasto sin pagador o participantes</span></div>
+    <p class="day">Sábado 7 de noviembre</p>
+    <div class="card list">
+      <div class="exp"><span class="cat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.9 0-6.5-2.6-6.5-6 0-3.7 3.4-5.6 4-9.5 2.6 1.8 3.4 4 3.3 5.8 1-.6 1.8-1.7 2-3 1.9 1.6 3.7 3.9 3.7 6.7 0 3.4-2.6 6-6.5 6z"/></svg></span><span class="grow"><b>Asado del sábado</b><small class="warn">Pendiente de asignación</small></span><b class="num">$ 36.000,00</b></div>
+      <div class="exp"><span class="cat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-4l2-5h12l2 5v4M4 16h16M4 16v2M20 16v2"/><circle cx="7.5" cy="13.5" r=".6"/><circle cx="16.5" cy="13.5" r=".6"/></svg></span><span class="grow"><b>Nafta</b><small class="muted">Pagó Caro</small></span><b class="num">$ 25.000,00</b></div>
+    </div>
+    <p class="day">Jueves 5 de noviembre</p>
+    <div class="card list">
+      <div class="exp"><span class="cat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V7M3 13h18v5M21 13a3 3 0 0 0-3-3h-7v3"/><circle cx="7" cy="10.5" r="1.6"/></svg></span><span class="grow"><b>Cabaña</b><small class="muted">Pagó Ana (vos)</small></span><b class="num">$ 180.000,00</b></div>
+      <div class="exp"><span class="cat"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg></span><span class="grow"><b>Súper</b><small class="muted">Pagó Juan</small></span><b class="num">$ 42.350,50</b></div>
+    </div>
+    <span class="fab"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Nuevo gasto</span></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Oscuro</figcaption>
+  </figure></div>
+  </section>
+  <section class="block" id="scr-balances" aria-labelledby="h-balances">
+    <h2 id="h-balances">Cuenta · Saldos</h2>
+    <div class="pair">
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb;--scale:1" role="img" aria-label="Cuenta · Saldos, modo claro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="bar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span class="grow"><b class="h-title">Vacaciones en Bariloche</b><small class="muted">ARS</small></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 8.5L12 4l4.5 4.5M5 14v5h14v-5"/></svg></header>
+    <div class="seg"><span>Gastos</span><span class="on">Saldos</span></div>
+    <section class="hero-card"><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Te deben</small><b>$ 58.450,50</b></span></span></section>
+    <div class="card list">
+      <div class="row"><span class="grow"><b>Ana</b> <small class="muted">(vos)</small></span><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Le deben</small><b>+ $ 58.450,50</b></span></span></div>
+      <div class="row"><span class="grow"><b>Juan</b></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debe</small><b>− $ 41.200,00</b></span></span></div>
+      <div class="row"><span class="grow"><b>Caro</b></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debe</small><b>− $ 17.250,50</b></span></span></div>
+    </div>
+    <div class="notice warning"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span><b>1 gasto pendiente</b> No cuenta en los saldos hasta que se complete. <span class="link">Completarlo en Gastos</span></span></div>
+    <h4 class="h-title">Reembolsos sugeridos</h4>
+    <div class="card sug"><div class="row"><span class="grow"><b>Juan → Ana</b></span><span class="chip-acc">Sugerido</span></div><b class="num-lg">$ 41.200,00</b><span class="btn primary">Marcar como pagado</span></div>
+    <div class="card sug"><div class="row"><span class="grow"><b>Caro → Ana</b></span><span class="chip-acc">Sugerido</span></div><b class="num-lg">$ 17.250,50</b><span class="btn primary">Marcar como pagado</span></div></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Claro</figcaption>
+  </figure>
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f;--scale:1" role="img" aria-label="Cuenta · Saldos, modo oscuro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="bar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span class="grow"><b class="h-title">Vacaciones en Bariloche</b><small class="muted">ARS</small></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 8.5L12 4l4.5 4.5M5 14v5h14v-5"/></svg></header>
+    <div class="seg"><span>Gastos</span><span class="on">Saldos</span></div>
+    <section class="hero-card"><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Te deben</small><b>$ 58.450,50</b></span></span></section>
+    <div class="card list">
+      <div class="row"><span class="grow"><b>Ana</b> <small class="muted">(vos)</small></span><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Le deben</small><b>+ $ 58.450,50</b></span></span></div>
+      <div class="row"><span class="grow"><b>Juan</b></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debe</small><b>− $ 41.200,00</b></span></span></div>
+      <div class="row"><span class="grow"><b>Caro</b></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debe</small><b>− $ 17.250,50</b></span></span></div>
+    </div>
+    <div class="notice warning"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span><b>1 gasto pendiente</b> No cuenta en los saldos hasta que se complete. <span class="link">Completarlo en Gastos</span></span></div>
+    <h4 class="h-title">Reembolsos sugeridos</h4>
+    <div class="card sug"><div class="row"><span class="grow"><b>Juan → Ana</b></span><span class="chip-acc">Sugerido</span></div><b class="num-lg">$ 41.200,00</b><span class="btn primary">Marcar como pagado</span></div>
+    <div class="card sug"><div class="row"><span class="grow"><b>Caro → Ana</b></span><span class="chip-acc">Sugerido</span></div><b class="num-lg">$ 17.250,50</b><span class="btn primary">Marcar como pagado</span></div></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Oscuro</figcaption>
+  </figure></div>
+  </section>
+  <section class="block" id="scr-form" aria-labelledby="h-form">
+    <h2 id="h-form">Formulario de gasto</h2>
+    <div class="pair">
+  <figure class="ph-fig">
+    <div class="phone no-tabs" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb;--scale:1" role="img" aria-label="Formulario de gasto, modo claro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="bar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span class="grow"><b class="h-title">Nuevo gasto</b></span></header>
+    <span class="field"><small>Concepto</small>Cena en el centro</span>
+    <span class="field big"><small>Importe (ARS)</small><b class="num-lg">$ 64.800,00</b></span>
+    <span class="field"><small>Fecha</small><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg> 8 de noviembre</span>
+    <span class="field select"><small>Pagó</small>Ana (vos) <svg class="ic sm rot" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    <p class="label">Lo comparten</p>
+    <div class="chips"><span class="chip on"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Ana</span><span class="chip on"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Juan</span><span class="chip">Caro</span></div>
+    <p class="label">Categoría</p>
+    <div class="cats"><span class="catpick on"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.9 0-6.5-2.6-6.5-6 0-3.7 3.4-5.6 4-9.5 2.6 1.8 3.4 4 3.3 5.8 1-.6 1.8-1.7 2-3 1.9 1.6 3.7 3.9 3.7 6.7 0 3.4-2.6 6-6.5 6z"/></svg></span><span class="catpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg></span><span class="catpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-4l2-5h12l2 5v4M4 16h16M4 16v2M20 16v2"/><circle cx="7.5" cy="13.5" r=".6"/><circle cx="16.5" cy="13.5" r=".6"/></svg></span><span class="catpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V7M3 13h18v5M21 13a3 3 0 0 0-3-3h-7v3"/><circle cx="7" cy="10.5" r="1.6"/></svg></span><span class="catpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span></div>
+    <span class="field"><small>Descripción (opcional)</small><span class="muted">Agregá un detalle</span></span>
+    <div class="sticky"><span class="btn primary">Guardar gasto</span></div></div>
+      
+    </div>
+    <figcaption>Claro</figcaption>
+  </figure>
+  <figure class="ph-fig">
+    <div class="phone no-tabs" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f;--scale:1" role="img" aria-label="Formulario de gasto, modo oscuro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="bar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span class="grow"><b class="h-title">Nuevo gasto</b></span></header>
+    <span class="field"><small>Concepto</small>Cena en el centro</span>
+    <span class="field big"><small>Importe (ARS)</small><b class="num-lg">$ 64.800,00</b></span>
+    <span class="field"><small>Fecha</small><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M9 3v4M15 3v4"/></svg> 8 de noviembre</span>
+    <span class="field select"><small>Pagó</small>Ana (vos) <svg class="ic sm rot" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    <p class="label">Lo comparten</p>
+    <div class="chips"><span class="chip on"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Ana</span><span class="chip on"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Juan</span><span class="chip">Caro</span></div>
+    <p class="label">Categoría</p>
+    <div class="cats"><span class="catpick on"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.9 0-6.5-2.6-6.5-6 0-3.7 3.4-5.6 4-9.5 2.6 1.8 3.4 4 3.3 5.8 1-.6 1.8-1.7 2-3 1.9 1.6 3.7 3.9 3.7 6.7 0 3.4-2.6 6-6.5 6z"/></svg></span><span class="catpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></svg></span><span class="catpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v-4l2-5h12l2 5v4M4 16h16M4 16v2M20 16v2"/><circle cx="7.5" cy="13.5" r=".6"/><circle cx="16.5" cy="13.5" r=".6"/></svg></span><span class="catpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V7M3 13h18v5M21 13a3 3 0 0 0-3-3h-7v3"/><circle cx="7" cy="10.5" r="1.6"/></svg></span><span class="catpick"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span></div>
+    <span class="field"><small>Descripción (opcional)</small><span class="muted">Agregá un detalle</span></span>
+    <div class="sticky"><span class="btn primary">Guardar gasto</span></div></div>
+      
+    </div>
+    <figcaption>Oscuro</figcaption>
+  </figure></div>
+  </section>
+  <section class="block" id="scr-profile" aria-labelledby="h-profile">
+    <h2 id="h-profile">Perfil</h2>
+    <div class="pair">
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb;--scale:1" role="img" aria-label="Perfil, modo claro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="top"><h3 class="h-display">Perfil</h3><p class="muted">ana@mail.com</p></header>
+    <h4 class="h-title">Datos personales</h4>
+    <div class="card pad"><span class="field"><small>Nombre</small>Ana</span><span class="field"><small>Apellido</small>Gómez</span></div>
+    <h4 class="h-title">Preferencias</h4>
+    <div class="card pad">
+      <p class="label">Tema</p>
+      <div class="seg3"><span>Claro</span><span>Oscuro</span><span class="on"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Dispositivo</span></div>
+      <span class="field select"><small>Idioma</small>Español <svg class="ic sm rot" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      <span class="field select"><small>Moneda por defecto</small>ARS · Peso argentino <svg class="ic sm rot" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    </div>
+    <h4 class="h-title">Exportar mis datos</h4>
+    <div class="card pad"><p class="muted">Tu perfil y todas tus Cuentas en CSV o JSON.</p><span class="btn outlined"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 8.5L12 4l4.5 4.5M5 14v5h14v-5"/></svg> Exportar mis datos</span></div>
+    <span class="btn text danger">Cerrar sesión</span></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Claro</figcaption>
+  </figure>
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f;--scale:1" role="img" aria-label="Perfil, modo oscuro">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="top"><h3 class="h-display">Perfil</h3><p class="muted">ana@mail.com</p></header>
+    <h4 class="h-title">Datos personales</h4>
+    <div class="card pad"><span class="field"><small>Nombre</small>Ana</span><span class="field"><small>Apellido</small>Gómez</span></div>
+    <h4 class="h-title">Preferencias</h4>
+    <div class="card pad">
+      <p class="label">Tema</p>
+      <div class="seg3"><span>Claro</span><span>Oscuro</span><span class="on"><svg class="ic xs" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg> Dispositivo</span></div>
+      <span class="field select"><small>Idioma</small>Español <svg class="ic sm rot" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+      <span class="field select"><small>Moneda por defecto</small>ARS · Peso argentino <svg class="ic sm rot" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></span>
+    </div>
+    <h4 class="h-title">Exportar mis datos</h4>
+    <div class="card pad"><p class="muted">Tu perfil y todas tus Cuentas en CSV o JSON.</p><span class="btn outlined"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 8.5L12 4l4.5 4.5M5 14v5h14v-5"/></svg> Exportar mis datos</span></div>
+    <span class="btn text danger">Cerrar sesión</span></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Oscuro</figcaption>
+  </figure></div>
+  </section>
+  <section class="logos" id="logos" aria-labelledby="h-logos">
+    <h2 id="h-logos">Logo</h2>
+    <p class="block-note">Tres propuestas de logotipo según tus respuestas: solo el nombre, amigable y prolijo, celeste y sol con el mismo peso, y la idea de cuentas claras como un tilde de saldado. Cada una va en la tipografía elegida arriba, en fondo claro y oscuro, y con su ícono de App hecho con “Che”. El login de las maquetas usa la A.</p>
+    <div class="logo-grid">
+  <article class="logo-card">
+    <h3>A. Tilde final</h3>
+    <p class="logo-idea">El nombre limpio, con “Che” en celeste y un tilde amarillo que cierra la palabra: la cuenta quedó saldada.</p>
+    <div class="logo-modes">
+      <div class="logo-tile" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb"><span class="wm wa"><span class="wm-che">Che</span>Pagame<svg class="wm-tick" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></div><div class="logo-tile" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f"><span class="wm wa"><span class="wm-che">Che</span>Pagame<svg class="wm-tick" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></div>
+    </div>
+    <div class="icons-row" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb">
+      <span class="app-icon" title="Ícono de la App"><span class="ai ai-a"><span class="ai-che">Che</span><svg class="ai-tick" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span>
+      <span class="app-icon round" title="Ícono adaptativo (Android)"><span class="ai ai-a"><span class="ai-che">Che</span><svg class="ai-tick" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span>
+      <span class="app-icon mono" title="Ícono temático monocromo"><span class="ai ai-a"><span class="ai-che">Che</span><svg class="ai-tick" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span>
+      <small>Ícono, adaptativo y monocromo</small>
+    </div>
+    <div class="icons-row" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f"><span class="app-icon dark"><span class="ai ai-a"><span class="ai-che">Che</span><svg class="ai-tick" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span><small>Ícono en modo oscuro</small></div>
+  </article>
+  <article class="logo-card">
+    <h3>B. Resaltado</h3>
+    <p class="logo-idea">“Pagame” marcado con resaltador amarillo y un tilde al final, como quien tacha una deuda de la lista. Mitad celeste, mitad sol.</p>
+    <div class="logo-modes">
+      <div class="logo-tile" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb"><span class="wm wb"><span class="wm-che">Che</span><span class="wm-hl">Pagame<svg class="wm-tick-in" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--on-accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span></div><div class="logo-tile" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f"><span class="wm wb"><span class="wm-che">Che</span><span class="wm-hl">Pagame<svg class="wm-tick-in" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--on-accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span></div>
+    </div>
+    <div class="icons-row" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb">
+      <span class="app-icon" title="Ícono de la App"><span class="ai ai-b"><span class="ai-hl">Che<svg class="ai-tick-in" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--on-accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span></span>
+      <span class="app-icon round" title="Ícono adaptativo (Android)"><span class="ai ai-b"><span class="ai-hl">Che<svg class="ai-tick-in" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--on-accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span></span>
+      <span class="app-icon mono" title="Ícono temático monocromo"><span class="ai ai-b"><span class="ai-hl">Che<svg class="ai-tick-in" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--on-accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span></span>
+      <small>Ícono, adaptativo y monocromo</small>
+    </div>
+    <div class="icons-row" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f"><span class="app-icon dark"><span class="ai ai-b"><span class="ai-hl">Che<svg class="ai-tick-in" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--on-accent)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12.5l5.5 5.5L20.5 5.5"/></svg></span></span></span><small>Ícono en modo oscuro</small></div>
+  </article>
+  <article class="logo-card">
+    <h3>C. Subrayado que salda</h3>
+    <p class="logo-idea">“Che” en una etiqueta celeste y un subrayado amarillo bajo “Pagame” que termina subiendo en tilde.</p>
+    <div class="logo-modes">
+      <div class="logo-tile" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb"><span class="wm wc"><span class="wm-tag">Che</span><span class="wm-under">Pagame<svg class="wm-swoosh" viewBox="0 0 120 20" preserveAspectRatio="none" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 H96 L104 17 L117 3"/></svg></span></span></div><div class="logo-tile" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f"><span class="wm wc"><span class="wm-tag">Che</span><span class="wm-under">Pagame<svg class="wm-swoosh" viewBox="0 0 120 20" preserveAspectRatio="none" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12 H96 L104 17 L117 3"/></svg></span></span></div>
+    </div>
+    <div class="icons-row" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb">
+      <span class="app-icon" title="Ícono de la App"><span class="ai ai-c"><span class="ai-che">Che</span><svg class="ai-swoosh" viewBox="0 0 120 20" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 H88 L98 17 L114 3"/></svg></span></span>
+      <span class="app-icon round" title="Ícono adaptativo (Android)"><span class="ai ai-c"><span class="ai-che">Che</span><svg class="ai-swoosh" viewBox="0 0 120 20" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 H88 L98 17 L114 3"/></svg></span></span>
+      <span class="app-icon mono" title="Ícono temático monocromo"><span class="ai ai-c"><span class="ai-che">Che</span><svg class="ai-swoosh" viewBox="0 0 120 20" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 H88 L98 17 L114 3"/></svg></span></span>
+      <small>Ícono, adaptativo y monocromo</small>
+    </div>
+    <div class="icons-row" style="--primary:#6CC4F2;--on-primary:#062233;--accent:#F6C343;--on-accent:#2A1E00;--positive:#5FD39A;--negative:#FF8A73;--warning:#F2C35B;--background:#0D1720;--surface:#16232F;--text:#E6EEF4;--text-muted:#9CB0C0;--border:#2A3B4A;--control-border:#647A8C;--scrim:#000000;--primary-soft:#203646;--warning-soft:#303634;--negative-soft:#322f37;--surface-variant:#202f3d;--level2:#1d303f"><span class="app-icon dark"><span class="ai ai-c"><span class="ai-che">Che</span><svg class="ai-swoosh" viewBox="0 0 120 20" aria-hidden="true" fill="none" stroke="var(--accent)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12 H88 L98 17 L114 3"/></svg></span></span><small>Ícono en modo oscuro</small></div>
+  </article></div>
+  </section>
+  <section class="scale block" id="scale" aria-labelledby="h-scale">
+    <h2 id="h-scale">Texto del sistema al 150%</h2>
+    <p class="block-note">Dashboard y Saldos con el texto agrandado: los importes y los nombres largos pasan de línea o se acortan con puntos suspensivos, sin superponerse (FR-019).</p>
+    <div class="pair">
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb;--scale:1.5" role="img" aria-label="Dashboard, modo claro, texto al 150%">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="top"><p class="muted">Hola,</p><h3 class="h-display">Ana</h3></header>
+    <section class="hero-card">
+      <p class="eyebrow">Tus saldos</p>
+      <div class="hero-row">
+        <div><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Te deben</small><b>$ 58.450,50</b></span></span></div>
+        <div><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debés</small><b>US$ 120,00</b></span></span></div>
+      </div>
+    </section>
+    <div class="sec-head"><h4 class="h-title">Tus Cuentas</h4><span class="link">Ver todas</span></div>
+    <div class="card list">
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg></span><span class="grow"><b>Vacaciones en Bariloche</b><small class="muted">ARS · 3 participantes</small></span><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><b>+ $ 58.450,50</b></span></span></div>
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="grow"><b>Depto Palermo</b><small class="muted">USD · 2 participantes</small></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><b>− US$ 120,00</b></span></span></div>
+      <div class="acc"><span class="acc-ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-3.9 0-6.5-2.6-6.5-6 0-3.7 3.4-5.6 4-9.5 2.6 1.8 3.4 4 3.3 5.8 1-.6 1.8-1.7 2-3 1.9 1.6 3.7 3.9 3.7 6.7 0 3.4-2.6 6-6.5 6z"/></svg></span><span class="grow"><b>Asados de los jueves</b><small class="muted">ARS · <span class="badge">Cerrada</span></small></span><span class="amt zero"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span><b>Al día</b></span></span></div>
+    </div>
+    <span class="btn primary"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Nueva Cuenta</span></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Claro · texto 150%</figcaption>
+  </figure>
+  <figure class="ph-fig">
+    <div class="phone" style="--primary:#0B6FA8;--on-primary:#FFFFFF;--accent:#F2B31B;--on-accent:#2A1E00;--positive:#1C7A4A;--negative:#B3361F;--warning:#8A5A00;--background:#F3F7FA;--surface:#FFFFFF;--text:#13283A;--text-muted:#4F6475;--border:#D3E0EA;--control-border:#748899;--scrim:#13283A;--primary-soft:#e2eef5;--warning-soft:#f1ebe0;--negative-soft:#f6e7e4;--surface-variant:#e9f0f5;--level2:#f3f8fb;--scale:1.5" role="img" aria-label="Cuenta · Saldos, modo claro, texto al 150%">
+      <div class="status"><span>9:41</span><span>● ● ●</span></div>
+      <div class="screen">
+    <header class="bar"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg><span class="grow"><b class="h-title">Vacaciones en Bariloche</b><small class="muted">ARS</small></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 8.5L12 4l4.5 4.5M5 14v5h14v-5"/></svg></header>
+    <div class="seg"><span>Gastos</span><span class="on">Saldos</span></div>
+    <section class="hero-card"><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Te deben</small><b>$ 58.450,50</b></span></span></section>
+    <div class="card list">
+      <div class="row"><span class="grow"><b>Ana</b> <small class="muted">(vos)</small></span><span class="amt pos"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 9v8h8"/></svg><span><small>Le deben</small><b>+ $ 58.450,50</b></span></span></div>
+      <div class="row"><span class="grow"><b>Juan</b></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debe</small><b>− $ 41.200,00</b></span></span></div>
+      <div class="row"><span class="grow"><b>Caro</b></span><span class="amt neg"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg><span><small>Debe</small><b>− $ 17.250,50</b></span></span></div>
+    </div>
+    <div class="notice warning"><svg class="ic sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></svg><span><b>1 gasto pendiente</b> No cuenta en los saldos hasta que se complete. <span class="link">Completarlo en Gastos</span></span></div>
+    <h4 class="h-title">Reembolsos sugeridos</h4>
+    <div class="card sug"><div class="row"><span class="grow"><b>Juan → Ana</b></span><span class="chip-acc">Sugerido</span></div><b class="num-lg">$ 41.200,00</b><span class="btn primary">Marcar como pagado</span></div>
+    <div class="card sug"><div class="row"><span class="grow"><b>Caro → Ana</b></span><span class="chip-acc">Sugerido</span></div><b class="num-lg">$ 17.250,50</b><span class="btn primary">Marcar como pagado</span></div></div>
+      
+  <nav class="tabs" aria-label="Navegación">
+    
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg></span><span class="tl">Inicio</span></span>
+      <span class="tab on"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M3 19c0-3.3 2.7-5 6-5s6 1.7 6 5"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14c2.9 0 5 1.4 5 4"/></svg></span><span class="tl">Cuentas</span></span>
+      <span class="tab"><span class="pill"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-6 8-6s8 2 8 6"/></svg></span><span class="tl">Perfil</span></span>
+  </nav>
+    </div>
+    <figcaption>Claro · texto 150%</figcaption>
+  </figure></div>
+  </section>
+</main>
+<script>
+  (function () {
+    var key = "chepagame-mockup-font";
+    function apply(v) { document.querySelector(".page").setAttribute("data-font", v); var el = document.getElementById("font-" + v); if (el) el.checked = true; }
+    try { var saved = localStorage.getItem(key); if (saved) apply(saved); } catch (e) {}
+    document.querySelectorAll('input[name="font"]').forEach(function (input) {
+      input.addEventListener("change", function () { apply(input.value); try { localStorage.setItem(key, input.value); } catch (e) {} });
+    });
+  })();
+</script>
+</div>

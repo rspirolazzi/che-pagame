@@ -163,9 +163,11 @@ Punto de partida relevado en el código:
 
 - **Decision**: un componente `AmountText` (importe con signo y color) y un `StatusNotice`
   (ícono + texto + color para aviso, error, solo lectura). Los textos existentes ("Te deben",
-  "Debés", "Le deben", "Debe", "Al día", "Estás al día") se conservan; se agregan el signo "+" o
-  "−" y los íconos `arrow-down-left` / `arrow-up-right` / `check` de MaterialCommunityIcons con
-  nombre accesible. El aviso de pendientes usa `alert-circle-outline`.
+  "Debés", "Le deben", "Debe", "Al día", "Estás al día") se conservan sin cambios; delante va una
+  insignia con el signo "+" o "−", o un tilde si está al día, con nombre accesible ("A favor",
+  "En contra", "Al día"). Al implementar se eligió la insignia con el signo en lugar de flechas:
+  el signo es más claro que una flecha y no cambia la frase que ya leían las pruebas. El aviso de
+  pendientes usa `alert-circle-outline`.
 - **Rationale**: FR-008 a FR-010 y SC-006; los textos ya traducidos se reutilizan.
 
 ## R11. Barras del sistema y cambio de modo

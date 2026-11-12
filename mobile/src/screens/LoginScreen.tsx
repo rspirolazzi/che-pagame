@@ -1,11 +1,13 @@
 import { Link } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Text, TextInput, useTheme } from "react-native-paper";
 
+import { AppButton } from "../components/AppButton";
 import { ErrorText, formStyles } from "../components/FormBits";
 import { GoogleSignInButton } from "../components/GoogleSignInButton";
+import { Logo } from "../components/Logo";
 import { useAuth } from "../hooks/useAuth";
 import { authApi } from "../services/api/auth";
 import { ApiError, type ApiErrorCode, errorCodeOf } from "../services/api/types";
@@ -13,6 +15,7 @@ import { validateEmail } from "../utils/validation";
 
 export default function LoginScreen() {
   const { t } = useTranslation();
+  const theme = useTheme();
   const { signInWithTokens, sessionExpired } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -46,13 +49,26 @@ export default function LoginScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={formStyles.screen} keyboardShouldPersistTaps="handled">
-      <Text variant="headlineMedium" style={formStyles.title}>
+    <ScrollView
+      contentContainerStyle={[formStyles.screen, formStyles.centered]}
+      keyboardShouldPersistTaps="handled"
+    >
+      <View style={styles.brand}>
+        <Logo />
+        <Text
+          variant="titleMedium"
+          style={[styles.center, { color: theme.colors.onSurfaceVariant }]}
+        >
+          {t("common.slogan")}
+        </Text>
+      </View>
+      <Text variant="titleLarge" accessibilityRole="header" style={formStyles.title}>
         {t("auth.login.title")}
       </Text>
-      <Text style={{ textAlign: "center" }}>{t("common.slogan")}</Text>
       <GoogleSignInButton onMessage={setMessage} />
-      <Text style={{ textAlign: "center" }}>{t("mobile.orUseEmail")}</Text>
+      <Text style={[styles.center, { color: theme.colors.onSurfaceVariant }]}>
+        {t("mobile.orUseEmail")}
+      </Text>
       <TextInput
         mode="outlined"
         label={t("common.email")}
@@ -79,9 +95,9 @@ export default function LoginScreen() {
         </Text>
       )}
       <ErrorText code={error} />
-      <Button mode="contained" loading={pending} disabled={pending} onPress={submit}>
+      <AppButton mode="contained" loading={pending} disabled={pending} onPress={submit}>
         {t("auth.login.submit")}
-      </Button>
+      </AppButton>
       <Link href="/login-code">{t("auth.login.useCode")}</Link>
       <Link href="/forgot-password">{t("auth.login.forgot")}</Link>
       <Link href="/register">
@@ -90,3 +106,8 @@ export default function LoginScreen() {
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  brand: { alignItems: "center", gap: 8, marginBottom: 16 },
+  center: { textAlign: "center" },
+});

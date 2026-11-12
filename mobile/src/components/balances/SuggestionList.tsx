@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import { Button, Card, Text } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 
 import { settlementsApi } from "../../services/api/settlements";
 import {
@@ -13,7 +13,9 @@ import {
 import { formatDay, today } from "../../utils/expenseGroups";
 import { formatMoney } from "../../utils/money";
 import { newRequestId } from "../../utils/requestId";
+import type { AppTheme } from "../../theme";
 import { ConfirmDialog } from "../accounts/AccountBits";
+import { AppButton } from "../AppButton";
 import { ErrorText } from "../FormBits";
 
 interface Open {
@@ -36,6 +38,8 @@ export function SuggestionList({
   onSaved: () => void;
 }) {
   const { t } = useTranslation();
+  const theme = useTheme<AppTheme>();
+  const { spacing, radius } = theme.custom;
   const [open, setOpen] = useState<Open | null>(null);
   const [error, setError] = useState<ApiErrorCode | null>(null);
   const [saving, setSaving] = useState(false);
@@ -73,31 +77,57 @@ export function SuggestionList({
   }
 
   return (
-    <View style={styles.list}>
-      <Text variant="titleMedium">{t("balances.suggestions")}</Text>
+    <View style={{ gap: spacing.md }}>
+      <Text variant="titleLarge">{t("balances.suggestions")}</Text>
       {suggestions.length === 0 ? (
-        <Text>{t("balances.nothingPending")}</Text>
+        <Text variant="bodyMedium">{t("balances.nothingPending")}</Text>
       ) : (
         suggestions.map((suggestion) => (
-          <Card key={`${suggestion.from.id}-${suggestion.to.id}`} mode="outlined">
-            <Card.Content style={styles.row}>
-              <Text variant="bodyLarge">
+          <View
+            key={`${suggestion.from.id}-${suggestion.to.id}`}
+            style={[
+              styles.card,
+              {
+                backgroundColor: theme.colors.surface,
+                borderColor: theme.colors.outlineVariant,
+                borderRadius: radius.md,
+                padding: spacing.md,
+                gap: spacing.sm,
+              },
+            ]}
+          >
+            <View style={[styles.row, { gap: spacing.sm }]}>
+              <Text variant="titleMedium" style={styles.flex}>
                 {t("balances.transfer", { from: suggestion.from.name, to: suggestion.to.name })}
               </Text>
-              <Text variant="bodyLarge">{money(suggestion.amount)}</Text>
-            </Card.Content>
+              {/* The sun accent only as a highlight background, never as text (FR-017). */}
+              <Text
+                variant="labelMedium"
+                style={[
+                  styles.chip,
+                  {
+                    backgroundColor: theme.custom.accent,
+                    color: theme.custom.onAccent,
+                    borderRadius: radius.full,
+                    paddingHorizontal: spacing.sm,
+                  },
+                ]}
+              >
+                {t("balances.suggested")}
+              </Text>
+            </View>
+            <Text style={theme.custom.amountLarge}>{money(suggestion.amount)}</Text>
             {!account.isClosed && (
-              <Card.Actions>
-                <Button
-                  onPress={() =>
-                    setOpen({ suggestion, date: today(), clientRequestId: newRequestId() })
-                  }
-                >
-                  {t("balances.markPaid")}
-                </Button>
-              </Card.Actions>
+              <AppButton
+                mode="contained"
+                onPress={() =>
+                  setOpen({ suggestion, date: today(), clientRequestId: newRequestId() })
+                }
+              >
+                {t("balances.markPaid")}
+              </AppButton>
             )}
-          </Card>
+          </View>
         ))
       )}
       <ConfirmDialog
@@ -126,6 +156,8 @@ export function SuggestionList({
 }
 
 const styles = StyleSheet.create({
-  list: { gap: 8 },
-  row: { flexDirection: "row", justifyContent: "space-between", flexWrap: "wrap", gap: 8 },
+  card: { borderWidth: 1 },
+  row: { flexDirection: "row", alignItems: "center", flexWrap: "wrap" },
+  flex: { flexShrink: 1, flexGrow: 1 },
+  chip: { overflow: "hidden", fontWeight: "700" },
 });

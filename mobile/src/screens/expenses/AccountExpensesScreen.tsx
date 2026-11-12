@@ -2,14 +2,13 @@ import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { RefreshControl, SectionList, StyleSheet, View } from "react-native";
-import { ActivityIndicator, Button, Chip, Text } from "react-native-paper";
+import { ActivityIndicator, FAB, Text, useTheme } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { AccountIcon } from "../../components/accounts/AccountBits";
-import { AccountTabs } from "../../components/accounts/AccountTabs";
-import { ExportButton } from "../../components/exports/ExportButton";
+import { AccountHeader } from "../../components/accounts/AccountHeader";
 import { ExpenseListItem } from "../../components/expenses/ExpenseBits";
 import { ErrorText } from "../../components/FormBits";
-import { exportsApi } from "../../services/api/exports";
+import { StatusNotice } from "../../components/StatusNotice";
 import { accountsApi } from "../../services/api/accounts";
 import { expensesApi } from "../../services/api/expenses";
 import {
@@ -19,6 +18,7 @@ import {
   type ExpenseListItem as Item,
 } from "../../services/api/types";
 import { formatDay, groupByDay, mergePages } from "../../utils/expenseGroups";
+import type { AppTheme } from "../../theme";
 import { formatMoney } from "../../utils/money";
 
 const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
@@ -29,8 +29,11 @@ const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1
  */
 export default function AccountExpensesScreen() {
   const { t, i18n } = useTranslation();
+  const theme = useTheme<AppTheme>();
+  const insets = useSafeAreaInsets();
   const router = useRouter();
   const locale = i18n.language;
+  const { spacing, radius } = theme.custom;
   const { accountId } = useLocalSearchParams<{ accountId: string }>();
   const [account, setAccount] = useState<AccountResponse | null>(null);
   const [items, setItems] = useState<Item[]>([]);
@@ -91,7 +94,7 @@ export default function AccountExpensesScreen() {
 
   if (!account) {
     return (
-      <View style={styles.screen}>
+      <View style={[styles.loading, { paddingTop: insets.top + spacing.lg }]}>
         {error ? <ErrorText code={error} /> : <ActivityIndicator />}
       </View>
     );
@@ -101,93 +104,119 @@ export default function AccountExpensesScreen() {
     title: capitalize(formatDay(group.date, locale)),
     data: group.items,
   }));
+  const pending = items.filter((item) => item.isPending).length;
 
   return (
-    <SectionList
-      sections={sections}
-      keyExtractor={(item) => item.id}
-      contentContainerStyle={styles.screen}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
-      onEndReached={loadMore}
-      onEndReachedThreshold={0.5}
-      ListHeaderComponent={
-        <View style={styles.header}>
-          <View style={styles.row}>
-            <AccountIcon icon={account.icon} size={36} />
-            <Text variant="headlineSmall" style={styles.flex}>
-              {account.name}
-            </Text>
-            {account.isClosed && <Chip compact>{t("accounts.closedBadge")}</Chip>}
+    <View style={styles.flex}>
+      <SectionList
+        sections={sections}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{
+          padding: spacing.lg,
+          paddingTop: insets.top + spacing.sm,
+          // Room for the floating "Nuevo gasto" button.
+          paddingBottom: spacing.xxl * 3,
+        }}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
+        onEndReached={loadMore}
+        onEndReachedThreshold={0.5}
+        stickySectionHeadersEnabled={false}
+        ListHeaderComponent={
+          <View style={{ gap: spacing.md, marginBottom: spacing.sm }}>
+            <AccountHeader account={account} active="expenses" />
+            {account.isClosed && (
+              <StatusNotice kind="readOnly">{t("accounts.detail.closedNotice")}</StatusNotice>
+            )}
+            <View style={styles.total}>
+              <Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant }}>
+                {t("expenses.total")}
+              </Text>
+              <Text style={theme.custom.amountLarge}>
+                {formatMoney(total, account.currency, account.currencyDecimals, locale)}
+              </Text>
+              <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+                {t("expenses.count", { count })}
+              </Text>
+            </View>
+            {pending > 0 && (
+              <StatusNotice kind="warning">
+                <Text variant="bodyMedium" style={styles.bold}>
+                  {t("balances.pending", { count: pending })}
+                </Text>
+                {"\n"}
+                {t("balances.pendingHint")}
+              </StatusNotice>
+            )}
+            <ErrorText code={error} />
           </View>
-          <AccountTabs accountId={account.id} active="expenses" />
-          {/* Also on closed accounts: exporting is read only (FR-001). */}
-          <ExportButton run={(format) => exportsApi.account(account.id, format)} />
-          <Text variant="labelMedium">{t("expenses.total")}</Text>
-          <Text variant="headlineMedium">
-            {formatMoney(total, account.currency, account.currencyDecimals, locale)}
+        }
+        renderSectionHeader={({ section }) => (
+          <Text
+            variant="labelLarge"
+            style={{
+              color: theme.colors.onSurfaceVariant,
+              marginTop: spacing.md,
+              marginBottom: spacing.xs,
+            }}
+          >
+            {section.title}
           </Text>
-          <Text variant="bodySmall">{t("expenses.count", { count })}</Text>
-          <View style={styles.row}>
-            <Button
-              mode="outlined"
+        )}
+        renderItem={({ item, index, section }) => (
+          <View
+            style={{
+              backgroundColor: theme.colors.surface,
+              borderColor: theme.colors.outlineVariant,
+              borderWidth: 1,
+              borderTopWidth: index === 0 ? 1 : 0,
+              borderTopLeftRadius: index === 0 ? radius.md : 0,
+              borderTopRightRadius: index === 0 ? radius.md : 0,
+              borderBottomLeftRadius: index === section.data.length - 1 ? radius.md : 0,
+              borderBottomRightRadius: index === section.data.length - 1 ? radius.md : 0,
+              overflow: "hidden",
+            }}
+          >
+            <ExpenseListItem
+              account={account}
+              item={item}
+              locale={locale}
               onPress={() =>
                 router.push({
-                  pathname: "/accounts/[accountId]/settings",
-                  params: { accountId: account.id },
+                  pathname: "/accounts/[accountId]/expenses/[expenseId]",
+                  params: { accountId: account.id, expenseId: item.id },
                 })
               }
-            >
-              {t("expenses.settings")}
-            </Button>
-            {!account.isClosed && (
-              <Button
-                mode="contained"
-                onPress={() =>
-                  router.push({
-                    pathname: "/accounts/[accountId]/expenses/new",
-                    params: { accountId: account.id },
-                  })
-                }
-              >
-                {t("expenses.new")}
-              </Button>
-            )}
+            />
           </View>
-          <ErrorText code={error} />
-        </View>
-      }
-      renderSectionHeader={({ section }) => (
-        <Text variant="titleSmall" style={styles.day}>
-          {section.title}
-        </Text>
-      )}
-      renderItem={({ item }) => (
-        <ExpenseListItem
-          account={account}
-          item={item}
-          locale={locale}
+        )}
+        ListEmptyComponent={
+          <Text variant="bodyMedium" style={{ color: theme.colors.onSurfaceVariant }}>
+            {t("expenses.empty")} {account.isClosed ? "" : t("expenses.emptyCta")}
+          </Text>
+        }
+        ListFooterComponent={loadingMore ? <ActivityIndicator /> : null}
+      />
+      {!account.isClosed && (
+        <FAB
+          icon="plus"
+          label={t("expenses.new")}
+          style={[styles.fab, { right: spacing.lg, bottom: spacing.lg }]}
           onPress={() =>
             router.push({
-              pathname: "/accounts/[accountId]/expenses/[expenseId]",
-              params: { accountId: account.id, expenseId: item.id },
+              pathname: "/accounts/[accountId]/expenses/new",
+              params: { accountId: account.id },
             })
           }
         />
       )}
-      ListEmptyComponent={
-        <Text>
-          {t("expenses.empty")} {account.isClosed ? "" : t("expenses.emptyCta")}
-        </Text>
-      }
-      ListFooterComponent={loadingMore ? <ActivityIndicator /> : null}
-    />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { padding: 16, gap: 8 },
-  header: { gap: 8, marginBottom: 8 },
-  row: { flexDirection: "row", alignItems: "center", gap: 12, flexWrap: "wrap" },
   flex: { flex: 1 },
-  day: { marginTop: 12 },
+  loading: { flex: 1, alignItems: "center" },
+  total: { gap: 2 },
+  bold: { fontWeight: "600" },
+  fab: { position: "absolute" },
 });

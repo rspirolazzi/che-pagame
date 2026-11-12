@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView } from "react-native";
-import { Button, Divider, SegmentedButtons, Text, TextInput } from "react-native-paper";
+import { View } from "react-native";
+import { SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper";
 
+import { AppButton } from "../components/AppButton";
 import { CurrencyPicker } from "../components/CurrencyPicker";
 import { ExportButton } from "../components/exports/ExportButton";
-import { CodeInput, ErrorText, formStyles } from "../components/FormBits";
+import { CodeInput, ErrorText } from "../components/FormBits";
+import { Screen } from "../components/Screen";
 import { useAuth } from "../hooks/useAuth";
 import { usePreferences } from "../hooks/usePreferences";
 import { exportsApi } from "../services/api/exports";
 import { type ApiErrorCode, errorCodeOf } from "../services/api/types";
 import { usersApi } from "../services/api/users";
+import type { AppTheme } from "../theme";
 import { displayName } from "../utils/displayName";
 import { validateEmail, validateName } from "../utils/validation";
 
@@ -72,101 +75,130 @@ export default function ProfileScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={formStyles.screen} keyboardShouldPersistTaps="handled">
-      <Text variant="headlineMedium">{t("profile.title")}</Text>
-      <Text variant="titleMedium">{displayName(user)}</Text>
+    <Screen>
+      <View>
+        <Text variant="headlineMedium" accessibilityRole="header">
+          {t("profile.title")}
+        </Text>
+        <Text variant="titleMedium">{displayName(user)}</Text>
+      </View>
 
-      <Text variant="titleSmall">{t("profile.personal")}</Text>
-      <TextInput
-        mode="outlined"
-        label={t("profile.firstName")}
-        accessibilityLabel={t("profile.firstName")}
-        maxLength={60}
-        value={firstName}
-        onChangeText={setFirstName}
-      />
-      <TextInput
-        mode="outlined"
-        label={t("profile.lastName")}
-        accessibilityLabel={t("profile.lastName")}
-        maxLength={60}
-        value={lastName}
-        onChangeText={setLastName}
-      />
-      <Button mode="contained" onPress={saveNames}>
-        {t("common.save")}
-      </Button>
-      {saved && <Text>{t("profile.saved")}</Text>}
+      <Section title={t("profile.personal")}>
+        <TextInput
+          mode="outlined"
+          label={t("profile.firstName")}
+          accessibilityLabel={t("profile.firstName")}
+          maxLength={60}
+          value={firstName}
+          onChangeText={setFirstName}
+        />
+        <TextInput
+          mode="outlined"
+          label={t("profile.lastName")}
+          accessibilityLabel={t("profile.lastName")}
+          maxLength={60}
+          value={lastName}
+          onChangeText={setLastName}
+        />
+        <AppButton mode="contained" onPress={saveNames}>
+          {t("common.save")}
+        </AppButton>
+        {saved && <Text>{t("profile.saved")}</Text>}
+      </Section>
 
-      <Divider />
-      <Text variant="titleSmall">{t("profile.preferences")}</Text>
-      <Text>{t("profile.language")}</Text>
-      <SegmentedButtons
-        value={user.preferences.language}
-        onValueChange={(value) => prefs.setLanguage(value as "es" | "en")}
-        buttons={[
-          { value: "es", label: t("profile.languages.es") },
-          { value: "en", label: t("profile.languages.en") },
-        ]}
-      />
-      <Text>{t("profile.theme")}</Text>
-      <SegmentedButtons
-        value={user.preferences.theme}
-        onValueChange={(value) => prefs.setTheme(value as "light" | "dark" | "system")}
-        buttons={[
-          { value: "light", label: t("profile.themes.light") },
-          { value: "dark", label: t("profile.themes.dark") },
-          { value: "system", label: t("profile.themes.system") },
-        ]}
-      />
-      <Text>{t("profile.currency")}</Text>
-      <CurrencyPicker
-        label={t("profile.currency")}
-        value={user.preferences.defaultCurrency ?? null}
-        onChange={prefs.setCurrency}
-      />
-      <ErrorText code={prefs.error} />
+      <Section title={t("profile.preferences")}>
+        <Text>{t("profile.language")}</Text>
+        <SegmentedButtons
+          value={user.preferences.language}
+          onValueChange={(value) => prefs.setLanguage(value as "es" | "en")}
+          buttons={[
+            { value: "es", label: t("profile.languages.es") },
+            { value: "en", label: t("profile.languages.en") },
+          ]}
+        />
+        <Text>{t("profile.theme")}</Text>
+        <SegmentedButtons
+          value={user.preferences.theme}
+          onValueChange={(value) => prefs.setTheme(value as "light" | "dark" | "system")}
+          buttons={[
+            { value: "light", label: t("profile.themes.light") },
+            { value: "dark", label: t("profile.themes.dark") },
+            { value: "system", label: t("profile.themes.system") },
+          ]}
+        />
+        <Text>{t("profile.currency")}</Text>
+        <CurrencyPicker
+          label={t("profile.currency")}
+          value={user.preferences.defaultCurrency ?? null}
+          onChange={prefs.setCurrency}
+        />
+        <ErrorText code={prefs.error} />
+      </Section>
 
-      <Divider />
-      <Text variant="titleSmall">{t("profile.email")}</Text>
-      <Text>
-        {t("profile.currentEmail")}: {user.email}
-      </Text>
-      {emailStep === "email" && (
-        <>
-          <TextInput
-            mode="outlined"
-            label={t("profile.newEmail")}
-            accessibilityLabel={t("profile.newEmail")}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            value={newEmail}
-            onChangeText={setNewEmail}
-          />
-          <Button mode="outlined" onPress={requestEmailChange}>
-            {t("profile.sendCode")}
-          </Button>
-        </>
-      )}
-      {emailStep === "code" && (
-        <>
-          <Text>{t("profile.codeSentTo", { email: newEmail.trim() })}</Text>
-          <CodeInput label={t("profile.codeLabel")} onComplete={confirmEmailChange} />
-        </>
-      )}
-      {emailStep === "done" && <Text>{t("profile.emailChanged", { email: user.email })}</Text>}
-      <ErrorText messageKey={message} />
-      <ErrorText code={error} />
+      <Section title={t("profile.email")}>
+        <Text>
+          {t("profile.currentEmail")}: {user.email}
+        </Text>
+        {emailStep === "email" && (
+          <>
+            <TextInput
+              mode="outlined"
+              label={t("profile.newEmail")}
+              accessibilityLabel={t("profile.newEmail")}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              value={newEmail}
+              onChangeText={setNewEmail}
+            />
+            <AppButton mode="outlined" onPress={requestEmailChange}>
+              {t("profile.sendCode")}
+            </AppButton>
+          </>
+        )}
+        {emailStep === "code" && (
+          <>
+            <Text>{t("profile.codeSentTo", { email: newEmail.trim() })}</Text>
+            <CodeInput label={t("profile.codeLabel")} onComplete={confirmEmailChange} />
+          </>
+        )}
+        {emailStep === "done" && <Text>{t("profile.emailChanged", { email: user.email })}</Text>}
+        <ErrorText messageKey={message} />
+        <ErrorText code={error} />
+      </Section>
 
-      <Divider />
-      <Text variant="titleSmall">{t("exports.mineTitle")}</Text>
-      <Text variant="bodySmall">{t("exports.mineHint")}</Text>
-      <ExportButton run={exportsApi.mine} label={t("exports.mineButton")} />
+      <Section title={t("exports.mineTitle")}>
+        <Text variant="bodySmall">{t("exports.mineHint")}</Text>
+        <ExportButton run={exportsApi.mine} label={t("exports.mineButton")} />
+      </Section>
 
-      <Divider />
-      <Button mode="text" onPress={logout}>
+      <AppButton mode="text" tone="danger" icon="logout" onPress={logout}>
         {t("auth.logout")}
-      </Button>
-    </ScrollView>
+      </AppButton>
+    </Screen>
+  );
+}
+
+/** A titled card of the profile (feature 006 mockup). */
+function Section({ title, children }: { title: string; children: ReactNode }) {
+  const theme = useTheme<AppTheme>();
+  const { spacing, radius } = theme.custom;
+  return (
+    <View style={{ gap: spacing.sm, marginTop: spacing.sm }}>
+      <Text variant="titleMedium" accessibilityRole="header">
+        {title}
+      </Text>
+      <View
+        style={{
+          gap: spacing.md,
+          padding: spacing.lg,
+          borderWidth: 1,
+          borderRadius: radius.md,
+          borderColor: theme.colors.outlineVariant,
+          backgroundColor: theme.colors.surface,
+        }}
+      >
+        {children}
+      </View>
+    </View>
   );
 }

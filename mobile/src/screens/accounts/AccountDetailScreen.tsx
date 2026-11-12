@@ -2,10 +2,12 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, Share, View } from "react-native";
-import { Button, Divider, List, Text, TextInput } from "react-native-paper";
+import { Divider, List, Text, TextInput, useTheme } from "react-native-paper";
 
+import { AppButton } from "../../components/AppButton";
 import { AccountIcon, ConfirmDialog, IconPicker } from "../../components/accounts/AccountBits";
 import { ErrorText, formStyles } from "../../components/FormBits";
+import { StatusNotice } from "../../components/StatusNotice";
 import { accountsApi } from "../../services/api/accounts";
 import { expensesApi } from "../../services/api/expenses";
 import {
@@ -30,6 +32,7 @@ type Dialog =
 
 export default function AccountDetailScreen() {
   const { t } = useTranslation();
+  const theme = useTheme();
   const router = useRouter();
   const { accountId } = useLocalSearchParams<{ accountId: string }>();
   const [account, setAccount] = useState<AccountResponse | null>(null);
@@ -141,7 +144,7 @@ export default function AccountDetailScreen() {
         </View>
       </View>
       {account.description ? <Text>{account.description}</Text> : null}
-      {readOnly && <Text accessibilityRole="alert">{t("accounts.detail.closedNotice")}</Text>}
+      {readOnly && <StatusNotice kind="readOnly">{t("accounts.detail.closedNotice")}</StatusNotice>}
 
       <Divider />
       <Text variant="titleMedium">{t("accounts.detail.participants")}</Text>
@@ -156,7 +159,7 @@ export default function AccountDetailScreen() {
               value={renaming.name}
               onChangeText={(text) => setRenaming({ id: p.id, name: text })}
             />
-            <Button
+            <AppButton
               onPress={() =>
                 isValidParticipantName(renaming.name) &&
                 run(
@@ -166,7 +169,7 @@ export default function AccountDetailScreen() {
               }
             >
               {t("accounts.form.save")}
-            </Button>
+            </AppButton>
           </View>
         ) : (
           <List.Item
@@ -182,13 +185,13 @@ export default function AccountDetailScreen() {
             right={() =>
               readOnly ? null : (
                 <View style={{ flexDirection: "row" }}>
-                  <Button compact onPress={() => setRenaming({ id: p.id, name: p.name })}>
+                  <AppButton compact onPress={() => setRenaming({ id: p.id, name: p.name })}>
                     {t("accounts.detail.rename")}
-                  </Button>
+                  </AppButton>
                   {!p.isOwner && (
-                    <Button compact onPress={() => askRemove(p)}>
+                    <AppButton compact onPress={() => askRemove(p)}>
                       {t("accounts.detail.remove")}
-                    </Button>
+                    </AppButton>
                   )}
                 </View>
               )
@@ -207,7 +210,7 @@ export default function AccountDetailScreen() {
             value={newParticipant}
             onChangeText={setNewParticipant}
           />
-          <Button
+          <AppButton
             onPress={() =>
               isValidParticipantName(newParticipant) &&
               run(
@@ -217,7 +220,7 @@ export default function AccountDetailScreen() {
             }
           >
             {t("accounts.detail.add")}
-          </Button>
+          </AppButton>
         </View>
       )}
 
@@ -227,16 +230,16 @@ export default function AccountDetailScreen() {
           <Text variant="titleMedium">{t("accounts.invite.title")}</Text>
           <Text>{t("accounts.invite.hint")}</Text>
           <Text selectable>{t("accounts.invite.code", { code: account.inviteCode })}</Text>
-          <Button
+          <AppButton
             mode="outlined"
             onPress={() => Share.share({ message: webInviteUrl(account.inviteCode) })}
           >
             {t("accounts.invite.share")}
-          </Button>
+          </AppButton>
           {account.isOwner && (
-            <Button mode="text" onPress={() => setDialog({ kind: "regenerate" })}>
+            <AppButton mode="text" onPress={() => setDialog({ kind: "regenerate" })}>
               {t("accounts.invite.regenerate")}
-            </Button>
+            </AppButton>
           )}
 
           <Divider />
@@ -259,7 +262,7 @@ export default function AccountDetailScreen() {
             onChangeText={setDescription}
           />
           <IconPicker value={icon} onChange={setIcon} />
-          <Button
+          <AppButton
             mode="contained"
             onPress={() =>
               isValidAccountName(name) &&
@@ -275,7 +278,7 @@ export default function AccountDetailScreen() {
             }
           >
             {t("accounts.form.save")}
-          </Button>
+          </AppButton>
           {saved && <Text>{t("accounts.form.saved")}</Text>}
         </>
       )}
@@ -283,19 +286,23 @@ export default function AccountDetailScreen() {
 
       <Divider />
       {!account.isOwner && !readOnly && (
-        <Button mode="outlined" onPress={() => setDialog({ kind: "leave" })}>
+        <AppButton mode="outlined" onPress={() => setDialog({ kind: "leave" })}>
           {t("accounts.actions.leave")}
-        </Button>
+        </AppButton>
       )}
       {account.isOwner && !readOnly && (
-        <Button mode="outlined" onPress={() => setDialog({ kind: "close" })}>
+        <AppButton mode="outlined" onPress={() => setDialog({ kind: "close" })}>
           {t("accounts.actions.close")}
-        </Button>
+        </AppButton>
       )}
       {account.isOwner && (
-        <Button mode="text" textColor="#c62828" onPress={() => setDialog({ kind: "delete" })}>
+        <AppButton
+          mode="text"
+          textColor={theme.colors.error}
+          onPress={() => setDialog({ kind: "delete" })}
+        >
           {t("accounts.actions.delete")}
-        </Button>
+        </AppButton>
       )}
 
       <ConfirmDialog

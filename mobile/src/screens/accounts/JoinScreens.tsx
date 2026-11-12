@@ -2,10 +2,12 @@ import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
-import { Button, RadioButton, Text, TextInput } from "react-native-paper";
+import { RadioButton, Text, TextInput } from "react-native-paper";
 
+import { AppButton } from "../../components/AppButton";
 import { AccountIcon } from "../../components/accounts/AccountBits";
 import { ErrorText, formStyles } from "../../components/FormBits";
+import { Screen } from "../../components/Screen";
 import { accountsApi } from "../../services/api/accounts";
 import { type ApiErrorCode, errorCodeOf, type InvitationPreview } from "../../services/api/types";
 import {
@@ -28,8 +30,10 @@ export function JoinScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={formStyles.screen} keyboardShouldPersistTaps="handled">
-      <Text variant="headlineMedium">{t("accounts.join")}</Text>
+    <Screen>
+      <Text variant="headlineMedium" accessibilityRole="header">
+        {t("accounts.join")}
+      </Text>
       <TextInput
         mode="outlined"
         label={t("invite.codeLabel")}
@@ -39,10 +43,10 @@ export function JoinScreen() {
         onChangeText={setValue}
       />
       {invalid && <ErrorText code="invalid_invitation" />}
-      <Button mode="contained" onPress={submit}>
+      <AppButton mode="contained" onPress={submit}>
         {t("invite.continue")}
-      </Button>
-    </ScrollView>
+      </AppButton>
+    </Screen>
   );
 }
 
@@ -97,9 +101,9 @@ export function InvitationScreen({ code }: { code: string }) {
     return (
       <ScrollView contentContainerStyle={formStyles.screen}>
         <Text accessibilityRole="alert">{t("invite.alreadyMember")}</Text>
-        <Button mode="contained" onPress={() => openAccount(accountId)}>
+        <AppButton mode="contained" onPress={() => openAccount(accountId)}>
           {t("invite.open")}
-        </Button>
+        </AppButton>
       </ScrollView>
     );
   }
@@ -126,13 +130,13 @@ export function InvitationScreen({ code }: { code: string }) {
               />
             ))}
           </RadioButton.Group>
-          <Button
+          <AppButton
             mode="contained"
             disabled={!selected || pending}
             onPress={() => join({ participantId: selected })}
           >
             {t("invite.join")}
-          </Button>
+          </AppButton>
         </>
       ) : (
         <Text>{t("invite.noneAvailable")}</Text>
@@ -146,13 +150,13 @@ export function InvitationScreen({ code }: { code: string }) {
         value={newName}
         onChangeText={setNewName}
       />
-      <Button
+      <AppButton
         mode="outlined"
         disabled={pending || !isValidParticipantName(newName)}
         onPress={() => join({ newParticipantName: newName.trim() })}
       >
         {t("invite.joinAsNew")}
-      </Button>
+      </AppButton>
       <ErrorText code={error} />
     </ScrollView>
   );

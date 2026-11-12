@@ -5,12 +5,13 @@ import { PaperProvider } from "react-native-paper";
 
 import i18n from "@/i18n";
 import type { AuthResponse, UserResponse } from "@/services/api/types";
+import { lightTheme } from "@/theme";
 
 export function renderScreen(ui: ReactElement) {
   function Wrapper({ children }: { children: ReactNode }) {
     return (
       <I18nextProvider i18n={i18n}>
-        <PaperProvider>{children}</PaperProvider>
+        <PaperProvider theme={lightTheme}>{children}</PaperProvider>
       </I18nextProvider>
     );
   }

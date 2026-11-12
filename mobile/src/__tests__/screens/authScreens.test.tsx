@@ -46,9 +46,17 @@ beforeEach(async () => {
 });
 
 describe("Login", () => {
-  it("shows the slogan", () => {
+  it("shows the logo, the name and the slogan (FR-014)", () => {
     renderScreen(<LoginScreen />);
+    expect(screen.getByLabelText("ChePagame")).toBeTruthy();
     expect(screen.getByText("Para que la guita no sea un problema")).toBeTruthy();
+  });
+
+  it("shows the slogan in English", async () => {
+    await i18n.changeLanguage("en");
+    renderScreen(<LoginScreen />);
+    expect(screen.getByText("So money is never a problem")).toBeTruthy();
+    await i18n.changeLanguage("es");
   });
 
   it("signs in with the password", async () => {

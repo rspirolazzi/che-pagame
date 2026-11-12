@@ -1,5 +1,18 @@
 // Global mocks for native modules that cannot run under Jest.
 
+// Navigators rendered with expo-router's renderRouter need the gesture handler mocks.
+require("react-native-gesture-handler/jestSetup");
+
+// Icon fonts load asynchronously and update state outside act(); a plain view keeps tests quiet.
+jest.mock("@expo/vector-icons", () => {
+  const { createElement } = require("react");
+  const { View } = require("react-native");
+  const Icon = ({ name, testID }: { name: string; testID?: string }) =>
+    createElement(View, { testID: testID ?? `icon-${name}` });
+  Icon.glyphMap = {};
+  return { MaterialCommunityIcons: Icon };
+});
+
 jest.mock("expo-secure-store", () => {
   const store = new Map<string, string>();
   return {

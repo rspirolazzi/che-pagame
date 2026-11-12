@@ -2,8 +2,9 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
-import { Button, HelperText, IconButton, Text, TextInput } from "react-native-paper";
+import { HelperText, IconButton, Text, TextInput } from "react-native-paper";
 
+import { AppButton } from "../../components/AppButton";
 import { IconPicker } from "../../components/accounts/AccountBits";
 import { CurrencyPicker } from "../../components/CurrencyPicker";
 import { ErrorText, formStyles } from "../../components/FormBits";
@@ -114,14 +115,19 @@ export default function NewAccountScreen() {
           />
         </View>
       ))}
-      <Button mode="text" onPress={() => setOthers([...others, ""])}>
+      <AppButton mode="text" onPress={() => setOthers([...others, ""])}>
         {t("accounts.form.addParticipant")}
-      </Button>
+      </AppButton>
       <ErrorText messageKey={problem} />
       <ErrorText code={error} />
-      <Button mode="contained" loading={pending} disabled={pending || !currency} onPress={create}>
+      <AppButton
+        mode="contained"
+        loading={pending}
+        disabled={pending || !currency}
+        onPress={create}
+      >
         {t("accounts.form.create")}
-      </Button>
+      </AppButton>
     </ScrollView>
   );
 }

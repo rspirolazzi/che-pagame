@@ -97,6 +97,24 @@ docker compose up -d --build
 - CSV always uses `,` and a decimal point, whatever the language. A spreadsheet set to Spanish may
   need "Import CSV" (with a dot as the decimal separator) instead of a double click.
 
+## Visual identity (feature 006)
+
+- The "Celeste y sol" identity lives in one place: `design/tokens.json` (colors per role for light
+  and dark, typography, spacing, radius and touch target size, plus the contrast pairs).
+- `npm run tokens` (from `mobile/`) validates it and writes `mobile/src/theme/tokens.generated.ts`
+  (plus a `.json` copy of the colors for `app.config.ts`) and `web/src/styles/tokens.generated.css`.
+  They are committed and never edited by hand.
+- `npm run icons` (from `mobile/`) draws the approved wordmark and the "Che" app icon from the
+  tokens and the brand typeface (Sora, SIL OFL, in `mobile/assets/fonts/`): the SVG sources in
+  `design/logo/` and the icon, adaptive icon, monochrome icon, splash and logo PNGs. Changing the
+  icon or splash needs a rebuilt development build (`npx expo run:android`).
+- The App navigates with a bottom bar (Inicio, Cuentas, Perfil); expense and settlement forms
+  open full screen without it.
+- `npm run tokens:check` writes nothing and fails if a text pair is below 4.5:1, a control pair
+  below 3:1, or a generated file is out of date. Mobile's Jest suite also checks contrast and fails
+  on any color literal outside `mobile/src/theme/`.
+- The Web keeps its current look until feature 007 imports the generated CSS.
+
 ## Tests
 
 ```bash

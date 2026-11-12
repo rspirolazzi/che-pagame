@@ -4,14 +4,15 @@ import { useTranslation } from "react-i18next";
 import { ScrollView, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
-  Button,
   Chip,
   Divider,
   HelperText,
   List,
   Text,
+  useTheme,
 } from "react-native-paper";
 
+import { AppButton } from "../../components/AppButton";
 import { ConfirmDialog } from "../../components/accounts/AccountBits";
 import { CategoryIcon, ExpenseHistory } from "../../components/expenses/ExpenseBits";
 import { ErrorText, formStyles } from "../../components/FormBits";
@@ -25,10 +26,12 @@ import {
   type HistoryEntry,
 } from "../../services/api/types";
 import { formatDay } from "../../utils/expenseGroups";
+import type { AppTheme } from "../../theme";
 import { formatMoney } from "../../utils/money";
 
 export default function ExpenseDetailScreen() {
   const { t, i18n } = useTranslation();
+  const theme = useTheme();
   const locale = i18n.language;
   const router = useRouter();
   const { accountId, expenseId } = useLocalSearchParams<{ accountId: string; expenseId: string }>();
@@ -68,7 +71,7 @@ export default function ExpenseDetailScreen() {
         <HelperText type="error" visible accessibilityRole="alert">
           {t("expenses.gone")}
         </HelperText>
-        <Button onPress={() => router.back()}>{t("expenses.back")}</Button>
+        <AppButton onPress={() => router.back()}>{t("expenses.back")}</AppButton>
       </ScrollView>
     );
   }
@@ -107,7 +110,7 @@ export default function ExpenseDetailScreen() {
           <Text variant="headlineSmall">{expense.title}</Text>
           <Text>{formatDay(expense.date, locale)}</Text>
         </View>
-        <Text variant="titleLarge">{money(expense.amount)}</Text>
+        <Text style={(theme as AppTheme).custom.amountLarge}>{money(expense.amount)}</Text>
       </View>
       {expense.isPending && <Chip icon="alert-circle-outline">{t("expenses.pending")}</Chip>}
       {expense.isPending && <Text>{t("expenses.detail.pendingHint")}</Text>}
@@ -138,7 +141,7 @@ export default function ExpenseDetailScreen() {
       <ErrorText code={error} />
       {!account.isClosed && (
         <View style={styles.row}>
-          <Button
+          <AppButton
             mode="contained"
             onPress={() =>
               router.push({
@@ -148,10 +151,14 @@ export default function ExpenseDetailScreen() {
             }
           >
             {t("expenses.detail.edit")}
-          </Button>
-          <Button mode="outlined" textColor="#c62828" onPress={() => setConfirming(true)}>
+          </AppButton>
+          <AppButton
+            mode="outlined"
+            textColor={theme.colors.error}
+            onPress={() => setConfirming(true)}
+          >
             {t("expenses.detail.delete")}
-          </Button>
+          </AppButton>
         </View>
       )}
       <Divider />

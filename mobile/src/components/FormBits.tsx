@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import { Button, HelperText, Text, TextInput } from "react-native-paper";
+import { Text, TextInput } from "react-native-paper";
 
+import { AppButton } from "./AppButton";
 import type { ApiErrorCode } from "../services/api/types";
+import { tokens } from "../theme/tokens.generated";
+import { StatusNotice } from "./StatusNotice";
 
 export function ErrorText({
   code,
@@ -15,11 +18,8 @@ export function ErrorText({
   const { t } = useTranslation();
   const key = messageKey ?? (code ? `errors.${code}` : null);
   if (!key) return null;
-  return (
-    <HelperText type="error" visible accessibilityRole="alert">
-      {t(key)}
-    </HelperText>
-  );
+  // Errors read with an icon and words, not only red text (feature 006, FR-010).
+  return <StatusNotice kind="error">{t(key)}</StatusNotice>;
 }
 
 interface CodeInputProps {
@@ -71,7 +71,7 @@ export function ResendButton({ onResend, initialCooldown = 60 }: ResendButtonPro
 
   return (
     <View>
-      <Button
+      <AppButton
         mode="text"
         disabled={cooldown > 0}
         onPress={async () => {
@@ -85,15 +85,23 @@ export function ResendButton({ onResend, initialCooldown = 60 }: ResendButtonPro
         }}
       >
         {cooldown > 0 ? t("auth.code.resendIn", { seconds: cooldown }) : t("auth.code.resend")}
-      </Button>
+      </AppButton>
       {sent && <Text>{t("auth.code.resent")}</Text>}
     </View>
   );
 }
 
+/** Screen padding and rhythm from the identity tokens (feature 006). */
 export const formStyles = StyleSheet.create({
-  screen: { flexGrow: 1, padding: 24, gap: 12, justifyContent: "center" },
-  title: { marginBottom: 8 },
+  screen: {
+    flexGrow: 1,
+    padding: tokens.spacing.lg,
+    paddingBottom: tokens.spacing.xxl,
+    gap: tokens.spacing.md,
+  },
+  /** Sign-in and onboarding screens keep their content vertically centered. */
+  centered: { justifyContent: "center" },
+  title: { marginBottom: tokens.spacing.sm },
 });
 
 const styles = StyleSheet.create({

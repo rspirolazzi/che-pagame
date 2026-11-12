@@ -15,7 +15,7 @@ npm run tokens:check   (desde mobile/: no escribe; falla si algo no cumple)
 
 | Situación | Sin `--check` | Con `--check` | Código de salida |
 | --- | --- | --- | --- |
-| Todo válido | Escribe las 2 salidas | No escribe | 0 |
+| Todo válido | Escribe las 3 salidas | No escribe | 0 |
 | Falta o sobra un rol en `light` o `dark` | No escribe; lista los roles | Igual | 1 |
 | Un valor no es `#RRGGBB` | No escribe; indica rol y modo | Igual | 1 |
 | Un par no llega al mínimo | No escribe; una línea por par | Igual | 1 |
@@ -43,6 +43,11 @@ export const tokens = {
 export type ColorRole = keyof typeof tokens.color.light;
 ```
 
+## 2b. `mobile/src/theme/tokens.generated.json`
+
+Solo los colores (`{ "color": { "light": {...}, "dark": {...} } }`), para `app.config.ts`: el
+cargador de configuración de Expo no puede importar módulos TypeScript. Agregado al implementar.
+
 ## 3. `web/src/styles/tokens.generated.css`
 
 ```css
@@ -67,7 +72,7 @@ No se importa en esta feature (la 007 lo conecta a `globals.css`).
 
 | Componente | Props | Garantías |
 | --- | --- | --- |
-| `AmountText` | `amount: string`, `currency`, `decimals`, `locale`, `variant?: "large" \| "regular"`, `subject?: "me" \| "other"` | Color por signo (`positive`, `negative` o neutro), signo "+"/"−", ícono con nombre accesible y el texto existente ("Te deben", "Debe", "Al día"...); cifras tabulares |
+| `AmountText` | `amount: string`, `currency`, `decimals`, `locale`, `variant?: "large" \| "regular"`, `subject?: "me" \| "other" \| "none"` | Color por signo (`positive`, `negative` o neutro), una insignia con "+", "−" o un tilde y nombre accesible ("A favor", "En contra", "Al día"), y el texto existente ("Te deben 60,00 ARS", "Debe", "Al día"...) sin cambios; con `none`, solo el importe. Cifras tabulares |
 | `StatusNotice` | `kind: "warning" \| "error" \| "readOnly" \| "info"`, `children`, `action?` | Ícono + texto + color; `error` usa `accessibilityRole="alert"` |
 | `Logo` | `variant: "full" \| "symbol"`, `size` | Elige la versión clara u oscura según el tema; `accessibilityLabel` "ChePagame" |
 | `AppTabBar` | props de `Tabs` (`tabBar`) | `BottomNavigation.Bar` de Paper con Inicio, Cuentas y Perfil; activo con indicador y etiqueta; cada destino de al menos 48 dp |

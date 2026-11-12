@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Text, TextInput } from "react-native-paper";
 
+import { AppButton } from "../components/AppButton";
 import { CodeInput, ErrorText, formStyles, ResendButton } from "../components/FormBits";
 import { useAuth } from "../hooks/useAuth";
 import { authApi } from "../services/api/auth";
@@ -63,7 +64,10 @@ export default function CodeSignInScreen({ kind }: { kind: "login-code" | "passw
   }
 
   return (
-    <ScrollView contentContainerStyle={formStyles.screen} keyboardShouldPersistTaps="handled">
+    <ScrollView
+      contentContainerStyle={[formStyles.screen, formStyles.centered]}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text variant="headlineMedium" style={formStyles.title}>
         {t(`${ns}.title`)}
       </Text>
@@ -81,9 +85,9 @@ export default function CodeSignInScreen({ kind }: { kind: "login-code" | "passw
           />
           <ErrorText messageKey={message} />
           <ErrorText code={error} />
-          <Button mode="contained" loading={pending} disabled={pending} onPress={sendCode}>
+          <AppButton mode="contained" loading={pending} disabled={pending} onPress={sendCode}>
             {t(`${ns}.request`)}
-          </Button>
+          </AppButton>
         </>
       ) : (
         <>
@@ -108,14 +112,14 @@ export default function CodeSignInScreen({ kind }: { kind: "login-code" | "passw
           )}
           <ErrorText messageKey={message} />
           <ErrorText code={error} />
-          <Button
+          <AppButton
             mode="contained"
             loading={pending}
             disabled={pending || code.length !== 6}
             onPress={() => signIn(code)}
           >
             {t(`${ns}.submit`)}
-          </Button>
+          </AppButton>
           <ResendButton
             onResend={async () => {
               try {

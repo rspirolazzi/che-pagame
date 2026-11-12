@@ -1,6 +1,8 @@
 import "../src/i18n";
 
 import { Stack, usePathname, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import * as SystemUI from "expo-system-ui";
 import { useEffect, useRef } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
@@ -16,6 +18,12 @@ function RootNavigator() {
   const router = useRouter();
   const returnTo = useRef<string | null>(null);
   usePendingInvite();
+
+  // System bars follow the active mode (FR-007).
+  useEffect(() => {
+    SystemUI.setBackgroundColorAsync(theme.colors.background).catch(() => undefined);
+  }, [theme]);
+  const statusBar = <StatusBar style={theme.dark ? "light" : "dark"} />;
 
   // Edge case: the session expires while the app is in use. Remember the screen and come back
   // to it after signing in again.
@@ -34,6 +42,7 @@ function RootNavigator() {
   if (status === "loading") {
     return (
       <PaperProvider theme={theme}>
+        {statusBar}
         <View
           style={{
             flex: 1,
@@ -51,6 +60,7 @@ function RootNavigator() {
   const signedIn = status === "authenticated";
   return (
     <PaperProvider theme={theme}>
+      {statusBar}
       <Stack
         screenOptions={{
           headerShown: false,

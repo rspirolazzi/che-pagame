@@ -1,50 +1,32 @@
 import { Stack } from "expo-router";
-import { useTranslation } from "react-i18next";
 
 import { useAuth } from "../../src/hooks/useAuth";
+import { useStackOptions } from "../../src/theme/navigation";
 
-/** A user without a default currency only sees the onboarding (FR-020a). */
+/**
+ * A user without a default currency only sees the onboarding (FR-020a). The bottom bar lives in
+ * the (tabs) group; full-screen forms stay here so they never show it (feature 006, FR-014b).
+ */
 export default function AppLayout() {
-  const { t } = useTranslation();
   const { user } = useAuth();
+  const stackOptions = useStackOptions();
   const needsCurrency = user?.preferences.defaultCurrency == null;
 
   return (
-    <Stack>
+    <Stack screenOptions={stackOptions}>
       <Stack.Protected guard={needsCurrency}>
         <Stack.Screen name="onboarding-currency" options={{ headerShown: false }} />
       </Stack.Protected>
       <Stack.Protected guard={!needsCurrency}>
-        <Stack.Screen name="index" options={{ title: t("common.appName") }} />
-        <Stack.Screen name="profile" options={{ title: t("nav.profile") }} />
-        <Stack.Screen name="accounts/index" options={{ title: t("accounts.title") }} />
-        <Stack.Screen name="accounts/new" options={{ title: t("accounts.new") }} />
-        <Stack.Screen name="accounts/[accountId]/index" options={{ title: t("expenses.title") }} />
-        <Stack.Screen
-          name="accounts/[accountId]/settings"
-          options={{ title: t("expenses.settings") }}
-        />
-        <Stack.Screen
-          name="accounts/[accountId]/expenses/new"
-          options={{ title: t("expenses.form.newTitle") }}
-        />
-        <Stack.Screen
-          name="accounts/[accountId]/expenses/[expenseId]/index"
-          options={{ title: "" }}
-        />
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        {/* The expense form draws its own header with back and the title. */}
+        <Stack.Screen name="accounts/[accountId]/expenses/new" options={{ headerShown: false }} />
         <Stack.Screen
           name="accounts/[accountId]/expenses/[expenseId]/edit"
-          options={{ title: t("expenses.form.editTitle") }}
+          options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="accounts/[accountId]/balances"
-          options={{ title: t("balances.title") }}
-        />
-        <Stack.Screen
-          name="accounts/[accountId]/settlements/new"
-          options={{ title: t("settlements.newTitle") }}
-        />
-        <Stack.Screen name="join" options={{ title: t("accounts.join") }} />
+        {/* The screen shows its own title; the header keeps only the back button. */}
+        <Stack.Screen name="accounts/[accountId]/settlements/new" options={{ title: "" }} />
       </Stack.Protected>
     </Stack>
   );

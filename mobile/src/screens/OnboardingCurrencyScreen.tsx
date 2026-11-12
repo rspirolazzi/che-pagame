@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { Button, HelperText, Text } from "react-native-paper";
+import { HelperText, Text } from "react-native-paper";
 
+import { AppButton } from "../components/AppButton";
 import { CurrencyPicker } from "../components/CurrencyPicker";
 import { ErrorText, formStyles } from "../components/FormBits";
 import { useAuth } from "../hooks/useAuth";
@@ -32,7 +33,7 @@ export default function OnboardingCurrencyScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={formStyles.screen}>
+    <ScrollView contentContainerStyle={[formStyles.screen, formStyles.centered]}>
       <Text variant="headlineMedium" style={formStyles.title}>
         {t("onboarding.title")}
       </Text>
@@ -42,9 +43,14 @@ export default function OnboardingCurrencyScreen() {
         <HelperText type="info">{t("onboarding.suggested")}</HelperText>
       )}
       <ErrorText code={error} />
-      <Button mode="contained" loading={pending} disabled={!currency || pending} onPress={confirm}>
+      <AppButton
+        mode="contained"
+        loading={pending}
+        disabled={!currency || pending}
+        onPress={confirm}
+      >
         {t("common.continue")}
-      </Button>
+      </AppButton>
     </ScrollView>
   );
 }

@@ -21,7 +21,11 @@
     "accounts": "Accounts",
     "profile": "Profile",
     "logout": "Logout",
-    "accountsSoon": "Coming soon"
+    "accountsSoon": "Coming soon",
+    "tabHome": "Home",
+    "tabAccounts": "Accounts",
+    "tabProfile": "Profile",
+    "tabsLabel": "Main navigation"
   },
   "footer": {
     "rights": "ChePagame. So money is never a problem.",
@@ -415,7 +419,8 @@
     "dialogHint": "If the amount or the date were different, use «Record settlement».",
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "saved": "Settlement recorded."
+    "saved": "Settlement recorded.",
+    "suggested": "Suggested"
   },
   "settlements": {
     "title": "Settlements",
@@ -460,5 +465,15 @@
     "mineTitle": "Export my data",
     "mineHint": "Download your profile and all your accounts as CSV (a ZIP with one spreadsheet per table) or JSON.",
     "mineButton": "Export my data"
+  },
+  "a11y": {
+    "owed": "Owed to",
+    "owes": "Owes",
+    "settled": "Settled up",
+    "warning": "Notice",
+    "error": "Error",
+    "readOnly": "Read only",
+    "info": "Information",
+    "back": "Back"
   }
 }

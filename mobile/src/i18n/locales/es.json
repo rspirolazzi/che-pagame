@@ -21,7 +21,11 @@
     "accounts": "Accounts",
     "profile": "Profile",
     "logout": "Logout",
-    "accountsSoon": "Disponible pronto"
+    "accountsSoon": "Disponible pronto",
+    "tabHome": "Inicio",
+    "tabAccounts": "Cuentas",
+    "tabProfile": "Perfil",
+    "tabsLabel": "Navegación principal"
   },
   "footer": {
     "rights": "ChePagame. Para que la guita no sea un problema.",
@@ -415,7 +419,8 @@
     "dialogHint": "Si el importe o la fecha fueron otros, registralo con «Registrar reembolso».",
     "confirm": "Confirmar",
     "cancel": "Cancelar",
-    "saved": "Reembolso registrado."
+    "saved": "Reembolso registrado.",
+    "suggested": "Sugerido"
   },
   "settlements": {
     "title": "Reembolsos",
@@ -460,5 +465,15 @@
     "mineTitle": "Exportar mis datos",
     "mineHint": "Descargá tu perfil y todas tus Cuentas en CSV (un ZIP con una planilla por tabla) o en JSON.",
     "mineButton": "Exportar mis datos"
+  },
+  "a11y": {
+    "owed": "A favor",
+    "owes": "En contra",
+    "settled": "Al día",
+    "warning": "Aviso",
+    "error": "Error",
+    "readOnly": "Solo lectura",
+    "info": "Información",
+    "back": "Volver"
   }
 }

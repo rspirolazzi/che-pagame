@@ -3,15 +3,9 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView, View } from "react-native";
-import {
-  ActivityIndicator,
-  Button,
-  HelperText,
-  RadioButton,
-  Text,
-  TextInput,
-} from "react-native-paper";
+import { ActivityIndicator, HelperText, RadioButton, Text, TextInput } from "react-native-paper";
 
+import { AppButton } from "../../components/AppButton";
 import { ErrorText, formStyles } from "../../components/FormBits";
 import { accountsApi } from "../../services/api/accounts";
 import { type SettlementInput, settlementsApi } from "../../services/api/settlements";
@@ -139,13 +133,13 @@ export default function SettlementFormScreen() {
       <Text variant="bodySmall">{t("settlements.currencyHint")}</Text>
       <View>
         <Text variant="labelLarge">{t("settlements.date")}</Text>
-        <Button
+        <AppButton
           mode="outlined"
           accessibilityLabel={t("settlements.date")}
           onPress={() => setShowPicker(true)}
         >
           {formatDay(date, locale, { dateStyle: "medium" })}
-        </Button>
+        </AppButton>
         {showPicker && (
           <DateTimePicker
             mode="date"
@@ -163,9 +157,9 @@ export default function SettlementFormScreen() {
         </HelperText>
       )}
       <ErrorText code={apiError} />
-      <Button mode="contained" loading={saving} disabled={saving} onPress={save}>
+      <AppButton mode="contained" loading={saving} disabled={saving} onPress={save}>
         {saving ? t("settlements.saving") : t("settlements.save")}
-      </Button>
+      </AppButton>
     </ScrollView>
   );
 }

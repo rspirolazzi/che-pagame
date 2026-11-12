@@ -67,3 +67,13 @@ regenerar o si un par no llega al contraste mínimo.
     chepagame-backend`): el mensaje usa el color de error, un ícono y explica qué pasó.
 12. **Enlace de invitación**: abrir `chepagame://invite/<code>` con y sin sesión: llega a la
     invitación como antes.
+
+## Verificaciones de la fuente común
+
+Probado el 2026-11-12 (T015), con los cambios de prueba revertidos después:
+
+| Caso (US4) | Resultado |
+| --- | --- |
+| Cambiar `primary` en `design/tokens.json` | `npm run tokens:check` marca las dos salidas como desactualizadas; `npm run tokens` las regenera y el tema de la App toma el valor nuevo sin tocar pantallas (`appTheme.test.ts` pasa con el valor nuevo). |
+| Poner `textMuted` con poco contraste (`#9AA8B4`) | `npm run tokens` sale con código 1, no escribe nada y lista `textMuted on background (light) is 2.26:1, minimum 4.5:1` y el par sobre la superficie. `contrast.test.ts` protege además las salidas ya generadas si alguien las edita a mano. |
+| Escribir `#ff0000` en `DashboardScreen.tsx` | `noHardcodedColors.test.ts` falla e indica `src/screens/DashboardScreen.tsx:35`. |

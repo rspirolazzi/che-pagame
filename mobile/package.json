@@ -40,6 +40,7 @@
   },
   "devDependencies": {
     "@react-native/jest-preset": "^0.85.3",
+    "@resvg/resvg-js": "2.6.2",
     "@testing-library/react-native": "^13.3.3",
     "@types/jest": "^29.5.14",
     "@types/react": "~19.2.2",
@@ -58,7 +59,10 @@
     "lint": "expo lint",
     "format": "prettier --write .",
     "test": "jest",
-    "gen:api": "npx --yes openapi-typescript@7 http://localhost:8000/api/v1/openapi.json -o src/services/api/schema.d.ts"
+    "gen:api": "npx --yes openapi-typescript@7 http://localhost:8000/api/v1/openapi.json -o src/services/api/schema.d.ts",
+    "tokens": "node --experimental-strip-types ../design/build-tokens.ts",
+    "tokens:check": "node --experimental-strip-types ../design/build-tokens.ts --check",
+    "icons": "node --experimental-strip-types ../design/build-icons.ts"
   },
   "private": true,
   "engines": {

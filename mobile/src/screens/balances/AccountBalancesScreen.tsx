@@ -1,17 +1,17 @@
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { RefreshControl, ScrollView, StyleSheet, View } from "react-native";
-import { ActivityIndicator, Button, Chip, Text } from "react-native-paper";
+import { RefreshControl, StyleSheet, View } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
 
-import { AccountIcon } from "../../components/accounts/AccountBits";
-import { AccountTabs } from "../../components/accounts/AccountTabs";
-import { ExportButton } from "../../components/exports/ExportButton";
+import { AppButton } from "../../components/AppButton";
+import { AccountHeader } from "../../components/accounts/AccountHeader";
 import { BalanceList } from "../../components/balances/BalanceList";
 import { SettlementList } from "../../components/balances/SettlementList";
 import { SuggestionList } from "../../components/balances/SuggestionList";
 import { ErrorText } from "../../components/FormBits";
-import { exportsApi } from "../../services/api/exports";
+import { Screen } from "../../components/Screen";
+import { StatusNotice } from "../../components/StatusNotice";
 import { accountsApi } from "../../services/api/accounts";
 import { settlementsApi } from "../../services/api/settlements";
 import {
@@ -94,27 +94,20 @@ export default function AccountBalancesScreen() {
 
   if (!account || !balances) {
     return (
-      <View style={styles.screen}>
-        {error ? <ErrorText code={error} /> : <ActivityIndicator />}
-      </View>
+      <Screen>
+        <View style={styles.center}>
+          {error ? <ErrorText code={error} /> : <ActivityIndicator />}
+        </View>
+      </Screen>
     );
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.screen}
-      refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}
-    >
-      <View style={styles.row}>
-        <AccountIcon icon={account.icon} size={36} />
-        <Text variant="headlineSmall" style={styles.flex}>
-          {account.name}
-        </Text>
-        {account.isClosed && <Chip compact>{t("accounts.closedBadge")}</Chip>}
-      </View>
-      <AccountTabs accountId={account.id} active="balances" />
-      {/* Also on closed accounts: exporting is read only (FR-001). */}
-      <ExportButton run={(format) => exportsApi.account(account.id, format)} />
+    <Screen refreshControl={<RefreshControl refreshing={refreshing} onRefresh={refresh} />}>
+      <AccountHeader account={account} active="balances" />
+      {account.isClosed && (
+        <StatusNotice kind="readOnly">{t("accounts.detail.closedNotice")}</StatusNotice>
+      )}
       <ErrorText code={error} />
       <BalanceList
         balances={balances}
@@ -130,8 +123,9 @@ export default function AccountBalancesScreen() {
         onSaved={() => void load()}
       />
       {!account.isClosed && (
-        <Button
-          mode="contained"
+        <AppButton
+          mode="outlined"
+          icon="plus"
           onPress={() =>
             router.push({
               pathname: "/accounts/[accountId]/settlements/new",
@@ -140,7 +134,7 @@ export default function AccountBalancesScreen() {
           }
         >
           {t("settlements.new")}
-        </Button>
+        </AppButton>
       )}
       <SettlementList
         account={account}
@@ -151,12 +145,10 @@ export default function AccountBalancesScreen() {
         onLoadMore={loadMore}
         onChanged={() => void load()}
       />
-    </ScrollView>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: { padding: 16, gap: 16 },
-  row: { flexDirection: "row", alignItems: "center", gap: 12, flexWrap: "wrap" },
-  flex: { flex: 1 },
+  center: { alignItems: "center" },
 });

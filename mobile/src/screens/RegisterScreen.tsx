@@ -2,8 +2,9 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { Button, HelperText, Text, TextInput } from "react-native-paper";
+import { HelperText, Text, TextInput } from "react-native-paper";
 
+import { AppButton } from "../components/AppButton";
 import { ErrorText, formStyles } from "../components/FormBits";
 import { GoogleSignInButton } from "../components/GoogleSignInButton";
 import { authApi } from "../services/api/auth";
@@ -50,7 +51,10 @@ export default function RegisterScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={formStyles.screen} keyboardShouldPersistTaps="handled">
+    <ScrollView
+      contentContainerStyle={[formStyles.screen, formStyles.centered]}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text variant="headlineMedium" style={formStyles.title}>
         {t("auth.register.title")}
       </Text>
@@ -93,9 +97,9 @@ export default function RegisterScreen() {
       />
       <ErrorText messageKey={message} />
       <ErrorText code={error} />
-      <Button mode="contained" loading={pending} disabled={pending} onPress={submit}>
+      <AppButton mode="contained" loading={pending} disabled={pending} onPress={submit}>
         {t("auth.register.submit")}
-      </Button>
+      </AppButton>
       <Link href="/login">
         {t("auth.register.haveAccount")} {t("auth.register.login")}
       </Link>

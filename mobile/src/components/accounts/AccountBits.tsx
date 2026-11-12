@@ -1,8 +1,9 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import { Button, Dialog, IconButton, Portal, Text, useTheme } from "react-native-paper";
+import { Dialog, IconButton, Portal, Text, useTheme } from "react-native-paper";
 
+import { AppButton } from "../AppButton";
 import type { AccountIcon as Icon } from "../../services/api/types";
 import { ACCOUNT_ICONS, MATERIAL_ICON } from "../../utils/accountIcons";
 
@@ -74,8 +75,10 @@ export function ConfirmDialog({
           {children}
         </Dialog.Content>
         <Dialog.Actions>
-          <Button onPress={onCancel}>{cancelLabel ?? t("accounts.dialogs.cancel")}</Button>
-          <Button onPress={onConfirm}>{confirmLabel ?? t("accounts.dialogs.continue")}</Button>
+          <AppButton onPress={onCancel}>{cancelLabel ?? t("accounts.dialogs.cancel")}</AppButton>
+          <AppButton onPress={onConfirm}>
+            {confirmLabel ?? t("accounts.dialogs.continue")}
+          </AppButton>
         </Dialog.Actions>
       </Dialog>
     </Portal>

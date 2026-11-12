@@ -2,17 +2,20 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { ScrollView, View } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import {
   ActivityIndicator,
-  Button,
   Checkbox,
   HelperText,
+  IconButton,
   RadioButton,
   Text,
   TextInput,
+  useTheme,
 } from "react-native-paper";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { AppButton } from "../../components/AppButton";
 import { CategoryPicker } from "../../components/expenses/ExpenseBits";
 import { ErrorText, formStyles } from "../../components/FormBits";
 import { accountsApi } from "../../services/api/accounts";
@@ -27,6 +30,7 @@ import {
 } from "../../services/api/types";
 import { DEFAULT_CATEGORY } from "../../utils/categoryIcons";
 import { formatDay, today } from "../../utils/expenseGroups";
+import type { AppTheme } from "../../theme";
 import { type AmountError, amountToInput, parseAmountInput } from "../../utils/money";
 import { newRequestId } from "../../utils/requestId";
 
@@ -68,6 +72,9 @@ function initialState(
 /** Create (no expenseId) or edit an expense. */
 export default function ExpenseFormScreen() {
   const { t, i18n } = useTranslation();
+  const theme = useTheme<AppTheme>();
+  const insets = useSafeAreaInsets();
+  const { spacing, radius } = theme.custom;
   const locale = i18n.language;
   const router = useRouter();
   const { accountId, expenseId } = useLocalSearchParams<{
@@ -175,7 +182,7 @@ export default function ExpenseFormScreen() {
         <HelperText type="error" visible accessibilityRole="alert">
           {t("expenses.gone")}
         </HelperText>
-        <Button onPress={() => router.back()}>{t("expenses.back")}</Button>
+        <AppButton onPress={() => router.back()}>{t("expenses.back")}</AppButton>
       </ScrollView>
     );
   }
@@ -189,89 +196,149 @@ export default function ExpenseFormScreen() {
     );
 
   return (
-    <ScrollView contentContainerStyle={formStyles.screen} keyboardShouldPersistTaps="handled">
-      <Text variant="headlineSmall">
-        {expense ? t("expenses.form.editTitle") : t("expenses.form.newTitle")}
-      </Text>
-      {notice === "conflict" && (
-        <HelperText type="error" visible accessibilityRole="alert">
-          {t("expenses.conflict")}
-        </HelperText>
-      )}
-      <View>
-        <Text variant="labelLarge">{t("expenses.form.date")}</Text>
-        <Button
-          mode="outlined"
-          accessibilityLabel={t("expenses.form.date")}
-          onPress={() => setShowPicker(true)}
-        >
-          {formatDay(state.date, locale, { dateStyle: "medium" })}
-        </Button>
-        {showPicker && (
-          <DateTimePicker
-            mode="date"
-            value={new Date(`${state.date}T12:00:00`)}
-            onChange={(_event, selected) => {
-              setShowPicker(false);
-              if (selected) set("date", today(selected));
-            }}
+    <View style={[styles.flex, { backgroundColor: theme.colors.background }]}>
+      <ScrollView
+        contentContainerStyle={[formStyles.screen, { paddingTop: insets.top + spacing.sm }]}
+        keyboardShouldPersistTaps="handled"
+      >
+        {/* Full screen form (no bottom bar): its own header with back and the title. */}
+        <View style={styles.header}>
+          <IconButton
+            icon="arrow-left"
+            accessibilityLabel={t("a11y.back")}
+            onPress={() => router.back()}
+            style={styles.touch}
           />
+          <Text variant="headlineSmall" accessibilityRole="header" style={styles.flex}>
+            {expense ? t("expenses.form.editTitle") : t("expenses.form.newTitle")}
+          </Text>
+        </View>
+        {notice === "conflict" && (
+          <HelperText type="error" visible accessibilityRole="alert">
+            {t("expenses.conflict")}
+          </HelperText>
         )}
-      </View>
-      <TextInput
-        mode="outlined"
-        label={t("expenses.form.title")}
-        accessibilityLabel={t("expenses.form.title")}
-        maxLength={TITLE_MAX}
-        value={state.title}
-        onChangeText={(text) => set("title", text)}
-      />
-      <TextInput
-        mode="outlined"
-        label={t("expenses.form.amount", { currency: account.currency })}
-        accessibilityLabel={t("expenses.form.amount", { currency: account.currency })}
-        keyboardType={decimals === 0 ? "number-pad" : "decimal-pad"}
-        value={state.amount}
-        onChangeText={(text) => set("amount", text)}
-      />
-      <Text variant="bodySmall">{t("expenses.form.currencyHint")}</Text>
-
-      <Text variant="labelLarge">{t("expenses.form.paidBy")}</Text>
-      <RadioButton.Group value={state.paidById} onValueChange={(value) => set("paidById", value)}>
-        {account.participants.map((p) => (
-          <RadioButton.Item key={p.id} label={p.name} value={p.id} />
-        ))}
-      </RadioButton.Group>
-
-      <Text variant="labelLarge">{t("expenses.form.participants")}</Text>
-      {account.participants.map((p) => (
-        <Checkbox.Item
-          key={p.id}
-          label={p.name}
-          status={state.participantIds.includes(p.id) ? "checked" : "unchecked"}
-          onPress={() => toggle(p.id)}
+        <View>
+          <Text variant="labelLarge">{t("expenses.form.date")}</Text>
+          <AppButton
+            mode="outlined"
+            accessibilityLabel={t("expenses.form.date")}
+            onPress={() => setShowPicker(true)}
+          >
+            {formatDay(state.date, locale, { dateStyle: "medium" })}
+          </AppButton>
+          {showPicker && (
+            <DateTimePicker
+              mode="date"
+              value={new Date(`${state.date}T12:00:00`)}
+              onChange={(_event, selected) => {
+                setShowPicker(false);
+                if (selected) set("date", today(selected));
+              }}
+            />
+          )}
+        </View>
+        <TextInput
+          mode="outlined"
+          label={t("expenses.form.title")}
+          accessibilityLabel={t("expenses.form.title")}
+          maxLength={TITLE_MAX}
+          value={state.title}
+          onChangeText={(text) => set("title", text)}
         />
-      ))}
+        <TextInput
+          mode="outlined"
+          label={t("expenses.form.amount", { currency: account.currency })}
+          accessibilityLabel={t("expenses.form.amount", { currency: account.currency })}
+          keyboardType={decimals === 0 ? "number-pad" : "decimal-pad"}
+          value={state.amount}
+          onChangeText={(text) => set("amount", text)}
+        />
+        <Text variant="bodySmall">{t("expenses.form.currencyHint")}</Text>
 
-      <CategoryPicker value={state.categoryIcon} onChange={(icon) => set("categoryIcon", icon)} />
-      <TextInput
-        mode="outlined"
-        label={t("expenses.form.description")}
-        accessibilityLabel={t("expenses.form.description")}
-        multiline
-        maxLength={DESCRIPTION_MAX}
-        value={state.description}
-        onChangeText={(text) => set("description", text)}
-      />
-      {fieldError && (
-        <HelperText type="error" visible accessibilityRole="alert">
-          {t(`expenses.validation.${fieldError}`, { decimals })}
-        </HelperText>
-      )}
-      <ErrorText code={apiError} />
-      <Button mode="contained" loading={saving} disabled={saving} onPress={save}>
-        {saving ? t("expenses.form.saving") : t("expenses.form.save")}
-      </Button>
-    </ScrollView>
+        <Text variant="titleMedium">{t("expenses.form.paidBy")}</Text>
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.colors.surface,
+              borderColor: theme.colors.outlineVariant,
+              borderRadius: radius.md,
+            },
+          ]}
+        >
+          <RadioButton.Group
+            value={state.paidById}
+            onValueChange={(value) => set("paidById", value)}
+          >
+            {account.participants.map((p) => (
+              <RadioButton.Item key={p.id} label={p.name} value={p.id} />
+            ))}
+          </RadioButton.Group>
+        </View>
+
+        <Text variant="titleMedium">{t("expenses.form.participants")}</Text>
+        <View
+          style={[
+            styles.card,
+            {
+              backgroundColor: theme.colors.surface,
+              borderColor: theme.colors.outlineVariant,
+              borderRadius: radius.md,
+            },
+          ]}
+        >
+          {account.participants.map((p) => (
+            <Checkbox.Item
+              key={p.id}
+              label={p.name}
+              status={state.participantIds.includes(p.id) ? "checked" : "unchecked"}
+              onPress={() => toggle(p.id)}
+            />
+          ))}
+        </View>
+
+        <CategoryPicker value={state.categoryIcon} onChange={(icon) => set("categoryIcon", icon)} />
+        <TextInput
+          mode="outlined"
+          label={t("expenses.form.description")}
+          accessibilityLabel={t("expenses.form.description")}
+          multiline
+          maxLength={DESCRIPTION_MAX}
+          value={state.description}
+          onChangeText={(text) => set("description", text)}
+        />
+        {fieldError && (
+          <HelperText type="error" visible accessibilityRole="alert">
+            {t(`expenses.validation.${fieldError}`, { decimals })}
+          </HelperText>
+        )}
+        <ErrorText code={apiError} />
+      </ScrollView>
+      {/* The save action stays visible at the bottom (feature 006 mockup). */}
+      <View
+        style={[
+          styles.footer,
+          {
+            backgroundColor: theme.colors.surface,
+            borderTopColor: theme.colors.outlineVariant,
+            padding: spacing.lg,
+            paddingBottom: insets.bottom + spacing.md,
+          },
+        ]}
+      >
+        <AppButton mode="contained" loading={saving} disabled={saving} onPress={save}>
+          {saving ? t("expenses.form.saving") : t("expenses.form.save")}
+        </AppButton>
+      </View>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  header: { flexDirection: "row", alignItems: "center", gap: 4 },
+  touch: { margin: 0, width: 48, height: 48 },
+  card: { borderWidth: 1, overflow: "hidden" },
+  footer: { borderTopWidth: 1 },
+});

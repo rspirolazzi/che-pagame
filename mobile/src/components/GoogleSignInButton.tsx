@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Button } from "react-native-paper";
 
+import { AppButton } from "./AppButton";
 import { useAuth } from "../hooks/useAuth";
 import { errorCodeOf } from "../services/api/types";
 import { signInWithGoogle } from "../services/auth/googleSignIn";
@@ -31,8 +31,8 @@ export function GoogleSignInButton({ onMessage }: GoogleSignInButtonProps) {
   }
 
   return (
-    <Button mode="outlined" loading={pending} disabled={pending} onPress={handlePress}>
+    <AppButton mode="outlined" loading={pending} disabled={pending} onPress={handlePress}>
       {t("auth.google.button")}
-    </Button>
+    </AppButton>
   );
 }

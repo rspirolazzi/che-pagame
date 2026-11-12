@@ -2,8 +2,9 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { Button, Text } from "react-native-paper";
+import { Text } from "react-native-paper";
 
+import { AppButton } from "../components/AppButton";
 import { CodeInput, ErrorText, formStyles, ResendButton } from "../components/FormBits";
 import { useAuth } from "../hooks/useAuth";
 import { authApi } from "../services/api/auth";
@@ -44,7 +45,10 @@ export default function VerifyEmailScreen() {
   }
 
   return (
-    <ScrollView contentContainerStyle={formStyles.screen} keyboardShouldPersistTaps="handled">
+    <ScrollView
+      contentContainerStyle={[formStyles.screen, formStyles.centered]}
+      keyboardShouldPersistTaps="handled"
+    >
       <Text variant="headlineMedium" style={formStyles.title}>
         {t("auth.verifyEmail.title")}
       </Text>
@@ -52,12 +56,12 @@ export default function VerifyEmailScreen() {
       <CodeInput label={t("auth.verifyEmail.codeLabel")} onComplete={verify} disabled={pending} />
       <ErrorText code={error} />
       <ResendButton onResend={resend} />
-      <Button
+      <AppButton
         mode="text"
         onPress={() => router.replace({ pathname: "/register", params: { email } })}
       >
         {t("auth.verifyEmail.correctEmail")}
-      </Button>
+      </AppButton>
     </ScrollView>
   );
 }

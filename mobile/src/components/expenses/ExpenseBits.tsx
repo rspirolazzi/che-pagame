@@ -1,7 +1,7 @@
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import { StyleSheet, View } from "react-native";
-import { Chip, IconButton, List, Text, useTheme } from "react-native-paper";
+import { Pressable, StyleSheet, View } from "react-native";
+import { IconButton, Text, useTheme } from "react-native-paper";
 
 import type {
   AccountResponse,
@@ -11,6 +11,7 @@ import type {
   HistoryEntry,
   ParticipantRef,
 } from "../../services/api/types";
+import type { AppTheme } from "../../theme";
 import { CATEGORY_ICONS, CATEGORY_MATERIAL_ICON } from "../../utils/categoryIcons";
 import { formatDay } from "../../utils/expenseGroups";
 import { formatMoney } from "../../utils/money";
@@ -49,6 +50,7 @@ export function CategoryPicker({
             accessibilityLabel={t(`expenses.categories.${icon}`)}
             accessibilityState={{ selected: icon === value }}
             onPress={() => onChange(icon)}
+            style={styles.pick}
           />
         ))}
       </View>
@@ -68,28 +70,51 @@ export function ExpenseListItem({
   onPress: () => void;
 }) {
   const { t } = useTranslation();
+  const theme = useTheme<AppTheme>();
+  const { spacing, radius } = theme.custom;
   return (
-    <List.Item
-      title={item.title}
-      description={
-        item.paidBy ? t("expenses.paidBy", { name: item.paidBy.name }) : t("expenses.noPayer")
-      }
-      onPress={onPress}
+    <Pressable
       accessibilityRole="button"
-      left={() => (
-        <View style={styles.center}>
-          <CategoryIcon icon={item.categoryIcon} />
-        </View>
-      )}
-      right={() => (
-        <View style={styles.right}>
-          <Text variant="titleMedium">
-            {formatMoney(item.amount, account.currency, account.currencyDecimals, locale)}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.row,
+        { padding: spacing.md, gap: spacing.md },
+        pressed && { backgroundColor: theme.colors.surfaceVariant },
+      ]}
+    >
+      <View
+        style={[
+          styles.tile,
+          { backgroundColor: theme.colors.primaryContainer, borderRadius: radius.md },
+        ]}
+      >
+        <CategoryIcon icon={item.categoryIcon} size={22} />
+      </View>
+      <View style={styles.body}>
+        <Text variant="titleMedium" numberOfLines={2}>
+          {item.title}
+        </Text>
+        {item.isPending ? (
+          <View style={[styles.pending, { gap: spacing.xs }]}>
+            <MaterialCommunityIcons
+              name="alert-circle-outline"
+              size={16}
+              color={theme.custom.warning}
+            />
+            <Text variant="bodySmall" style={[styles.bold, { color: theme.custom.warning }]}>
+              {t("expenses.pending")}
+            </Text>
+          </View>
+        ) : (
+          <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
+            {item.paidBy ? t("expenses.paidBy", { name: item.paidBy.name }) : t("expenses.noPayer")}
           </Text>
-          {item.isPending && <Chip compact>{t("expenses.pending")}</Chip>}
-        </View>
-      )}
-    />
+        )}
+      </View>
+      <Text style={theme.custom.amount}>
+        {formatMoney(item.amount, account.currency, account.currencyDecimals, locale)}
+      </Text>
+    </Pressable>
   );
 }
 
@@ -158,8 +183,13 @@ export function ExpenseHistory({
 
 const styles = StyleSheet.create({
   icons: { flexDirection: "row", flexWrap: "wrap" },
-  center: { justifyContent: "center" },
-  right: { alignItems: "flex-end", justifyContent: "center", gap: 4 },
+  // 48 dp touch targets for the category picker (FR-018).
+  pick: { width: 48, height: 48 },
+  row: { flexDirection: "row", alignItems: "center", minHeight: 48 },
+  tile: { width: 40, height: 40, alignItems: "center", justifyContent: "center" },
+  body: { flex: 1, minWidth: 0, gap: 2 },
+  pending: { flexDirection: "row", alignItems: "center" },
+  bold: { fontWeight: "600" },
   history: { gap: 12 },
   entry: { gap: 2 },
 });

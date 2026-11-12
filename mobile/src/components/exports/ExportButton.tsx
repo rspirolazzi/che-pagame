@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { StyleSheet, View } from "react-native";
-import { Button, HelperText, Menu } from "react-native-paper";
+import { Menu } from "react-native-paper";
 
+import { AppButton } from "../AppButton";
+import { StatusNotice } from "../StatusNotice";
 import type { DownloadedFile } from "../../services/api/client";
 import type { ExportFormat } from "../../services/api/exports";
 import { errorCodeOf } from "../../services/api/types";
@@ -50,7 +52,7 @@ export function ExportButton({ run, label }: ExportButtonProps) {
         visible={open}
         onDismiss={() => setOpen(false)}
         anchor={
-          <Button
+          <AppButton
             mode="outlined"
             icon="export-variant"
             loading={busy}
@@ -58,7 +60,7 @@ export function ExportButton({ run, label }: ExportButtonProps) {
             onPress={() => setOpen(true)}
           >
             {busy ? t("exports.exporting") : (label ?? t("exports.button"))}
-          </Button>
+          </AppButton>
         }
       >
         {FORMATS.map((format) => (
@@ -66,14 +68,12 @@ export function ExportButton({ run, label }: ExportButtonProps) {
         ))}
       </Menu>
       {failed && (
-        <View>
-          <HelperText type="error" visible accessibilityRole="alert">
-            {failed.notFound ? t("exports.notFound") : t("exports.error")}
-          </HelperText>
-          <Button mode="text" onPress={() => exportAs(failed.format)}>
-            {t("exports.retry")}
-          </Button>
-        </View>
+        <StatusNotice
+          kind="error"
+          action={{ label: t("exports.retry"), onPress: () => exportAs(failed.format) }}
+        >
+          {failed.notFound ? t("exports.notFound") : t("exports.error")}
+        </StatusNotice>
       )}
     </View>
   );

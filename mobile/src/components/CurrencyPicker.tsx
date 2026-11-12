@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
-import { Button, Menu } from "react-native-paper";
+import { Menu } from "react-native-paper";
 
+import { AppButton } from "./AppButton";
 import { currencyOptions } from "../utils/currencies";
 
 interface CurrencyPickerProps {
@@ -22,9 +23,9 @@ export function CurrencyPicker({ label, value, onChange }: CurrencyPickerProps) 
       visible={open}
       onDismiss={() => setOpen(false)}
       anchor={
-        <Button mode="outlined" accessibilityLabel={label} onPress={() => setOpen(true)}>
+        <AppButton mode="outlined" accessibilityLabel={label} onPress={() => setOpen(true)}>
           {selected ? selected.label : t("onboarding.placeholder")}
-        </Button>
+        </AppButton>
       }
     >
       <ScrollView style={{ maxHeight: 360 }}>
