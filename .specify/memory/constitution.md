@@ -272,6 +272,28 @@ constitución.
 - **Accounts ("Mis Cuentas"):** listado de cuentas compartidas.
 - **Profile:** Nombre, Apellido, Idioma, Moneda por defecto y Theme (Light/Dark/System, donde
   System sigue el modo claro u oscuro del dispositivo).
+- **Navegación de la App Mobile:** una barra inferior con Inicio (Dashboard), Cuentas y Perfil,
+  visible en esas pantallas y en las que se abren desde ellas; los formularios a pantalla completa
+  (gasto, reembolso) y el onboarding no la muestran.
+
+### Identidad visual
+
+- La identidad de ChePagame es la paleta "Celeste y sol": celeste como color principal y amarillo
+  sol como acento, con colores fijos para "te deben", "debés" y "pendiente de asignación", en modo
+  claro y oscuro.
+- Los valores visuales (colores por rol y modo, tipografía, espaciados y radios) MUST salir de una
+  única fuente, `design/tokens.json`, de la que se generan el tema de la App Mobile y las
+  variables de la Web. Las salidas generadas MUST NOT editarse a mano.
+- Las pantallas y componentes MUST NOT usar colores escritos a mano fuera del tema generado.
+- Todo par de texto y fondo MUST cumplir contraste 4,5:1, y los bordes de controles, el foco y los
+  íconos informativos 3:1, en ambos modos. El cumplimiento MUST verificarse automáticamente.
+- Ningún estado (saldos a favor o en contra, avisos, errores, solo lectura) MUST comunicarse solo
+  con color: también MUST tener texto, signo o ícono.
+- La tipografía de la marca MUST ir incluida en la App y en la Web, sin descargarse de servicios
+  de terceros al usarlas (Principio VI).
+
+Rationale: una sola fuente evita que App y Web se separen con el tiempo, y el contraste y los
+estados sin depender del color hacen que los saldos se lean bien para todos.
 
 ## Fuera de Alcance (esta versión)
 
@@ -300,4 +322,4 @@ constitución.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.4.1 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-12
+**Version**: 4.5.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-12
