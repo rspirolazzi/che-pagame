@@ -87,7 +87,9 @@
     },
     "about": {
       "title": "About us",
-      "body": "ChePagame was born to make splitting expenses among friends, family or housemates simple and transparent. Every expense is recorded, balances are calculated exactly in each account's currency and your data is yours: no ads, and you can export it whenever you want."
+      "body": "ChePagame was born to make splitting expenses among friends, family or housemates simple and transparent. Every expense is recorded, balances are calculated exactly in each account's currency and your data is yours: no ads, and you can export it whenever you want.",
+      "version": "Version {version}",
+      "versionBuild": "Version {version} · build {build}"
     },
     "contact": {
       "title": "Contact",

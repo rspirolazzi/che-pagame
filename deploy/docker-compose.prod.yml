@@ -1,0 +1,93 @@
+# Production stack for the DigitalOcean server (feature 009): MongoDB, the backend and the web
+# app, using the images published by .github/workflows/deploy-*.yml.
+#
+# Copy this file to DEPLOY_PATH on the server as docker-compose.yml, and
+# deploy/.env.production.example as .env (fill it in there; never commit it). The workflows only
+# pull and restart one service; changes to this file are applied by copying it again and running
+# `docker compose up -d`.
+
+name: chepagame
+
+services:
+  chepagame-mongodb:
+    image: mongo:8.0
+    container_name: chepagame-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:?Set MONGO_INITDB_ROOT_USERNAME in .env}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:?Set MONGO_INITDB_ROOT_PASSWORD in .env}
+    # Replica set (required for transactions) with a keyfile generated inside the container on
+    # each start; it never touches the host or the repository.
+    entrypoint: ["bash", "-c"]
+    command:
+      - |
+        head -c 756 /dev/urandom | base64 > /etc/mongo-keyfile
+        chmod 400 /etc/mongo-keyfile
+        chown mongodb:mongodb /etc/mongo-keyfile
+        exec docker-entrypoint.sh mongod --replSet rs0 --keyFile /etc/mongo-keyfile --bind_ip_all
+    # No published ports: MongoDB is reachable only inside the compose network.
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    # Initiates the single-node replica set on first run, then reports its status.
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          mongosh --quiet -u "$$MONGO_INITDB_ROOT_USERNAME" -p "$$MONGO_INITDB_ROOT_PASSWORD"
+          --authenticationDatabase admin --eval
+          "try { rs.status().ok } catch (e) { rs.initiate({ _id: 'rs0', members: [{ _id: 0, host: 'chepagame-mongodb:27017' }] }).ok }"
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  chepagame-backend:
+    image: ${DOCKERHUB_NAMESPACE:?Set DOCKERHUB_NAMESPACE in .env}/chepagame-backend:${BACKEND_TAG:-latest}
+    container_name: chepagame-backend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # Inside the compose network MongoDB is reachable by its service name.
+      MONGODB_HOST_OVERRIDE: chepagame-mongodb:27017
+    ports:
+      - "${PUBLISH_ADDRESS:-127.0.0.1}:8000:8000"
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health', timeout=4)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    depends_on:
+      chepagame-mongodb:
+        condition: service_healthy
+
+  chepagame-frontend:
+    image: ${DOCKERHUB_NAMESPACE:?Set DOCKERHUB_NAMESPACE in .env}/chepagame-frontend:${FRONTEND_TAG:-latest}
+    container_name: chepagame-frontend
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      API_INTERNAL_BASE_URL: http://chepagame-backend:8000/api/v1
+      AUTH_TRUST_HOST: "true"
+      # Principle VI: no data to third parties without opt-in.
+      NEXT_TELEMETRY_DISABLED: "1"
+    ports:
+      - "${PUBLISH_ADDRESS:-127.0.0.1}:3000:3000"
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    depends_on:
+      chepagame-backend:
+        condition: service_started
+
+volumes:
+  mongodb_data:
+  mongodb_config:

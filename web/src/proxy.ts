@@ -60,5 +60,6 @@ export default async function proxy(request: NextRequest, event: NextFetchEvent)
 }
 
 export const config = {
-  matcher: ["/((?!api/auth|_next/static|_next/image|favicon.ico).*)"],
+  // api/health is the production healthcheck: public and without a session (feature 009).
+  matcher: ["/((?!api/auth|api/health|_next/static|_next/image|favicon.ico).*)"],
 };

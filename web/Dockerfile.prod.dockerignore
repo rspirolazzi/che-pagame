@@ -1,0 +1,17 @@
+node_modules/
+.next/
+coverage/
+*.log*
+.env
+.env.*
+.git/
+Dockerfile
+.dockerignore
+
+# Production image only (Dockerfile.prod): no tests or local build data.
+src/__tests__/
+jest.config.ts
+jest.setup.ts
+tsconfig.tsbuildinfo
+Dockerfile.prod
+Dockerfile.prod.dockerignore

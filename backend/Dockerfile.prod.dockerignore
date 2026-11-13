@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.dev-outbox/
+.env
+.env.*
+Dockerfile
+.dockerignore
+
+# Production image only (Dockerfile.prod): no tests or VCS data.
+.git/
+tests/
+Dockerfile.prod
+Dockerfile.prod.dockerignore

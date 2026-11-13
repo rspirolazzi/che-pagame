@@ -1,0 +1,41 @@
+# Production image of the web app (feature 009). The development image is ./Dockerfile.
+# Next.js standalone output: no dev dependencies or source code in the final image, runs as the
+# unprivileged "node" user.
+FROM node:22.13.0-alpine AS deps
+WORKDIR /app
+COPY package.json package-lock.json ./
+RUN npm ci --no-audit --no-fund
+
+FROM node:22.13.0-alpine AS build
+WORKDIR /app
+ENV NEXT_TELEMETRY_DISABLED=1
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+RUN npm run build
+
+FROM node:22.13.0-alpine AS runner
+WORKDIR /app
+ENV NODE_ENV=production \
+    NEXT_TELEMETRY_DISABLED=1 \
+    HOSTNAME=0.0.0.0 \
+    PORT=3000
+
+# Build information shown on "Quiénes somos" and GET /api/health (passed by the deploy workflow).
+ARG APP_VERSION="" \
+    BUILD_NUMBER="" \
+    BUILD_DATE="" \
+    RELEASE_TAG="" \
+    GIT_SHA=""
+ENV APP_VERSION=$APP_VERSION \
+    BUILD_NUMBER=$BUILD_NUMBER \
+    BUILD_DATE=$BUILD_DATE \
+    RELEASE_TAG=$RELEASE_TAG \
+    GIT_SHA=$GIT_SHA
+
+COPY --from=build --chown=node:node /app/.next/standalone ./
+COPY --from=build --chown=node:node /app/.next/static ./.next/static
+COPY --from=build --chown=node:node /app/public ./public
+
+USER node
+EXPOSE 3000
+CMD ["node", "server.js"]

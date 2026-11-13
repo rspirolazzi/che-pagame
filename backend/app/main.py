@@ -13,6 +13,7 @@ from app.api.v1 import (
     balances,
     expenses,
     exports,
+    health,
     invitations,
     settlements,
     users,
@@ -84,6 +85,7 @@ def create_app() -> FastAPI:
         return _error_response(request, 500, errors.INTERNAL_ERROR)
 
     api = APIRouter(prefix="/api/v1")
+    api.include_router(health.router)
     api.include_router(auth.router)
     api.include_router(users.router)
     api.include_router(accounts.router)

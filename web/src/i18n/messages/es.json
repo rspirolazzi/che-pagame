@@ -87,7 +87,9 @@
     },
     "about": {
       "title": "Quiénes somos",
-      "body": "ChePagame nació para que dividir gastos entre amigos, familia o compañeros de casa sea simple y transparente. Cada gasto queda registrado, los saldos se calculan con exactitud en la moneda de cada Cuenta y tus datos son tuyos: sin publicidad y con la posibilidad de exportarlos cuando quieras."
+      "body": "ChePagame nació para que dividir gastos entre amigos, familia o compañeros de casa sea simple y transparente. Cada gasto queda registrado, los saldos se calculan con exactitud en la moneda de cada Cuenta y tus datos son tuyos: sin publicidad y con la posibilidad de exportarlos cuando quieras.",
+      "version": "Versión {version}",
+      "versionBuild": "Versión {version} · build {build}"
     },
     "contact": {
       "title": "Contacto",

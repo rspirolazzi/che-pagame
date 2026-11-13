@@ -131,6 +131,70 @@ docker compose up -d --build
   developer. Build the App for the stores with `EXPO_PUBLIC_DONATION_URL` empty (and keep it
   empty in the `production` profile once `eas.json` exists).
 
+## Deploy (feature 009)
+
+Two GitHub Actions workflows publish production images to Docker Hub and update the
+DigitalOcean server:
+
+- `.github/workflows/deploy-backend.yml` runs on every push to `main` that touches `backend/`.
+- `.github/workflows/deploy-web.yml` runs on every push to `main` that touches `web/`.
+
+Each one first runs its component's lint and tests (`verify`). Only if they pass does it build
+the image from `Dockerfile.prod`, push it as `latest` and `sha-<commit>`, and recreate that one
+service on the server, waiting until its healthcheck passes. A change in one component never
+restarts the other. Both can also be started by hand (Actions → workflow → **Run workflow**);
+a manual run from a branch other than `main` only runs `verify` and never deploys.
+
+Each image carries its build information: version (`package.json` / `pyproject.toml`), build
+number, UTC date, release tag (`main-<build>`) and short commit. It is shown on "Quiénes somos"
+and returned by `GET /api/v1/health` (backend) and `GET /api/health` (web).
+
+### GitHub configuration
+
+Settings → Secrets and variables → Actions. Values never go in the repository.
+
+| Name | Kind | What it is |
+|------|------|------------|
+| `DOCKERHUB_USERNAME` | Secret | Docker Hub user that pushes the images |
+| `DOCKERHUB_TOKEN` | Secret | Docker Hub access token with Read & Write permission |
+| `DROPLET_IP` | Secret | Server address |
+| `DROPLET_USER` | Secret | SSH user on the server |
+| `SSH_PRIVATE_KEY` | Secret | Private key dedicated to deploys (its public key is in the server's `authorized_keys`) |
+| `DROPLET_SSH_FINGERPRINT` | Secret | Server host key fingerprint: only the `SHA256:…` field printed by `ssh-keygen -lf /etc/ssh/ssh_host_ed25519_key.pub` |
+| `DOCKERHUB_NAMESPACE` | Variable | Docker Hub account of the images (`<namespace>/chepagame-backend`, `<namespace>/chepagame-frontend`) |
+| `DEPLOY_PATH` | Variable | Folder on the server that holds the production compose file, e.g. `/root/projects` |
+
+If one is missing, the run fails at "Check configuration" naming it, without printing values.
+The Docker Hub repositories are public: images contain no secrets or `.env` files.
+
+### Server setup (once)
+
+1. Install Docker Engine and Docker Compose v2.22+.
+2. Create an SSH key pair only for deploys and add the public key to the deploy user's
+   `~/.ssh/authorized_keys`.
+3. Copy `deploy/docker-compose.prod.yml` to `DEPLOY_PATH/docker-compose.yml` and
+   `deploy/.env.production.example` to `DEPLOY_PATH/.env`, and fill in `.env` on the server.
+4. Run `docker compose up -d` in `DEPLOY_PATH` (the first deploy of each workflow pulls the
+   images).
+
+MongoDB publishes no ports. The backend and the web app publish `8000` and `3000` on
+`PUBLISH_ADDRESS` (`127.0.0.1` by default) for a reverse proxy on the host; HTTPS, the domain
+and the proxy are handled by the server, outside this repository.
+
+Changes to `deploy/` are not applied by the workflows: copy the files to the server again and
+run `docker compose up -d`.
+
+### Rollback
+
+1. Pick the previous `sha-<commit>` tag (Docker Hub or the list of workflow runs).
+2. On the server, set `BACKEND_TAG=sha-<commit>` (or `FRONTEND_TAG`) in `DEPLOY_PATH/.env`.
+3. Run `docker compose up -d --no-deps --wait chepagame-backend` (or `chepagame-frontend`).
+4. To follow deploys again, set the tag back to `latest` and run the same command (or wait for
+   the next deploy).
+
+While a tag is pinned, deploys still publish new images but the server keeps the pinned one;
+the last lines of the SSH step (`docker compose images`) show the tag that is running.
+
 ## Tests
 
 ```bash
