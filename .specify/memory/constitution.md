@@ -70,7 +70,10 @@ Rationale: un único idioma técnico mantiene el código consistente y accesible
 - El usuario MUST poder exportar sus datos en formato abierto (CSV y/o JSON).
 - Secretos (API keys, tokens, credenciales, contraseñas de base de datos, secretos de JWT) MUST
   NOT agregarse al código, commitearse al repositorio, loguearse ni compartirse en ningún chat
-  (incluidos asistentes de IA). Solo MUST residir en archivos `.env` locales.
+  (incluidos asistentes de IA). Solo MUST residir en: archivos `.env` locales de desarrollo, el
+  `.env` del servidor de producción (fuera del repositorio) y los secretos cifrados del sistema de
+  CI/CD (GitHub Secrets). Los datos no secretos del deploy SHOULD guardarse como variables de
+  CI/CD, no como secretos.
 - Los archivos `.env` MUST estar en `.gitignore`. El repositorio MUST incluir un `.env.example`
   con todas las variables requeridas y valores de ejemplo vacíos o ficticios, nunca reales.
 - Si un secreto se expone, MUST rotarse de inmediato.
@@ -209,6 +212,28 @@ constitución.
   interpolación de variables en Compose); MUST NOT escribirse en `docker-compose.yml`.
 - Los puertos de MongoDB SHOULD publicarse solo en `127.0.0.1` en desarrollo.
 
+### Despliegue
+
+- Las imágenes de producción MUST construirse con Dockerfiles propios (ej. `Dockerfile.prod`),
+  separados de los de desarrollo: sin recarga en caliente, sin dependencias de desarrollo ni de
+  test y corriendo con un usuario sin privilegios. El entorno de desarrollo local MUST NOT
+  depender de ellas.
+- Ningún componente MUST publicarse en el registro de imágenes ni desplegarse si antes no pasaron
+  su lint y sus tests.
+- Las imágenes MUST NOT contener secretos ni archivos `.env`; los secretos de ejecución viven solo
+  en el `.env` del servidor. Los logs de CI/CD MUST NOT mostrar valores secretos.
+- La configuración de producción del servidor (compose de producción) MUST versionarse en
+  `deploy/`, junto con una plantilla de su `.env` sin valores reales. Repite las reglas de
+  "Infraestructura Local": replica set, volúmenes nombrados y credenciales desde `.env`.
+- En producción, MongoDB MUST NOT publicar puertos fuera de la red interna de Docker.
+- El acceso del CI/CD al servidor MUST usar una clave SSH dedicada al deploy y MUST verificar la
+  identidad del servidor (huella de su clave de host) antes de ejecutar comandos.
+- Cada componente MUST exponer un endpoint de salud público que informe su estado y su
+  información de build (versión, build, fecha, release, commit) y nada más: MUST NOT exponer
+  configuración, variables de entorno, versiones de dependencias ni detalles de errores.
+- Cada imagen MUST publicarse con una etiqueta inmutable por commit (ej. `sha-<commit>`) además de
+  `latest`, para poder volver a una versión anterior.
+
 ### Nomenclatura
 
 - **MongoDB:** colecciones en plural y `snake_case` (`users`, `accounts`, `expenses`,
@@ -326,4 +351,4 @@ estados sin depender del color hacen que los saldos se lean bien para todos.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.6.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-13
+**Version**: 4.7.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-13
