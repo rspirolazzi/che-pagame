@@ -1,8 +1,10 @@
 import { getTranslations } from "next-intl/server";
 
 import { auth } from "@/auth";
+import { DonateSection } from "@/components/donate/DonateSection";
 import { ExportButton } from "@/components/exports/ExportButton";
 import { EmailChangeForm, PreferencesForm, ProfileForm } from "@/components/ProfileForms";
+import { parseDonationUrl } from "@/lib/donation";
 
 export default async function ProfilePage() {
   const [session, t, tExports] = await Promise.all([
@@ -23,6 +25,7 @@ export default async function ProfilePage() {
         <p>{tExports("mineHint")}</p>
         <ExportButton endpoint="/api/exports/me" label={tExports("mineButton")} />
       </section>
+      <DonateSection url={parseDonationUrl(process.env.DONATION_URL)} />
     </section>
   );
 }

@@ -624,3 +624,15 @@ input[type="radio"] {
 .export-error {
   font-size: 0.875rem;
 }
+
+/* Donation link (feature 008) */
+.donate-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.donate-section {
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-border);
+}

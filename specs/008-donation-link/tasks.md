@@ -30,7 +30,7 @@ fallar antes de implementar.
 
 ## Phase 1: Setup
 
-- [ ] T001 Agregar `DONATION_URL=` y `EXPO_PUBLIC_DONATION_URL=` (vacías, con un comentario: link `https` de la página de donaciones, opcional; vacía en los builds para las tiendas) a `.env.example` en la raíz.
+- [X] T001 Agregar `DONATION_URL=` y `EXPO_PUBLIC_DONATION_URL=` (vacías, con un comentario: link `https` de la página de donaciones, opcional; vacía en los builds para las tiendas) a `.env.example` en la raíz.
 
 ---
 
@@ -42,16 +42,16 @@ fallar antes de implementar.
 
 ### Tests (primero, tienen que fallar)
 
-- [ ] T002 [P] [US1] Test `web/src/__tests__/lib/donation.test.ts`: `parseDonationUrl` devuelve la dirección para `https://cafecito.app/chepagame` (también con espacios alrededor) y `null` para `undefined`, `""`, `http://…`, `javascript:alert(1)`, `ftp://…` y texto sin esquema.
-- [ ] T003 [P] [US1] Test `web/src/__tests__/components/DonateSection.test.tsx`: con `url`, título, frase y link con `href` igual a la dirección, `target="_blank"`, `rel` con `noopener` y `noreferrer`, `referrerpolicy="no-referrer"` y nombre accesible "Apoyá ChePagame (se abre en una pestaña nueva)"; con `url={null}` no renderiza nada; en inglés dice "Support ChePagame".
-- [ ] T004 [P] [US1] Ampliar `web/src/__tests__/components/LegalPage.test.tsx` (footer): `SiteFooter` con `donationUrl` muestra el link "Apoyá ChePagame"; sin él, no.
+- [X] T002 [P] [US1] Test `web/src/__tests__/lib/donation.test.ts`: `parseDonationUrl` devuelve la dirección para `https://cafecito.app/chepagame` (también con espacios alrededor) y `null` para `undefined`, `""`, `http://…`, `javascript:alert(1)`, `ftp://…` y texto sin esquema.
+- [X] T003 [P] [US1] Test `web/src/__tests__/components/DonateSection.test.tsx`: con `url`, título, frase y link con `href` igual a la dirección, `target="_blank"`, `rel` con `noopener` y `noreferrer`, `referrerpolicy="no-referrer"` y nombre accesible "Apoyá ChePagame (se abre en una pestaña nueva)"; con `url={null}` no renderiza nada; en inglés dice "Support ChePagame".
+- [X] T004 [P] [US1] Ampliar `web/src/__tests__/components/LegalPage.test.tsx` (footer): `SiteFooter` con `donationUrl` muestra el link "Apoyá ChePagame"; sin él, no.
 
 ### Implementación
 
-- [ ] T005 [P] [US1] Crear `web/src/lib/donation.ts` con `parseDonationUrl(value?: string): string | null` (recorta espacios, `new URL`, solo protocolo `https:`, devuelve `url.href`).
-- [ ] T006 [P] [US1] Agregar el ícono `heart` a `web/src/components/ui/Icon.tsx` y las claves `donate.button`, `donate.title`, `donate.body` y `donate.newTab` en `web/src/i18n/messages/es.json` y `en.json`.
-- [ ] T007 [US1] Crear `web/src/components/donate/DonateLink.tsx` y `DonateSection.tsx` según [contracts/donate-ui.md](contracts/donate-ui.md), con estilos en `web/src/styles/components.css` (variables de la identidad).
-- [ ] T008 [US1] Usarlos: `web/src/components/SiteFooter.tsx` recibe `donationUrl` y muestra `DonateLink`; `web/src/app/layout.tsx` pasa `parseDonationUrl(process.env.DONATION_URL)` al footer en los dos armazones; `web/src/app/(public)/about/page.tsx` y `web/src/app/(private)/profile/page.tsx` agregan `DonateSection`.
+- [X] T005 [P] [US1] Crear `web/src/lib/donation.ts` con `parseDonationUrl(value?: string): string | null` (recorta espacios, `new URL`, solo protocolo `https:`, devuelve `url.href`).
+- [X] T006 [P] [US1] Agregar el ícono `heart` a `web/src/components/ui/Icon.tsx` y las claves `donate.button`, `donate.title`, `donate.body` y `donate.newTab` en `web/src/i18n/messages/es.json` y `en.json`.
+- [X] T007 [US1] Crear `web/src/components/donate/DonateLink.tsx` y `DonateSection.tsx` según [contracts/donate-ui.md](contracts/donate-ui.md), con estilos en `web/src/styles/components.css` (variables de la identidad).
+- [X] T008 [US1] Usarlos: `web/src/components/SiteFooter.tsx` recibe `donationUrl` y muestra `DonateLink`; `web/src/app/layout.tsx` pasa `parseDonationUrl(process.env.DONATION_URL)` al footer en los dos armazones; `web/src/app/(public)/about/page.tsx` y `web/src/app/(private)/profile/page.tsx` agregan `DonateSection`.
 
 **Checkpoint**: US1 funciona y se valida sola.
 
@@ -65,13 +65,13 @@ fallar antes de implementar.
 
 ### Tests (primero, tienen que fallar)
 
-- [ ] T009 [P] [US2] Test `mobile/src/__tests__/utils/donation.test.ts`: los mismos casos de T002 para `parseDonationUrl`.
-- [ ] T010 [P] [US2] Test `mobile/src/__tests__/components/donateSection.test.tsx`: con `url`, el botón "Apoyá ChePagame" llama a `Linking.openURL` con la dirección; si `openURL` rechaza, aparece el error con `role="alert"`; con `url={null}` no renderiza nada.
+- [X] T009 [P] [US2] Test `mobile/src/__tests__/utils/donation.test.ts`: los mismos casos de T002 para `parseDonationUrl`.
+- [X] T010 [P] [US2] Test `mobile/src/__tests__/components/donateSection.test.tsx`: con `url`, el botón "Apoyá ChePagame" llama a `Linking.openURL` con la dirección; si `openURL` rechaza, aparece el error con `role="alert"`; con `url={null}` no renderiza nada.
 
 ### Implementación
 
-- [ ] T011 [P] [US2] Crear `mobile/src/utils/donation.ts` con `parseDonationUrl` (mismo comportamiento que T005) y las claves `donate.button`, `donate.title`, `donate.body` y `donate.openError` en `mobile/src/i18n/locales/es.json` y `en.json`.
-- [ ] T012 [US2] Crear `mobile/src/components/DonateSection.tsx` (título, frase, `AppButton` con ícono `heart-outline` que abre con `Linking.openURL`; `StatusNotice kind="error"` si falla) y agregarlo como sección de `mobile/src/screens/ProfileScreen.tsx` con `parseDonationUrl(process.env.EXPO_PUBLIC_DONATION_URL)`.
+- [X] T011 [P] [US2] Crear `mobile/src/utils/donation.ts` con `parseDonationUrl` (mismo comportamiento que T005) y las claves `donate.button`, `donate.title`, `donate.body` y `donate.openError` en `mobile/src/i18n/locales/es.json` y `en.json`.
+- [X] T012 [US2] Crear `mobile/src/components/DonateSection.tsx` (título, frase, `AppButton` con ícono `heart-outline` que abre con `Linking.openURL`; `StatusNotice kind="error"` si falla) y agregarlo como sección de `mobile/src/screens/ProfileScreen.tsx` con `parseDonationUrl(process.env.EXPO_PUBLIC_DONATION_URL)`.
 
 **Checkpoint**: US2 funciona y se valida sola.
 
@@ -79,9 +79,9 @@ fallar antes de implementar.
 
 ## Phase 4: Polish y validación
 
-- [ ] T013 [P] Agregar a `README.md` (raíz) la sección "Donations (feature 008)": variables, que el botón no aparece sin un link `https`, y que los builds para Google Play o el App Store se compilan con `EXPO_PUBLIC_DONATION_URL` vacía (y vacía en el perfil `production` cuando exista `eas.json`).
-- [ ] T014 Correr en `web/` `npx jest`, `npm run lint`, `npx tsc --noEmit` y `npx next build`, y en `mobile/` `npx jest`, `npm run lint` y `npx tsc --noEmit`.
-- [ ] T015 Configurar el link en el `.env` (lo hace el usuario), reiniciar el contenedor de Web y recompilar o recargar la App, y validar los 7 escenarios de [quickstart.md](quickstart.md). Validación del usuario.
+- [X] T013 [P] Agregar a `README.md` (raíz) la sección "Donations (feature 008)": variables, que el botón no aparece sin un link `https`, y que los builds para Google Play o el App Store se compilan con `EXPO_PUBLIC_DONATION_URL` vacía (y vacía en el perfil `production` cuando exista `eas.json`).
+- [X] T014 Correr en `web/` `npx jest`, `npm run lint`, `npx tsc --noEmit` y `npx next build`, y en `mobile/` `npx jest`, `npm run lint` y `npx tsc --noEmit`.
+- [X] T015 Configurar el link en el `.env` (lo hace el usuario), reiniciar el contenedor de Web y recompilar o recargar la App, y validar los 7 escenarios de [quickstart.md](quickstart.md). Validación del usuario.
 
 ---
 

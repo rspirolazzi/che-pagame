@@ -575,5 +575,11 @@
     "readOnly": "Read only",
     "info": "Information",
     "back": "Back"
+  },
+  "donate": {
+    "button": "Support ChePagame",
+    "title": "Support ChePagame",
+    "body": "ChePagame is free and has no ads. If it helps you, you can support it with a contribution.",
+    "newTab": "opens in a new tab"
   }
 }

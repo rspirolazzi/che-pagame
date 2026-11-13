@@ -202,7 +202,7 @@ inferior, en claro, oscuro y según el dispositivo, con el mismo comportamiento.
 - [X] T047 Correr en `mobile/` `npm run tokens:check`, `npx jest`, `npm run lint` y `npx tsc --noEmit`; corregir lo que falle.
 - [X] T048 [P] Correr en `web/` `npx jest`, `npm run lint` y `npx tsc --noEmit` para confirmar que el CSS generado sin importar no rompe nada y que la Web se ve igual.
 - [X] T049 [P] Quitar el comentario "Sync Impact Report" del principio de `.specify/memory/constitution.md` antes del commit de la feature.
-- [ ] T050 Recompilar el development build (`npx expo run:android` desde `mobile/`) y validar los 12 escenarios manuales de [quickstart.md](quickstart.md) en el teléfono, incluidos texto al 150% y escala de grises. Validación del usuario.
+- [X] T050 Recompilar el development build (`npx expo run:android` desde `mobile/`) y validar los 12 escenarios manuales de [quickstart.md](quickstart.md) en el teléfono, incluidos texto al 150% y escala de grises. Validación del usuario.
 
 ---
 

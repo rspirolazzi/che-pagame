@@ -120,6 +120,17 @@ docker compose up -d --build
   mount).
 - `CONTACT_EMAIL` (optional, in `.env`) is the public email shown on the Contact page.
 
+## Donations (feature 008)
+
+- "Apoyá ChePagame" opens the project's donation page (Cafecito) outside ChePagame: a plain link,
+  no widget or third-party script, no referrer. ChePagame never handles payments.
+- Web: `DONATION_URL` (read on the server) shows the link in the footer, on About and on the
+  Profile. App: `EXPO_PUBLIC_DONATION_URL` (embedded at build time) shows a section on the
+  Profile. Only a valid `https` link is used; empty or anything else hides the button.
+- Store builds: Google Play and the App Store may reject an external donation link to the
+  developer. Build the App for the stores with `EXPO_PUBLIC_DONATION_URL` empty (and keep it
+  empty in the `production` profile once `eas.json` exists).
+
 ## Tests
 
 ```bash

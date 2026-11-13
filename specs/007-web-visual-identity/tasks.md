@@ -188,7 +188,7 @@ con el mismo comportamiento.
 
 - [X] T042 Correr en `web/` `npx jest`, `npm run lint`, `npx tsc --noEmit` y `npx next build`, y en `mobile/` `npm run tokens:check` y `npx jest` (la fuente común no debe haber cambiado para la App).
 - [X] T043 [P] Quitar el comentario "Sync Impact Report" del principio de `.specify/memory/constitution.md` antes del commit de la feature.
-- [ ] T044 Reiniciar el contenedor (`docker restart chepagame-web`) y validar los 11 escenarios manuales de [quickstart.md](quickstart.md). Validación del usuario.
+- [X] T044 Reiniciar el contenedor (`docker restart chepagame-web`) y validar los 11 escenarios manuales de [quickstart.md](quickstart.md). Validación del usuario.
 
 ---
 

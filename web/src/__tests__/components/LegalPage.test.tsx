@@ -14,6 +14,17 @@ it("the footer shows the slogan and links to the privacy and terms pages", () =>
   expect(screen.getByRole("link", { name: "Términos" })).toHaveAttribute("href", "/terms");
 });
 
+it("the footer shows the donation link only when one is configured (feature 008)", () => {
+  const { unmount } = renderWithIntl(<SiteFooter donationUrl="https://cafecito.app/chepagame" />);
+  expect(screen.getByRole("link", { name: /Apoyá ChePagame/ })).toHaveAttribute(
+    "href",
+    "https://cafecito.app/chepagame",
+  );
+  unmount();
+  renderWithIntl(<SiteFooter donationUrl={null} />);
+  expect(screen.queryByRole("link", { name: /Apoyá ChePagame/ })).not.toBeInTheDocument();
+});
+
 it("shows the privacy page with every section in Spanish", () => {
   renderWithIntl(<LegalPage kind="privacy" />);
   expect(screen.getByRole("heading", { level: 1, name: "Privacidad" })).toBeInTheDocument();

@@ -5,6 +5,7 @@ import { SegmentedButtons, Text, TextInput, useTheme } from "react-native-paper"
 
 import { AppButton } from "../components/AppButton";
 import { CurrencyPicker } from "../components/CurrencyPicker";
+import { DonateSection } from "../components/DonateSection";
 import { ExportButton } from "../components/exports/ExportButton";
 import { CodeInput, ErrorText } from "../components/FormBits";
 import { Screen } from "../components/Screen";
@@ -15,7 +16,11 @@ import { type ApiErrorCode, errorCodeOf } from "../services/api/types";
 import { usersApi } from "../services/api/users";
 import type { AppTheme } from "../theme";
 import { displayName } from "../utils/displayName";
+import { parseDonationUrl } from "../utils/donation";
 import { validateEmail, validateName } from "../utils/validation";
+
+// Feature 008: embedded at build time; empty in store builds (Google Play, App Store).
+const donationUrl = parseDonationUrl(process.env.EXPO_PUBLIC_DONATION_URL);
 
 export default function ProfileScreen() {
   const { t } = useTranslation();
@@ -170,6 +175,12 @@ export default function ProfileScreen() {
         <Text variant="bodySmall">{t("exports.mineHint")}</Text>
         <ExportButton run={exportsApi.mine} label={t("exports.mineButton")} />
       </Section>
+
+      {donationUrl && (
+        <Section title={t("donate.title")}>
+          <DonateSection url={donationUrl} />
+        </Section>
+      )}
 
       <AppButton mode="text" tone="danger" icon="logout" onPress={logout}>
         {t("auth.logout")}

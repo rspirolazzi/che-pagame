@@ -9,6 +9,7 @@ import { AppShell } from "@/components/AppShell";
 import { PublicHeader } from "@/components/PublicHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SkipLink } from "@/components/SkipLink";
+import { parseDonationUrl } from "@/lib/donation";
 
 import "@/styles/tokens.generated.css";
 import "./globals.css";
@@ -32,6 +33,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const [session, locale] = await Promise.all([auth(), getLocale()]);
   const user = session?.user && !session.error ? session.user : null;
+  const donationUrl = parseDonationUrl(process.env.DONATION_URL);
 
   return (
     <html lang={locale} className={sora.variable} suppressHydrationWarning>
@@ -45,7 +47,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <main id="main" className="page" tabIndex={-1}>
                   {children}
                 </main>
-                <SiteFooter />
+                <SiteFooter donationUrl={donationUrl} />
               </AppShell>
             ) : (
               <>
@@ -53,7 +55,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
                 <main id="main" className="page" tabIndex={-1}>
                   {children}
                 </main>
-                <SiteFooter />
+                <SiteFooter donationUrl={donationUrl} />
               </>
             )}
           </AppProviders>

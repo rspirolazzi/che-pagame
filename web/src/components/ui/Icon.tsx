@@ -22,6 +22,7 @@ const PATHS = {
   split: "M12 4a8 8 0 1 0 0 16 8 8 0 1 0 0-16M12 4v16M12 12l6-5",
   scale: "M12 4v16M6 8h12M4 14l2-6 2 6a2 2 0 0 1-4 0zM16 14l2-6 2 6a2 2 0 0 1-4 0z",
   arrowRight: "M5 12h14M13 6l6 6-6 6",
+  heart: "M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z",
 } as const;
 
 export type IconName = keyof typeof PATHS;

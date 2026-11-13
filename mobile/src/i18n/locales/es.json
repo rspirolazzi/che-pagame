@@ -475,5 +475,12 @@
     "readOnly": "Solo lectura",
     "info": "Información",
     "back": "Volver"
+  },
+  "donate": {
+    "button": "Apoyá ChePagame",
+    "title": "Apoyá ChePagame",
+    "body": "ChePagame es gratuito y sin publicidad. Si te sirve, podés apoyarlo con un aporte.",
+    "opensBrowser": "Se abre en el navegador",
+    "openError": "No pudimos abrir la página de aportes. Probá de nuevo más tarde."
   }
 }

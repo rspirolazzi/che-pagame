@@ -575,5 +575,11 @@
     "readOnly": "Solo lectura",
     "info": "Información",
     "back": "Volver"
+  },
+  "donate": {
+    "button": "Apoyá ChePagame",
+    "title": "Apoyá ChePagame",
+    "body": "ChePagame es gratuito y sin publicidad. Si te sirve, podés apoyarlo con un aporte.",
+    "newTab": "se abre en una pestaña nueva"
   }
 }
