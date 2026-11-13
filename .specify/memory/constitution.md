@@ -261,10 +261,14 @@ constitución.
 
 ### Web
 
-- **Header (no logueado):** Inicio | Cómo funciona | Quiénes somos | Contacto | Login / Registro
-- **Header (logueado):** Inicio | Cómo funciona | Quiénes somos | Contacto | menú desplegable de
-  usuario (`Accounts`, `Profile`, `Logout`)
+- **Header (sin sesión):** Inicio | Cómo funciona | Quiénes somos | Contacto | Login / Registro
+- **Barra lateral (con sesión):** las páginas privadas muestran una barra lateral fija con el
+  logotipo y Inicio (Dashboard) | Cuentas | Perfil, más Salir. Las páginas informativas (Cómo
+  funciona, Quiénes somos, Contacto, Privacidad, Términos) siguen alcanzables desde la barra
+  lateral o el footer.
 - **Footer:** links informativos y legales.
+- **Celular:** en anchos de celular, el header y la barra lateral se compactan en un menú que se
+  abre con un botón.
 
 ### Panel Principal (Mobile App y Web App)
 
@@ -322,4 +326,4 @@ estados sin depender del color hacen que los saldos se lean bien para todos.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.5.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-12
+**Version**: 4.6.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-13
