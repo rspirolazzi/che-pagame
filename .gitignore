@@ -2,6 +2,8 @@
 .env
 .env.*
 !.env.example
+# Production server template (feature 009): no real values
+!deploy/.env.production.example
 
 # Node / Next.js / Expo
 node_modules/
