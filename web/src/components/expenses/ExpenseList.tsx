@@ -17,6 +17,8 @@ import { CategoryIcon } from "./CategoryIcon";
 interface ExpenseListProps {
   account: AccountResponse;
   firstPage: ExpensePage;
+  /** False when the page shows ExpenseSummary in the side column. */
+  showSummary?: boolean;
 }
 
 export function ExpenseListItem({ account, item }: { account: AccountResponse; item: Item }) {
@@ -45,10 +47,31 @@ export function ExpenseListItem({ account, item }: { account: AccountResponse; i
  * Total on top, expenses grouped by day, loaded 50 at a time (FR-034, FR-035). It never refreshes
  * by itself: "Refresh" or coming back to the page brings current data (FR-033).
  */
-export function ExpenseList({ account, firstPage }: ExpenseListProps) {
+/** "Total gastado", the count and "Actualizar" (in the side column on desktop, FR-013a). */
+export function ExpenseSummary({ account, firstPage }: ExpenseListProps) {
   const t = useTranslations("expenses");
   const locale = useLocale();
   const router = useRouter();
+  const total = firstPage.total ?? "0";
+  return (
+    <div className="card stack expense-summary">
+      <div>
+        <small>{t("total")}</small>
+        <p className="expense-total">
+          {formatMoney(total, account.currency, account.currencyDecimals, locale)}
+        </p>
+        <small>{t("count", { count: firstPage.count ?? 0 })}</small>
+      </div>
+      <button type="button" className="secondary" onClick={() => router.refresh()}>
+        {t("refresh")}
+      </button>
+    </div>
+  );
+}
+
+export function ExpenseList({ account, firstPage, showSummary = true }: ExpenseListProps) {
+  const t = useTranslations("expenses");
+  const locale = useLocale();
   const [items, setItems] = useState(firstPage.items);
   const [cursor, setCursor] = useState(firstPage.nextCursor);
   const [loading, setLoading] = useState(false);
@@ -84,21 +107,9 @@ export function ExpenseList({ account, firstPage }: ExpenseListProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cursor]);
 
-  const total = firstPage.total ?? "0";
   return (
     <section className="stack">
-      <div className="row space-between">
-        <div>
-          <small>{t("total")}</small>
-          <p className="expense-total">
-            {formatMoney(total, account.currency, account.currencyDecimals, locale)}
-          </p>
-          <small>{t("count", { count: firstPage.count ?? 0 })}</small>
-        </div>
-        <button type="button" className="secondary" onClick={() => router.refresh()}>
-          {t("refresh")}
-        </button>
-      </div>
+      {showSummary && <ExpenseSummary account={account} firstPage={firstPage} />}
       {items.length === 0 ? (
         <p>
           {t("empty")} {!account.isClosed && t("emptyCta")}
@@ -107,7 +118,7 @@ export function ExpenseList({ account, firstPage }: ExpenseListProps) {
         groupByDay(items).map((group) => (
           <section key={group.date} aria-label={formatDay(group.date, locale)}>
             <h2 className="day-heading">{formatDay(group.date, locale)}</h2>
-            <ul className="expense-list">
+            <ul className="expense-list card">
               {group.items.map((item) => (
                 <ExpenseListItem key={item.id} account={account} item={item} />
               ))}

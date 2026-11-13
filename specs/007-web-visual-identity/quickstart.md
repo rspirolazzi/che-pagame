@@ -63,3 +63,13 @@ dice y se saltea en lugar de fallar sin explicación.
     inicio" en el celular usa el ícono y el nombre ChePagame.
 11. **Comportamiento igual**: cargar y editar un gasto, registrar un reembolso desde una
     sugerencia, exportar, invitar, cambiar datos del Perfil y cerrar sesión: todo como antes.
+
+## Verificaciones de la fuente común
+
+Probado el 2026-11-13 (T013), con los cambios de prueba revertidos después:
+
+| Caso (US4) | Resultado |
+| --- | --- |
+| Cambiar `primary` en `design/tokens.json` sin regenerar | `tokens.test.ts` falla con `light primary` (CSS desactualizado); `npm run tokens` regenera las 4 salidas, el CSS de la Web toma el valor nuevo y el test pasa. |
+| Escribir `#ff0000` en `LegalPage.tsx` | `noHardcodedColors.test.ts` falla e indica `components/LegalPage.tsx:15`. |
+| Poner `textMuted` con poco contraste (`#9AA8B4`) | El generador sale con código 1, no escribe nada y lista `textMuted on background (light) is 2.26:1, minimum 4.5:1` y el par sobre la superficie. |

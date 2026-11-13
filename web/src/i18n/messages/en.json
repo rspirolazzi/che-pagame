@@ -21,7 +21,16 @@
     "accounts": "Accounts",
     "profile": "Profile",
     "logout": "Logout",
-    "accountsSoon": "Coming soon"
+    "accountsSoon": "Coming soon",
+    "tabHome": "Home",
+    "tabAccounts": "Accounts",
+    "tabProfile": "Profile",
+    "more": "More",
+    "menu": "Menu",
+    "closeMenu": "Close",
+    "skipToContent": "Skip to content",
+    "main": "Main navigation",
+    "signOut": "Sign out"
   },
   "footer": {
     "rights": "ChePagame. So money is never a problem.",
@@ -31,20 +40,62 @@
   "home": {
     "title": "So money is never a problem",
     "subtitle": "Add the group's expenses and ChePagame tells you who owes whom.",
-    "cta": "Get started"
+    "cta": "Get started",
+    "ctaSignedIn": "Go to my accounts",
+    "howItWorks": "See how it works",
+    "benefits": {
+      "split": {
+        "title": "Split without hassle",
+        "body": "Add the expense, choose who shares it and you are done."
+      },
+      "clear": {
+        "title": "Clear balances",
+        "body": "See who owes whom and which settlements leave everyone even."
+      },
+      "yours": {
+        "title": "Your data is yours",
+        "body": "No ads. Export it whenever you want, as CSV or JSON."
+      }
+    },
+    "preview": {
+      "label": "Example",
+      "title": "Bariloche holidays"
+    }
   },
   "pages": {
     "howItWorks": {
       "title": "How it works",
-      "body": "Create a shared account, add expenses and check the balances. This page will be completed in an upcoming version."
+      "intro": "Four steps so nobody has to do the math.",
+      "steps": {
+        "create": {
+          "title": "Create an account and invite",
+          "body": "Name it, choose the currency and share the link with the group."
+        },
+        "add": {
+          "title": "Add the expenses",
+          "body": "Who paid, how much and who shares it. Anyone in the group can add them."
+        },
+        "balances": {
+          "title": "Check the balances",
+          "body": "ChePagame works out who owes whom, to the cent, and suggests how to settle."
+        },
+        "settle": {
+          "title": "Settle up",
+          "body": "Record the settlements when they are paid and everyone is even."
+        }
+      }
     },
     "about": {
       "title": "About us",
-      "body": "ChePagame is a project to make splitting expenses between friends simple and transparent."
+      "body": "ChePagame was born to make splitting expenses among friends, family or housemates simple and transparent. Every expense is recorded, balances are calculated exactly in each account's currency and your data is yours: no ads, and you can export it whenever you want."
     },
     "contact": {
       "title": "Contact",
-      "body": "Soon you will be able to reach us from here."
+      "intro": "Do you have a question or an idea? Write to us.",
+      "copy": "Copy",
+      "copied": "Copied.",
+      "write": "Write to us",
+      "unavailable": "Soon you will be able to write to us from here."
     }
   },
   "auth": {
@@ -405,7 +456,8 @@
     "dialogHint": "If the amount or the date were different, use «Record settlement».",
     "confirm": "Confirm",
     "cancel": "Cancel",
-    "saved": "Settlement recorded."
+    "saved": "Settlement recorded.",
+    "suggested": "Suggested"
   },
   "settlements": {
     "title": "Settlements",
@@ -513,5 +565,15 @@
         }
       }
     }
+  },
+  "a11y": {
+    "owed": "Owed to",
+    "owes": "Owes",
+    "settled": "Settled up",
+    "warning": "Notice",
+    "error": "Error",
+    "readOnly": "Read only",
+    "info": "Information",
+    "back": "Back"
   }
 }

@@ -21,7 +21,16 @@
     "accounts": "Accounts",
     "profile": "Profile",
     "logout": "Logout",
-    "accountsSoon": "Disponible pronto"
+    "accountsSoon": "Disponible pronto",
+    "tabHome": "Inicio",
+    "tabAccounts": "Cuentas",
+    "tabProfile": "Perfil",
+    "more": "Más",
+    "menu": "Menú",
+    "closeMenu": "Cerrar",
+    "skipToContent": "Saltar al contenido",
+    "main": "Navegación principal",
+    "signOut": "Salir"
   },
   "footer": {
     "rights": "ChePagame. Para que la guita no sea un problema.",
@@ -31,20 +40,62 @@
   "home": {
     "title": "Para que la guita no sea un problema",
     "subtitle": "Cargá los gastos del grupo y ChePagame te dice quién le debe a quién.",
-    "cta": "Empezar"
+    "cta": "Empezar",
+    "ctaSignedIn": "Ir a mis Cuentas",
+    "howItWorks": "Mirá cómo funciona",
+    "benefits": {
+      "split": {
+        "title": "Dividí sin vueltas",
+        "body": "Cargás el gasto, elegís quiénes lo comparten y listo."
+      },
+      "clear": {
+        "title": "Saldos claros",
+        "body": "Ves quién le debe a quién y qué reembolsos dejan a todos al día."
+      },
+      "yours": {
+        "title": "Tus datos son tuyos",
+        "body": "Sin publicidad. Los exportás cuando quieras, en CSV o JSON."
+      }
+    },
+    "preview": {
+      "label": "Ejemplo",
+      "title": "Vacaciones en Bariloche"
+    }
   },
   "pages": {
     "howItWorks": {
       "title": "Cómo funciona",
-      "body": "Creá una cuenta compartida, cargá los gastos y mirá los saldos. Esta página se completa en una próxima versión."
+      "intro": "Cuatro pasos para que nadie tenga que andar haciendo cuentas.",
+      "steps": {
+        "create": {
+          "title": "Creá una Cuenta e invitá",
+          "body": "Ponele nombre, elegí la moneda y compartí el enlace con el grupo."
+        },
+        "add": {
+          "title": "Cargá los gastos",
+          "body": "Quién pagó, cuánto y entre quiénes se divide. Cualquiera del grupo puede cargarlos."
+        },
+        "balances": {
+          "title": "Mirá los saldos",
+          "body": "ChePagame calcula quién le debe a quién, al centavo, y sugiere cómo saldar."
+        },
+        "settle": {
+          "title": "Saldá las cuentas",
+          "body": "Registrá los reembolsos cuando se paguen y todos quedan al día."
+        }
+      }
     },
     "about": {
       "title": "Quiénes somos",
-      "body": "ChePagame es un proyecto para que dividir gastos entre amigos sea simple y transparente."
+      "body": "ChePagame nació para que dividir gastos entre amigos, familia o compañeros de casa sea simple y transparente. Cada gasto queda registrado, los saldos se calculan con exactitud en la moneda de cada Cuenta y tus datos son tuyos: sin publicidad y con la posibilidad de exportarlos cuando quieras."
     },
     "contact": {
       "title": "Contacto",
-      "body": "Muy pronto vas a poder escribirnos desde acá."
+      "intro": "¿Tenés una consulta o una idea? Escribinos.",
+      "copy": "Copiar",
+      "copied": "Copiado.",
+      "write": "Escribinos",
+      "unavailable": "Pronto vas a poder escribirnos desde acá."
     }
   },
   "auth": {
@@ -405,7 +456,8 @@
     "dialogHint": "Si el importe o la fecha fueron otros, registralo con «Registrar reembolso».",
     "confirm": "Confirmar",
     "cancel": "Cancelar",
-    "saved": "Reembolso registrado."
+    "saved": "Reembolso registrado.",
+    "suggested": "Sugerido"
   },
   "settlements": {
     "title": "Reembolsos",
@@ -513,5 +565,15 @@
         }
       }
     }
+  },
+  "a11y": {
+    "owed": "A favor",
+    "owes": "En contra",
+    "settled": "Al día",
+    "warning": "Aviso",
+    "error": "Error",
+    "readOnly": "Solo lectura",
+    "info": "Información",
+    "back": "Volver"
   }
 }

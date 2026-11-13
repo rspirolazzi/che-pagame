@@ -1,7 +1,7 @@
 // Generates the ChePagame logo (approved option "A. Tilde final") from design/tokens.json and the
 // brand typeface: the SVG sources in design/logo/ and every PNG the app needs in
 // mobile/assets/images/. Usage: node --experimental-strip-types design/build-icons.ts
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -130,3 +130,18 @@ for (const [scale, suffix] of [[1, ""], [2, "@2x"], [3, "@3x"]] as const) {
   write(join(OUT, `logo-light${suffix}.png`), png(wordLight, 220 * scale));
   write(join(OUT, `logo-dark${suffix}.png`), png(wordDark, 220 * scale));
 }
+
+// Web (feature 007): the brand typeface served by the site itself, the favicon, the iOS icon and
+// the manifest icons. PNG, not SVG: a browser draws an SVG favicon without the brand font.
+const WEB = join(ROOT, "web");
+for (const weight of ["Sora-SemiBold", "Sora-Bold"]) {
+  const target = join(WEB, "src", "app", "fonts", `${weight}.ttf`);
+  mkdirSync(dirname(target), { recursive: true });
+  copyFileSync(join(ROOT, "mobile", "assets", "fonts", `${weight}.ttf`), target);
+  console.log(`wrote ${target.slice(ROOT.length + 1).replaceAll("\\", "/")}`);
+}
+const webIcon = iconMark(512, 300, light.onPrimary, light.accent, light.primary);
+write(join(WEB, "src", "app", "icon.png"), png(webIcon, 64));
+write(join(WEB, "src", "app", "apple-icon.png"), png(webIcon, 180));
+write(join(WEB, "public", "icons", "icon-192.png"), png(webIcon, 192));
+write(join(WEB, "public", "icons", "icon-512.png"), png(webIcon, 512));

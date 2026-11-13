@@ -1,38 +1,46 @@
 "use client";
 
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 import type { AccountSummary } from "@/lib/api/types";
 import { totalsByCurrency } from "@/lib/balanceTotals";
-import { formatMoney } from "@/lib/money";
+
+import { AmountText } from "../ui/AmountText";
+import { StatusNotice } from "../ui/StatusNotice";
 
 /**
  * "Te deben" and "Debés" per currency over every account, closed ones included (FR-024). Amounts
- * of different currencies are never added together.
+ * of different currencies are never added together. Highlighted card of the Dashboard (007).
  */
 export function BalanceSummary({ accounts }: { accounts: AccountSummary[] }) {
   const t = useTranslations("dashboard.balances");
-  const locale = useLocale();
   const totals = totalsByCurrency(accounts);
-  if (totals.length === 0) return <p>{t("allSettled")}</p>;
-  const column = (label: string, pick: "owedToMe" | "iOwe", className: string) => (
-    <div role="group" aria-label={label} className="stack">
+  if (totals.length === 0) return <StatusNotice kind="info">{t("allSettled")}</StatusNotice>;
+  const column = (label: string, pick: "owedToMe" | "iOwe") => (
+    <div role="group" aria-label={label} className="summary-column">
       <small>{label}</small>
       {totals
         .filter((total) => /[1-9]/.test(total[pick]))
         .map((total) => (
-          <strong key={total.currency} className={className}>
-            {formatMoney(total[pick], total.currency, total.decimals, locale)}
-          </strong>
+          <AmountText
+            key={total.currency}
+            amount={pick === "iOwe" ? `-${total[pick]}` : total[pick]}
+            currency={total.currency}
+            decimals={total.decimals}
+            subject="none"
+            size="lg"
+          />
         ))}
     </div>
   );
   return (
-    <section className="stack" aria-labelledby="balance-summary-title">
-      <h2 id="balance-summary-title">{t("title")}</h2>
-      <div className="row space-between">
-        {column(t("owedToYou"), "owedToMe", "amount-positive")}
-        {column(t("youOwe"), "iOwe", "amount-negative")}
+    <section className="balance-summary card" aria-labelledby="balance-summary-title">
+      <h2 id="balance-summary-title" className="eyebrow">
+        {t("title")}
+      </h2>
+      <div className="summary-columns">
+        {column(t("owedToYou"), "owedToMe")}
+        {column(t("youOwe"), "iOwe")}
       </div>
     </section>
   );

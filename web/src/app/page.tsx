@@ -1,15 +1,49 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+import { auth } from "@/auth";
+import { HomePreview } from "@/components/HomePreview";
+import { Icon, type IconName } from "@/components/ui/Icon";
+import { Logo } from "@/components/ui/Logo";
+
+const BENEFITS: [key: string, icon: IconName][] = [
+  ["split", "split"],
+  ["clear", "scale"],
+  ["yours", "lock"],
+];
+
+/** Home (FR-008): logo, slogan and start; three benefits; a balances preview; how it works. */
 export default async function HomePage() {
-  const t = await getTranslations("home");
+  const [t, session] = await Promise.all([getTranslations(), auth()]);
+  const signedIn = Boolean(session?.user && !session.error);
   return (
-    <section className="hero">
-      <h1>{t("title")}</h1>
-      <p>{t("subtitle")}</p>
-      <Link href="/register" className="button">
-        {t("cta")}
+    <>
+      <section className="hero" aria-labelledby="home-slogan">
+        <Logo href="/" size="lg" />
+        <h1 id="home-slogan" className="slogan">
+          {t("common.slogan")}
+        </h1>
+        <p>{t("home.subtitle")}</p>
+        <Link href={signedIn ? "/accounts" : "/register"} className="button">
+          {signedIn ? t("home.ctaSignedIn") : t("home.cta")}
+        </Link>
+      </section>
+      <ul className="benefits">
+        {BENEFITS.map(([key, icon]) => (
+          <li key={key} className="card benefit">
+            <span className="tile">
+              <Icon name={icon} />
+            </span>
+            <h2>{t(`home.benefits.${key}.title`)}</h2>
+            <p>{t(`home.benefits.${key}.body`)}</p>
+          </li>
+        ))}
+      </ul>
+      <HomePreview />
+      <Link href="/how-it-works" className="more-link">
+        {t("home.howItWorks")}
+        <Icon name="arrowRight" />
       </Link>
-    </section>
+    </>
   );
 }

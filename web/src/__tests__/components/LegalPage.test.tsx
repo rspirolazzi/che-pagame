@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 
 import { LEGAL_SECTIONS, LegalPage } from "@/components/LegalPage";
-import { SiteFooter } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 
 import { renderWithIntl } from "../support/render";
 

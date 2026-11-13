@@ -70,8 +70,9 @@ Punto de partida relevado en el código (rama creada desde `006-mobile-visual-id
 
 ## R5. Favicon e ícono para la pantalla de inicio
 
-- **Decision**: `design/build-icons.ts` suma salidas para la Web: `web/src/app/icon.svg` (el
-  ícono "Che" con el tilde), `web/src/app/apple-icon.png` (180 × 180) y
+- **Decision**: `design/build-icons.ts` suma salidas para la Web: `web/src/app/icon.png` (64 × 64,
+  el ícono "Che" con el tilde; PNG y no SVG porque un navegador dibuja el favicon SVG sin la
+  fuente de la marca, ajuste hecho al implementar), `web/src/app/apple-icon.png` (180 × 180) y
   `web/public/icons/icon-192.png` y `icon-512.png`, referenciados desde `web/src/app/manifest.ts`
   (nombre, colores de tema y fondo desde los tokens). Se borra `favicon.ico` de la plantilla.
 - **Rationale**: las convenciones de archivos del App Router generan las etiquetas `<link>`; el

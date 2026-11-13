@@ -113,7 +113,12 @@ docker compose up -d --build
 - `npm run tokens:check` writes nothing and fails if a text pair is below 4.5:1, a control pair
   below 3:1, or a generated file is out of date. Mobile's Jest suite also checks contrast and fails
   on any color literal outside `mobile/src/theme/`.
-- The Web keeps its current look until feature 007 imports the generated CSS.
+- The Web uses the same source (feature 007): `web/src/styles/tokens.generated.css` (plus a `.json`
+  copy of the colors for the web manifest). `npm run icons` also copies Sora to
+  `web/src/app/fonts/` and writes the site icon, the iOS icon and the manifest icons. Web tests
+  run on the host (`tokens.test.ts` reads `design/tokens.json`, which the web container does not
+  mount).
+- `CONTACT_EMAIL` (optional, in `.env`) is the public email shown on the Contact page.
 
 ## Tests
 

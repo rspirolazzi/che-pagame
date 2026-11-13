@@ -1,0 +1,626 @@
+/* Components of the identity (feature 007). Existing class names keep working, restyled. */
+
+/* Cards and layout helpers */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-lg);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.stack > * + * {
+  margin-top: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.auth-card {
+  width: min(100%, 26.25rem);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* Buttons: 48px touch target, pill shape (FR-017) */
+button,
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  min-height: var(--size-touch-target);
+  padding: 0 var(--space-lg);
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+button.secondary,
+.button.secondary {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-control-border);
+}
+
+button.danger,
+.button.danger {
+  background: var(--color-negative);
+  color: var(--color-on-primary);
+}
+
+button.danger-text {
+  background: transparent;
+  color: var(--color-negative);
+  padding: 0 var(--space-sm);
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  padding: 0;
+  min-height: 0;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.icon-button {
+  width: var(--size-touch-target);
+  padding: 0;
+  background: transparent;
+  color: var(--color-text);
+  border-color: transparent;
+}
+
+.google-button {
+  width: 100%;
+  background: var(--color-surface);
+  color: var(--color-text);
+  border-color: var(--color-control-border);
+}
+
+/* Forms */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  font-weight: 500;
+}
+
+input,
+select,
+textarea {
+  min-height: var(--size-touch-target);
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 400;
+}
+
+textarea {
+  min-height: 5rem;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--color-primary);
+}
+
+.code-input {
+  letter-spacing: 0.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+  font-family: var(--font-brand);
+}
+
+.divider {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.form-links {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.form-error {
+  color: var(--color-negative);
+}
+
+.form-status {
+  color: var(--color-text);
+}
+
+/* Badges and the accent chip */
+.badge {
+  display: inline-block;
+  padding: 0.0625rem var(--space-sm);
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* The only use of the sun accent: a background with its text color on top (FR-004). */
+.chip-accent {
+  display: inline-block;
+  padding: 0.125rem 0.625rem;
+  border-radius: var(--radius-full);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Notices (warning, error, read only, info) */
+.notice {
+  display: flex;
+  gap: var(--space-sm);
+  align-items: flex-start;
+  padding: var(--space-md);
+  border: 1px solid;
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.notice-icon {
+  display: inline-flex;
+  padding-top: 0.0625rem;
+}
+
+.notice-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.notice-warning {
+  border-color: var(--color-warning);
+  background: var(--warning-soft);
+}
+
+.notice-warning .notice-icon,
+.notice-warning strong {
+  color: var(--color-warning);
+}
+
+.notice-error {
+  border-color: var(--color-negative);
+  background: var(--negative-soft);
+}
+
+.notice-error .notice-icon {
+  color: var(--color-negative);
+}
+
+.notice-readOnly {
+  border-color: var(--color-control-border);
+}
+
+.notice-readOnly .notice-icon {
+  color: var(--color-text-muted);
+}
+
+.notice-info {
+  border-color: var(--color-primary);
+}
+
+.notice-info .notice-icon {
+  color: var(--color-primary);
+}
+
+/* Amounts */
+.amount {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.amount-lg {
+  font-size: 1.5rem;
+}
+
+.amount-badge {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 1.4em;
+  height: 1.4em;
+  border: 1.5px solid currentColor;
+  border-radius: var(--radius-full);
+  font-size: 0.85em;
+  line-height: 1;
+}
+
+.amount-positive {
+  color: var(--color-positive);
+}
+
+.amount-negative {
+  color: var(--color-negative);
+}
+
+.amount-neutral {
+  color: var(--color-text-muted);
+}
+
+.amount-figure,
+.expense-total {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.expense-total {
+  font-size: 1.75rem;
+}
+
+/* Dashboard summary */
+.balance-summary {
+  background: var(--raised);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.summary-columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: var(--space-lg);
+}
+
+.summary-column {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+/* Lists inside one card, rows separated by a border */
+.account-list,
+.participant-list,
+.expense-list,
+.history-list,
+.balance-list,
+.suggestion-list,
+.settlement-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.balance-list.card,
+.account-list.card,
+.expense-list.card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.account-list > li + li,
+.expense-list > li + li,
+.balance-list > li + li {
+  border-top: 1px solid var(--color-border);
+}
+
+.suggestion-list,
+.settlement-list,
+.history-list {
+  gap: var(--space-md);
+}
+
+.account-list a,
+.expense-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  min-height: var(--size-touch-target);
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-text);
+  font-weight: 400;
+  text-decoration: none;
+}
+
+.account-list a:hover,
+.expense-row:hover {
+  background: var(--primary-soft);
+}
+
+.account-list a > :first-child,
+.expense-row > :first-child {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--color-primary);
+}
+
+.expense-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.expense-main small .badge {
+  margin-left: var(--space-sm);
+}
+
+.account-balance {
+  margin-left: auto;
+}
+
+.balance-row,
+.settlement-row,
+.participant-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+}
+
+.balance-row.me {
+  background: var(--primary-soft);
+  font-weight: 600;
+}
+
+.settlement-row {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.suggestion-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.suggestion-row .amount-figure {
+  font-size: 1.5rem;
+}
+
+.day-heading {
+  margin: var(--space-md) 0 var(--space-xs);
+  font-family: var(--font-system);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.day-heading::first-letter {
+  text-transform: uppercase;
+}
+
+.detail-list {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: var(--space-sm) var(--space-lg);
+  margin: 0;
+}
+
+.detail-list dt {
+  color: var(--color-text-muted);
+}
+
+.detail-list dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Account header and tabs */
+.account-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+}
+
+.account-header .account-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.account-header .account-title h1 {
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+.tile {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
+  border-radius: var(--radius-md);
+  background: var(--primary-soft);
+  color: var(--color-primary);
+  font-size: 1.25rem;
+}
+
+.tabs {
+  display: inline-flex;
+  align-self: flex-start;
+  border: 1px solid var(--color-control-border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 var(--space-xl);
+  color: var(--color-text);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.tab + .tab {
+  border-left: 1px solid var(--color-control-border);
+}
+
+.tab.active {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-weight: 700;
+}
+
+/* Icon picker */
+.icon-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+.icon-picker label {
+  display: grid;
+  place-items: center;
+  width: var(--size-touch-target);
+  height: var(--size-touch-target);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+
+.icon-picker label.selected {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.icon-picker input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.icon-picker label:has(input:focus-visible) {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Dialogs */
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-lg);
+  background: color-mix(in srgb, var(--color-scrim) 45%, transparent);
+}
+
+.dialog {
+  width: min(100%, 28rem);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+}
+
+.dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}
+
+/* Export menu (feature 005) */
+.export-button {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-xs);
+}
+
+.export-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  min-width: 11rem;
+  margin-top: var(--space-xs);
+  padding: var(--space-xs);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow);
+}
+
+.export-menu button {
+  justify-content: flex-start;
+  border-radius: var(--radius-sm);
+  background: none;
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.export-menu button:hover,
+.export-menu button:focus-visible {
+  background: var(--primary-soft);
+}
+
+.export-error {
+  font-size: 0.875rem;
+}

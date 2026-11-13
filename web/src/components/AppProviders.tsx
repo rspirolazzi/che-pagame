@@ -26,7 +26,7 @@ const themeScriptProps =
 export function AppProviders({ theme, children }: { theme?: ThemeName; children: ReactNode }) {
   return (
     <ThemeProvider
-      attribute="class"
+      attribute="data-theme"
       defaultTheme="system"
       enableSystem
       disableTransitionOnChange

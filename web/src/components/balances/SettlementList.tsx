@@ -12,6 +12,8 @@ import type { AccountResponse, SettlementPage, SettlementResponse } from "@/lib/
 import { formatDay } from "@/lib/expenseGroups";
 import { formatMoney } from "@/lib/money";
 
+import { StatusNotice } from "../ui/StatusNotice";
+
 interface SettlementListProps {
   account: AccountResponse;
   firstPage: SettlementPage;
@@ -91,24 +93,19 @@ export function SettlementList({ account, firstPage }: SettlementListProps) {
             >
               <span className="stack">
                 <span>{t("row", { from: item.from.name, to: item.to.name })}</span>
-                <small>
-                  {formatDay(item.date, locale, { dateStyle: "medium" })}
-                  {item.isExcluded && (
-                    <>
-                      {" "}
-                      <span className="badge" title={t("removedHint")}>
-                        {t("removed")}
-                      </span>
-                    </>
-                  )}
-                </small>
+                <small>{formatDay(item.date, locale, { dateStyle: "medium" })}</small>
+                {item.isExcluded && (
+                  <StatusNotice kind="info">
+                    <strong>{t("removed")}</strong> {t("removedHint")}
+                  </StatusNotice>
+                )}
               </span>
               <span className="row">
-                <strong>
+                <strong className="amount-figure">
                   {formatMoney(item.amount, account.currency, account.currencyDecimals, locale)}
                 </strong>
                 {!account.isClosed && (
-                  <button type="button" className="secondary" onClick={() => setToDelete(item)}>
+                  <button type="button" className="danger-text" onClick={() => setToDelete(item)}>
                     {t("delete")}
                   </button>
                 )}

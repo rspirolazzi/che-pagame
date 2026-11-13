@@ -2,10 +2,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
-import { AccountIcon } from "@/components/accounts/AccountIcon";
-import { AccountTabs } from "@/components/accounts/AccountTabs";
-import { ExpenseList } from "@/components/expenses/ExpenseList";
+import { AccountHeader } from "@/components/accounts/AccountHeader";
+import { ExpenseList, ExpenseSummary } from "@/components/expenses/ExpenseList";
 import { ExportButton } from "@/components/exports/ExportButton";
+import { Icon } from "@/components/ui/Icon";
+import { StatusNotice } from "@/components/ui/StatusNotice";
 import { getAccount } from "@/lib/accountsServer";
 import { ApiError } from "@/lib/api/errors";
 import { firstExpensePage } from "@/lib/expensesServer";
@@ -29,42 +30,47 @@ async function load(accountId: string) {
 
 export default async function AccountExpensesPage({ params }: AccountPageProps) {
   const { accountId } = await params;
-  const [loaded, t, tAccounts] = await Promise.all([
+  const [loaded, t, tAccounts, tBalances] = await Promise.all([
     load(accountId),
     getTranslations("expenses"),
     getTranslations("accounts"),
+    getTranslations("balances"),
   ]);
   if (!loaded) notFound();
   const [account, firstPage] = loaded;
+  const hasPending = firstPage.items.some((item) => item.isPending);
   return (
-    <section className="card stack">
-      <header className="row space-between">
-        <span className="row">
-          <AccountIcon icon={account.icon} size="2rem" />
-          <span>
-            <h1>{account.name}</h1>
-            {account.isClosed && <span className="badge">{tAccounts("closedBadge")}</span>}
-          </span>
-        </span>
-        <span className="row">
-          <Link href={`/accounts/${account.id}/settings`} className="button secondary">
-            {t("settings")}
-          </Link>
-          {/* Also on closed accounts: exporting is read only (FR-001). */}
-          <ExportButton endpoint={`/api/exports/accounts/${account.id}`} />
+    <>
+      <AccountHeader account={account} active="expenses" />
+      {account.isClosed && (
+        <StatusNotice kind="readOnly">{tAccounts("detail.closedNotice")}</StatusNotice>
+      )}
+      <div className="page-grid">
+        <ExpenseList
+          key={firstPage.items.map((i) => i.id).join()}
+          account={account}
+          firstPage={firstPage}
+          showSummary={false}
+        />
+        <aside className="page-aside">
+          <ExpenseSummary account={account} firstPage={firstPage} />
+          {hasPending && (
+            <StatusNotice kind="warning">
+              <strong>{t("pending")}</strong>
+              <br />
+              {tBalances("pendingHint")}
+            </StatusNotice>
+          )}
           {!account.isClosed && (
             <Link href={`/accounts/${account.id}/expenses/new`} className="button">
+              <Icon name="plus" />
               {t("new")}
             </Link>
           )}
-        </span>
-      </header>
-      <AccountTabs accountId={account.id} active="expenses" />
-      <ExpenseList
-        key={firstPage.items.map((i) => i.id).join()}
-        account={account}
-        firstPage={firstPage}
-      />
-    </section>
+          {/* Also on closed accounts: exporting is read only (FR-001 of feature 005). */}
+          <ExportButton endpoint={`/api/exports/accounts/${account.id}`} />
+        </aside>
+      </div>
+    </>
   );
 }

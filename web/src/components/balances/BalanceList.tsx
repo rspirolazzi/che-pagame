@@ -2,37 +2,17 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
-import type { AccountBalances, AccountResponse, BalanceEntry } from "@/lib/api/types";
-import { absAmount, amountSign } from "@/lib/balanceTotals";
-import { formatMoney } from "@/lib/money";
+import type { AccountBalances, AccountResponse } from "@/lib/api/types";
+import { amountSign } from "@/lib/balanceTotals";
+
+import { AmountText } from "../ui/AmountText";
+import { StatusNotice } from "../ui/StatusNotice";
 
 interface BalanceListProps {
   account: AccountResponse;
   balances: AccountBalances;
-}
-
-function useBalanceText() {
-  const t = useTranslations("balances");
-  const locale = useLocale();
-  return (entry: BalanceEntry, balances: AccountBalances) => {
-    const amount = formatMoney(
-      absAmount(entry.amount),
-      balances.currency,
-      balances.currencyDecimals,
-      locale,
-    );
-    const sign = amountSign(entry.amount);
-    if (entry.isMe) {
-      if (sign > 0) return t("owedToYou", { amount });
-      if (sign < 0) return t("youOwe", { amount });
-      return t("youSettled");
-    }
-    if (sign > 0) return t("owed", { amount });
-    if (sign < 0) return t("owes", { amount });
-    return t("settled");
-  };
 }
 
 /**
@@ -41,8 +21,8 @@ function useBalanceText() {
  */
 export function BalanceList({ account, balances }: BalanceListProps) {
   const t = useTranslations("balances");
+  const tExpenses = useTranslations("expenses");
   const router = useRouter();
-  const text = useBalanceText();
   const noDebts = balances.balances.every((entry) => amountSign(entry.amount) === 0);
   return (
     <section className="stack" aria-labelledby="balances-title">
@@ -53,31 +33,28 @@ export function BalanceList({ account, balances }: BalanceListProps) {
         </button>
       </div>
       {balances.pendingExpenses > 0 && (
-        <p role="status" className="form-status">
-          <strong>{t("pending", { count: balances.pendingExpenses })}</strong>. {t("pendingHint")}{" "}
+        <StatusNotice kind="warning">
+          <strong>{tExpenses("pending")}</strong>
+          <br />
+          <span>{t("pending", { count: balances.pendingExpenses })}</span>. {t("pendingHint")}{" "}
           <Link href={`/accounts/${account.id}`}>{t("pendingLink")}</Link>
-        </p>
+        </StatusNotice>
       )}
-      <ul className="balance-list">
-        {balances.balances.map((entry) => {
-          const sign = amountSign(entry.amount);
-          return (
-            <li
-              key={entry.participant.id}
-              className={entry.isMe ? "balance-row me" : "balance-row"}
-            >
-              <span>
-                {entry.participant.name}
-                {entry.isMe && <small> ({t("you")})</small>}
-              </span>
-              <strong
-                className={sign > 0 ? "amount-positive" : sign < 0 ? "amount-negative" : undefined}
-              >
-                {text(entry, balances)}
-              </strong>
-            </li>
-          );
-        })}
+      <ul className="balance-list card">
+        {balances.balances.map((entry) => (
+          <li key={entry.participant.id} className={entry.isMe ? "balance-row me" : "balance-row"}>
+            <span>
+              {entry.participant.name}
+              {entry.isMe && <small> ({t("you")})</small>}
+            </span>
+            <AmountText
+              amount={entry.amount}
+              currency={balances.currency}
+              decimals={balances.currencyDecimals}
+              subject={entry.isMe ? "me" : "other"}
+            />
+          </li>
+        ))}
       </ul>
       {noDebts && <p>{t("noDebts")}</p>}
     </section>

@@ -71,10 +71,16 @@ export function SuggestionList({
       ) : (
         <ul className="suggestion-list">
           {suggestions.map((suggestion) => (
-            <li key={`${suggestion.from.id}-${suggestion.to.id}`} className="suggestion-row">
-              <span>{t("transfer", { from: suggestion.from.name, to: suggestion.to.name })}</span>
-              <span className="row">
+            <li key={`${suggestion.from.id}-${suggestion.to.id}`} className="suggestion-row card">
+              <span className="row space-between">
                 <strong>
+                  {t("transfer", { from: suggestion.from.name, to: suggestion.to.name })}
+                </strong>
+                {/* The sun accent only as a highlight background (FR-004). */}
+                <span className="chip-accent">{t("suggested")}</span>
+              </span>
+              <span className="row space-between">
+                <strong className="amount-figure">
                   {formatMoney(
                     suggestion.amount,
                     account.currency,
@@ -85,7 +91,6 @@ export function SuggestionList({
                 {!account.isClosed && (
                   <button
                     type="button"
-                    className="secondary"
                     onClick={() =>
                       setOpen({
                         suggestion,
