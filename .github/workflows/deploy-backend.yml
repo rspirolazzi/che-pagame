@@ -157,7 +157,7 @@ jobs:
             GIT_SHA=${{ steps.build_meta.outputs.sha_short }}
 
       - name: Update container on DigitalOcean droplet
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@v1.2.5
         env:
           DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
           SERVICE: ${{ env.SERVICE }}
