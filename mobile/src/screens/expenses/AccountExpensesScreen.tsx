@@ -203,7 +203,7 @@ export default function AccountExpensesScreen() {
           style={[styles.fab, { right: spacing.lg, bottom: spacing.lg }]}
           onPress={() =>
             router.push({
-              pathname: "/accounts/[accountId]/expenses/new",
+              pathname: "/accounts/[accountId]/new-expense",
               params: { accountId: account.id },
             })
           }

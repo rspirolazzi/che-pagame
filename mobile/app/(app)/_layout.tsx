@@ -20,7 +20,7 @@ export default function AppLayout() {
       <Stack.Protected guard={!needsCurrency}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         {/* The expense form draws its own header with back and the title. */}
-        <Stack.Screen name="accounts/[accountId]/expenses/new" options={{ headerShown: false }} />
+        <Stack.Screen name="accounts/[accountId]/new-expense" options={{ headerShown: false }} />
         <Stack.Screen
           name="accounts/[accountId]/expenses/[expenseId]/edit"
           options={{ headerShown: false }}

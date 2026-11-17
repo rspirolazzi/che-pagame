@@ -104,6 +104,11 @@ Punto de partida relevado en el código:
   elección de moneda quedan fuera del grupo `(tabs)`, en el `Stack` de `(app)`, por eso no muestran
   la barra. Los grupos no cambian las URLs: `/accounts/{id}`, `/accounts/{id}/expenses/new`,
   `/profile` y el enlace `chepagame://invite/<code>` siguen iguales.
+- **Corrección (2026-11-17)**: `/accounts/{id}/expenses/new` coincidía con el detalle de gasto de
+  `(tabs)` (`expenses/[expenseId]`) y abría un gasto con id `new` ("Este gasto ya no existe"). El
+  formulario de gasto nuevo pasó a `/accounts/{id}/new-expense` (ruta interna, sin enlaces
+  externos). La barra dibuja solo las tres pestañas: una barra propia ignora `href: null`, y `join`
+  aparecía como cuarta pestaña.
 - **Rationale**: es el patrón que la constitución ya describe ("Panel Principal": Dashboard,
   Accounts, Profile) y el que la persona espera en el teléfono. Usar la barra de Paper evita estilos
   propios: toma la identidad del tema y marca el activo con un indicador y el texto, no solo color.

@@ -34,6 +34,7 @@ const routes = {
       <Tabs.Screen name="index" />
       <Tabs.Screen name="accounts" />
       <Tabs.Screen name="profile" />
+      <Tabs.Screen name="join" options={{ href: null }} />
     </Tabs>
   ),
   "(app)/(tabs)/index": page("Dashboard screen"),
@@ -41,7 +42,9 @@ const routes = {
   "(app)/(tabs)/accounts/_layout": () => <Stack screenOptions={{ headerShown: false }} />,
   "(app)/(tabs)/accounts/index": page("Accounts screen"),
   "(app)/(tabs)/accounts/[accountId]/index": page("Account screen"),
-  "(app)/accounts/[accountId]/expenses/new": page("New expense screen"),
+  "(app)/(tabs)/accounts/[accountId]/expenses/[expenseId]/index": page("Expense detail screen"),
+  "(app)/(tabs)/join": page("Join screen"),
+  "(app)/accounts/[accountId]/new-expense": page("New expense screen"),
 };
 
 beforeEach(async () => {
@@ -94,12 +97,32 @@ it("keeps the URL of an account inside the tabs (R5)", () => {
 
 it("opens the new expense form outside the tabs, without the bar (R5)", () => {
   const view = renderRouter(routes, {
-    initialUrl: "/accounts/a1/expenses/new",
+    initialUrl: "/accounts/a1/new-expense",
     wrapper: Wrapper,
   });
   expect(screen.getByText("New expense screen")).toBeOnTheScreen();
   expect(view.getSegments()).not.toContain("(tabs)");
   expect(screen.queryByTestId("tab-accounts")).toBeNull();
+});
+
+it("opens the new expense form from the account, not the detail of an expense named new", async () => {
+  const view = renderRouter(routes, { initialUrl: "/accounts/a1", wrapper: Wrapper });
+  act(() =>
+    router.push({ pathname: "/accounts/[accountId]/new-expense", params: { accountId: "a1" } }),
+  );
+  expect(await screen.findByText("New expense screen")).toBeOnTheScreen();
+  expect(screen.queryByText("Expense detail screen")).toBeNull();
+  expect(view.getSegments()).not.toContain("(tabs)");
+});
+
+it("shows only the three destinations, never a hidden route such as join", () => {
+  renderRouter(routes, { initialUrl: "/join", wrapper: Wrapper });
+  expect(screen.getByText("Join screen")).toBeOnTheScreen();
+  expect(screen.queryByTestId("tab-join")).toBeNull();
+  // /join is opened from Cuentas, so that destination stays marked.
+  expect(screen.getByTestId("tab-accounts").props.accessibilityState).toMatchObject({
+    selected: true,
+  });
 });
 
 it("pressing the active tab goes back to its main screen", async () => {

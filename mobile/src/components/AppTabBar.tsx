@@ -30,9 +30,16 @@ export const TABS: Record<string, { label: string; icon: IconName; focusedIcon: 
 export function AppTabBar({ state, navigation, insets }: BottomTabBarProps) {
   const { t } = useTranslation();
   const theme = useTheme<AppTheme>();
+  // A custom bar ignores `href: null`: draw only the destinations, so routes like /join keep the
+  // bar without a tab of their own. /join is reached from Cuentas, which stays active there.
+  const routes = state.routes.filter((route) => TABS[route.name]);
+  const focusedKey = state.routes[state.index]?.key;
+  const focusedIndex = routes.findIndex((route) => route.key === focusedKey);
+  const accountsIndex = routes.findIndex((route) => route.name === "accounts");
+  const index = focusedIndex >= 0 ? focusedIndex : Math.max(0, accountsIndex);
   return (
     <BottomNavigation.Bar
-      navigationState={state}
+      navigationState={{ index, routes }}
       safeAreaInsets={insets}
       activeIndicatorStyle={{ backgroundColor: theme.custom.accent }}
       activeColor={theme.custom.onAccent}
@@ -69,7 +76,7 @@ export function AppTabBar({ state, navigation, insets }: BottomTabBarProps) {
           preventDefault();
           return;
         }
-        const focused = state.routes[state.index]?.key === route.key;
+        const focused = focusedKey === route.key;
         if (!focused) navigation.navigate(route.name, route.params);
       }}
     />
