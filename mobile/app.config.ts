@@ -59,4 +59,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     typedRoutes: true,
     reactCompiler: true,
   },
+  // EAS project ID: a public identifier, not a credential.
+  extra: {
+    eas: {
+      projectId: "194f53ff-81df-496b-b952-dcd216efa4f3",
+    },
+  },
 });

@@ -179,7 +179,9 @@ The Docker Hub repositories are public: images contain no secrets or `.env` file
 
 MongoDB publishes no ports. The backend and the web app publish `8000` and `3000` on
 `PUBLISH_ADDRESS` (`127.0.0.1` by default) for a reverse proxy on the host; HTTPS, the domain
-and the proxy are handled by the server, outside this repository.
+and the proxy are handled by the server, outside this repository. The current production server
+(shared nginx, Let's Encrypt, `api.` subdomain) is documented step by step in
+[deploy/DIGITALOCEAN.md](deploy/DIGITALOCEAN.md).
 
 Changes to `deploy/` are not applied by the workflows: copy the files to the server again and
 run `docker compose up -d`.
