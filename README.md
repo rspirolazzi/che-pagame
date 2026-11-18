@@ -39,7 +39,9 @@ docker compose up -d --build
 - Mobile: `cd mobile && npx expo run:android` (or `run:ios`). Needs JDK 17 and the Android SDK
   (`ANDROID_HOME`). Inside the emulator `localhost` is the emulator itself: set
   `EXPO_PUBLIC_API_BASE_URL=http://10.0.2.2:8000/api/v1` in `mobile/.env`, or keep `localhost` and
-  run `adb reverse tcp:8000 tcp:8000` after starting the emulator.
+  run `adb reverse tcp:8000 tcp:8000` after starting the emulator. Development builds do not need
+  the release key; to build an APK or AAB to share, see
+  [Android release build](#android-release-build-feature-010).
 
 ## Accounts and invitations (feature 002)
 
@@ -130,6 +132,75 @@ docker compose up -d --build
 - Store builds: Google Play and the App Store may reject an external donation link to the
   developer. Build the App for the stores with `EXPO_PUBLIC_DONATION_URL` empty (and keep it
   empty in the `production` profile once `eas.json` exists).
+
+## Android release build (feature 010)
+
+Release builds are signed with the project's own upload key, never with the debug key, block the
+permissions the App does not use and shrink code with R8. `mobile/android/` is generated, so all of
+this comes from `mobile/app.config.ts` and `mobile/plugins/withReleaseSigning.js`. Full validation
+steps: [specs/010-android-release-hardening/quickstart.md](specs/010-android-release-hardening/quickstart.md).
+
+1. **Create the key once, outside the repository.** `keytool` asks for the passwords, so they never
+   end up in the shell history:
+
+   ```bash
+   keytool -genkeypair -v -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias chepagame-upload -keystore ~/keys/chepagame-upload.jks
+   ```
+
+   Back up the `.jks` and its passwords somewhere safe: without them you cannot publish updates of
+   the same App.
+2. **Configure `mobile/.env`** (never committed) with `ANDROID_UPLOAD_STORE_FILE` (absolute path to
+   the `.jks`, forward slashes also work on Windows), `ANDROID_UPLOAD_STORE_PASSWORD`,
+   `ANDROID_UPLOAD_KEY_ALIAS` and `ANDROID_UPLOAD_KEY_PASSWORD`. Environment variables win over the
+   file. Without them, release builds fail with `Release signing is not configured` and the list
+   of missing variables; development builds keep working.
+3. **Build** (in `mobile/`):
+
+   | Goal | Command | Output |
+   |---|---|---|
+   | Regenerate the native project | `npx expo prebuild --platform android --clean` | `android/` |
+   | APK for phones (arm64) | `cd android && ./gradlew assembleRelease -PreactNativeArchitectures=arm64-v8a` | `android/app/build/outputs/apk/release/app-release.apk` |
+   | AAB for Google Play | `cd android && ./gradlew bundleRelease` | `android/app/build/outputs/bundle/release/app-release.aab` |
+
+   The Android `versionCode` comes from `version` in `app.config.ts` (`1.2.3` → `10203`): bump the
+   version for every release you distribute.
+4. **Google Sign-In:** Google checks the SHA-1 of the signing key. Get it with
+   `cd android && ./gradlew signingReport` (variant `release`) and add it to an OAuth client of
+   type **Android** (package `com.chepagame.app`) in Google Cloud. The Web client ID does not change.
+5. **Install:** Android does not update an App signed with another key, so uninstall the
+   debug-signed ChePagame first.
+6. **Check before sharing:** upload the APK to [VirusTotal](https://www.virustotal.com). If an
+   engine still flags it, report the false positive to that vendor with the SHA-256 of the file;
+   do not change the App to dodge a scanner.
+
+### Build on GitHub
+
+`.github/workflows/release-android.yml` builds, signs and publishes the App on GitHub Actions
+(about 20–30 minutes). Configure it once in Settings → Secrets and variables → Actions:
+
+- **Secrets:** `ANDROID_UPLOAD_KEYSTORE_BASE64` (the `.jks` in base64), `ANDROID_UPLOAD_STORE_PASSWORD`,
+  `ANDROID_UPLOAD_KEY_ALIAS`, `ANDROID_UPLOAD_KEY_PASSWORD`. To copy the keystore in base64 without
+  showing it (PowerShell):
+  `[Convert]::ToBase64String([IO.File]::ReadAllBytes("$HOME\keys\chepagame-upload.jks")) | Set-Clipboard`
+- **Variables** (public, they end up inside the APK): `EXPO_PUBLIC_API_BASE_URL`
+  (e.g. `https://api.chepagame.com.ar/v1`), `EXPO_PUBLIC_WEB_BASE_URL`
+  (e.g. `https://chepagame.com.ar`), `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` and, optionally,
+  `EXPO_PUBLIC_DONATION_URL`.
+
+To publish a version: bump `version` in `mobile/app.config.ts`, commit and push, then tag that
+commit with the same version and push the tag:
+
+```bash
+git tag mobile-v1.0.1
+```
+
+```bash
+git push origin mobile-v1.0.1
+```
+
+The run checks lint, types and tests, fails if the tag does not match the version, and creates a
+GitHub Release with `chepagame-<version>-arm64.apk`, `chepagame-<version>.aab` and their SHA-256.
+A manual run (Actions → Android release → Run workflow) only uploads them as an artifact.
 
 ## Deploy (feature 009)
 
