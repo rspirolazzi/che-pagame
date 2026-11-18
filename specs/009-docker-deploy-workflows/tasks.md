@@ -150,7 +150,7 @@ visible en "Quiénes somos" y en `/api/health`, sin reiniciar el Backend.
   - `docker compose up -d` de desarrollo sigue funcionando con recarga en caliente.
 - [X] T025 [P] Validar los workflows con `actionlint` (vía `docker run --rm -v "$PWD:/repo" -w /repo rhysd/actionlint:latest`) y revisar que ningún `run:` imprima `secrets.*` ni interpole `${{ secrets.* }}` dentro de un script.
 - [X] T026 Quitar el comentario "Sync Impact Report" del principio de `.specify/memory/constitution.md` antes del commit.
-- [ ] T027 Cargar los secretos y variables en GitHub, preparar el servidor (lo hace el usuario), hacer push de `main` y validar los 11 escenarios de la sección 3 y el tiempo total de la sección 4 de [quickstart.md](quickstart.md) (SC-001). Validación del usuario.
+- [X] T027 Cargar los secretos y variables en GitHub, preparar el servidor (lo hace el usuario), hacer push de `main` y validar los 11 escenarios de la sección 3 y el tiempo total de la sección 4 de [quickstart.md](quickstart.md) (SC-001). Validación del usuario.
 
 ---
 
