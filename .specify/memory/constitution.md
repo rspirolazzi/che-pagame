@@ -234,6 +234,23 @@ constitución.
 - Cada imagen MUST publicarse con una etiqueta inmutable por commit (ej. `sha-<commit>`) además de
   `latest`, para poder volver a una versión anterior.
 
+### Builds Móviles de Release
+
+- Todo binario de la App Mobile que se distribuya (APK o AAB) MUST firmarse con una keystore de
+  release propia, nunca con la keystore debug. La keystore y sus contraseñas MUST vivir fuera del
+  repositorio (`.env` local, GitHub Secrets o credenciales de EAS) y MUST NOT commitearse.
+- La App MUST declarar solo los permisos de Android que usa. Los permisos que agregan las
+  librerías y la App no necesita (ej. `SYSTEM_ALERT_WINDOW`, lectura/escritura de almacenamiento
+  externo) MUST bloquearse en la configuración de Expo (`app.config.ts`), no en archivos generados.
+- Los builds de release SHOULD habilitar R8 (minify) y el shrink de recursos, y SHOULD
+  distribuirse como AAB o como APK por ABI en lugar de un APK universal.
+- Antes de publicar un binario, SHOULD verificarse con un escáner multi-antivirus (ej. VirusTotal);
+  los falsos positivos SHOULD reportarse al proveedor que los marca.
+
+Rationale: un binario firmado con la clave debug y con permisos que no usa activa detecciones
+heurísticas de los antivirus (ej. `PUP/Android.Malct`), resta confianza a los usuarios y no se
+puede publicar en Google Play.
+
 ### Nomenclatura
 
 - **MongoDB:** colecciones en plural y `snake_case` (`users`, `accounts`, `expenses`,
@@ -351,4 +368,4 @@ estados sin depender del color hacen que los saldos se lean bien para todos.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.7.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-13
+**Version**: 4.8.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-18
