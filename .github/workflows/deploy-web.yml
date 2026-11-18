@@ -149,7 +149,8 @@ jobs:
 
             docker compose pull "$SERVICE"
             # Recreate only this service and wait until its healthcheck passes.
-            docker compose up -d --no-deps --wait --wait-timeout 180 "$SERVICE"
+            #docker compose up -d --no-deps --wait --wait-timeout 180 "$SERVICE"
+            docker compose up -d --no-deps "$SERVICE"
 
             # Remove dangling images (no tag, not used).
             docker image prune -f
