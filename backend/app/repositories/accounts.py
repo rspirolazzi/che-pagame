@@ -151,3 +151,13 @@ async def update(
         array_filters=array_filters,
         return_document=ReturnDocument.AFTER,
     )
+
+
+async def list_linked_to(
+    user_id: ObjectId, session: AsyncClientSession | None = None
+) -> list[dict[str, Any]]:
+    """Every account, closed or deleted included, with an active participant linked to the user."""
+    cursor = _collection().find(
+        {"participants": {"$elemMatch": {"userId": user_id, "removedAt": None}}}, session=session
+    )
+    return [doc async for doc in cursor]

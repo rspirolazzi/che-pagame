@@ -52,7 +52,14 @@ async def test_create_returns_account_response(client, create_user):
     assert set(body) == ACCOUNT_FIELDS
     assert body["isOwner"] is True
     assert body["myParticipantId"] == next(p["id"] for p in body["participants"] if p["isMe"])
-    assert set(body["participants"][0]) == {"id", "name", "isLinked", "isMe", "isOwner"}
+    assert set(body["participants"][0]) == {
+        "id",
+        "name",
+        "isAnonymized",
+        "isLinked",
+        "isMe",
+        "isOwner",
+    }
     assert body["currencyDecimals"] == 2
 
 

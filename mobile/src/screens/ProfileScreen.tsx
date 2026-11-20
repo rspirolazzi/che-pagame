@@ -1,3 +1,4 @@
+import { useRouter } from "expo-router";
 import { type ReactNode, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { View } from "react-native";
@@ -25,6 +26,7 @@ const donationUrl = parseDonationUrl(process.env.EXPO_PUBLIC_DONATION_URL);
 export default function ProfileScreen() {
   const { t } = useTranslation();
   const { user, setUser, logout } = useAuth();
+  const router = useRouter();
   const prefs = usePreferences();
   const [firstName, setFirstName] = useState(user?.firstName ?? "");
   const [lastName, setLastName] = useState(user?.lastName ?? "");
@@ -182,7 +184,19 @@ export default function ProfileScreen() {
         </Section>
       )}
 
-      <AppButton mode="text" tone="danger" icon="logout" onPress={logout}>
+      <Section title={t("deleteAccount.title")}>
+        <Text variant="bodySmall">{t("deleteAccount.profileHint")}</Text>
+        <AppButton
+          mode="outlined"
+          tone="danger"
+          icon="account-remove-outline"
+          onPress={() => router.push("/delete-account")}
+        >
+          {t("deleteAccount.title")}
+        </AppButton>
+      </Section>
+
+      <AppButton mode="text" tone="danger" icon="logout" onPress={() => logout()}>
         {t("auth.logout")}
       </AppButton>
     </Screen>

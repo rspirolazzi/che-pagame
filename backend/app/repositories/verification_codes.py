@@ -11,7 +11,7 @@ from app.db.client import get_database
 COLLECTION = "verification_codes"
 MAX_ATTEMPTS = 5
 
-CodePurpose = Literal["verify_email", "login", "password_reset", "change_email"]
+CodePurpose = Literal["verify_email", "login", "password_reset", "change_email", "delete_account"]
 
 
 def _collection():
@@ -88,3 +88,9 @@ async def mark_consumed(code_id: ObjectId, session: AsyncClientSession | None = 
 
 async def mark_invalidated(code_id: ObjectId) -> None:
     await _collection().update_one({"_id": code_id}, {"$set": {"invalidatedAt": datetime.now(UTC)}})
+
+
+async def delete_for_emails(emails: list[str], session: AsyncClientSession | None = None) -> None:
+    await _collection().delete_many(
+        {"email": {"$in": [normalize_email(e) for e in emails]}}, session=session
+    )

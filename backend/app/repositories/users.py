@@ -109,3 +109,8 @@ def to_user_response(doc: dict[str, Any]) -> UserResponse:
         created_at=doc["createdAt"],
         updated_at=doc["updatedAt"],
     )
+
+
+async def delete(user_id: ObjectId, session: AsyncClientSession | None = None) -> None:
+    """Physical delete (feature 015, research R3): frees the email and the Google subject."""
+    await _collection().delete_one({"_id": user_id}, session=session)

@@ -80,3 +80,33 @@ async def test_require_member_returns_404_for_everyone_else(db):
     await db.accounts.update_one({"_id": account_id}, {"$set": {"isDeleted": True}})
     with pytest.raises(AppError):
         await perms.require_member(account_id, MEMBER)
+
+
+# --- Feature 015: deleted users -----------------------------------------------------------------
+
+
+def test_display_name_is_the_stored_name_by_default():
+    participant = accounts.new_participant("Beto", ObjectId())
+    assert perms.participant_display_name(participant, "es") == "Beto"
+    assert perms.participant_display_name(participant, "en") == "Beto"
+
+
+@pytest.mark.parametrize(
+    ("language", "expected"), [("es", "Usuario eliminado"), ("en", "Deleted user")]
+)
+def test_display_name_of_an_anonymized_participant_is_translated(language, expected):
+    participant = accounts.new_participant("Beto")
+    participant["anonymizedAt"] = datetime.now(UTC)
+    assert perms.participant_display_name(participant, language) == expected
+
+
+def test_display_name_defaults_to_the_request_language():
+    from app.core.i18n import request_language
+
+    participant = accounts.new_participant("Beto")
+    participant["anonymizedAt"] = datetime.now(UTC)
+    token = request_language.set("en")
+    try:
+        assert perms.participant_display_name(participant) == "Deleted user"
+    finally:
+        request_language.reset(token)

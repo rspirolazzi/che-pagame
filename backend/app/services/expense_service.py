@@ -30,6 +30,7 @@ from app.services import audit_service
 from app.services.account_permissions import (
     active_participants,
     my_participant,
+    participant_names,
     require_member,
     require_open,
 )
@@ -52,7 +53,7 @@ AUDITED_FIELDS = (
 
 def _names(account: dict[str, Any]) -> dict[str, str]:
     """All participants, removed ones included, so history keeps their names."""
-    return {p["id"]: p["name"] for p in account["participants"]}
+    return participant_names(account)
 
 
 def _ref(account: dict[str, Any], participant_id: str | None) -> ParticipantRef | None:

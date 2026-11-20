@@ -12,6 +12,7 @@ export function SiteFooter({ donationUrl = null }: { donationUrl?: string | null
       <nav aria-label="legal">
         <Link href="/privacy">{t("privacy")}</Link>
         <Link href="/terms">{t("terms")}</Link>
+        <Link href="/delete-account">{t("deleteAccount")}</Link>
         {donationUrl && <DonateLink url={donationUrl} compact />}
       </nav>
     </footer>

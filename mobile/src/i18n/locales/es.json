@@ -482,5 +482,22 @@
     "body": "ChePagame es gratuito y sin publicidad. Si te sirve, podés apoyarlo con un aporte.",
     "opensBrowser": "Se abre en el navegador",
     "openError": "No pudimos abrir la página de aportes. Probá de nuevo más tarde."
+  },
+  "deleteAccount": {
+    "title": "Eliminar mi cuenta",
+    "profileHint": "Borra tus datos personales de ChePagame. No se puede deshacer.",
+    "intro": "Antes de confirmar, mirá qué se borra y qué queda. Si querés, descargá tus datos primero.",
+    "erasedTitle": "Qué se borra",
+    "erasedBody": "Tu email, tu nombre y apellido, tu contraseña, tus preferencias, el vínculo con Google y todas tus sesiones. Las Cuentas donde sos el único miembro registrado se eliminan con sus gastos.",
+    "keptTitle": "Qué queda",
+    "keptBody": "En las Cuentas que compartís con otras personas, tus gastos y reembolsos siguen para que los saldos no cambien. Ahí vas a aparecer como «Usuario eliminado». Si eras el dueño, pasa a ser el miembro que se sumó primero.",
+    "exportHint": "Descargá tu perfil y tus Cuentas antes de eliminar la cuenta. Después no se puede.",
+    "sendCode": "Enviarme el código para eliminar",
+    "codeSentTo": "Te enviamos un código a {email}. Ingresalo para eliminar tu cuenta.",
+    "codeLabel": "Código",
+    "irreversible": "Al ingresar el código, tu cuenta se elimina enseguida y no se puede deshacer.",
+    "resend": "Enviar otro código",
+    "cancel": "Cancelar",
+    "done": "Tu cuenta fue eliminada."
   }
 }

@@ -27,6 +27,7 @@ EmailTemplate = Literal[
     "login_code",
     "password_reset",
     "change_email",
+    "delete_account",
     "security_google_linked",
     "security_password_changed",
     "security_email_changed",

@@ -33,9 +33,23 @@ jest.mock("@/utils/expenseGroups", () => ({
 const api = settlementsApi as jest.Mocked<typeof settlementsApi>;
 const threePeople = makeAccount({
   participants: [
-    { id: "p-ana", name: "Ana", isLinked: true, isMe: true, isOwner: true },
-    { id: "p-leandro", name: "Leandro", isLinked: false, isMe: false, isOwner: false },
-    { id: "p-javier", name: "Javier", isLinked: false, isMe: false, isOwner: false },
+    { id: "p-ana", name: "Ana", isAnonymized: false, isLinked: true, isMe: true, isOwner: true },
+    {
+      id: "p-leandro",
+      name: "Leandro",
+      isAnonymized: false,
+      isLinked: false,
+      isMe: false,
+      isOwner: false,
+    },
+    {
+      id: "p-javier",
+      name: "Javier",
+      isAnonymized: false,
+      isLinked: false,
+      isMe: false,
+      isOwner: false,
+    },
   ],
 });
 

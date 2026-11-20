@@ -97,7 +97,8 @@ export function ParticipantList({ account, onChange, onRemovedSelf }: Participan
               </span>
             ) : (
               <span>
-                {p.name}
+                {/* A deleted user's participant reads differently (feature 015). */}
+                {p.isAnonymized ? <em className="muted">{p.name}</em> : p.name}
                 {p.isMe && <small> ({t("detail.you")})</small>}
                 {p.isOwner && <small> · {t("detail.owner")}</small>}
                 {p.isLinked && !p.isMe && <small> · {t("detail.linked")}</small>}

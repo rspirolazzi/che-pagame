@@ -16,6 +16,7 @@ from bson import ObjectId
 from app.core.export_labels import category_label
 from app.core.i18n import Language
 from app.core.money import currency_decimals, format_amount, split_equal
+from app.services.account_permissions import participant_display_name, participant_names
 from app.services.balance_math import compute_balances, is_pending, suggest_transfers
 
 
@@ -123,7 +124,7 @@ def build_account_export(
     settlements = list(settlements)
     currency = account["currency"]
     order = [p["id"] for p in account["participants"]]
-    names = {p["id"]: p["name"] for p in account["participants"]}
+    names = participant_names(account, language)
     active = {p["id"] for p in account["participants"] if p.get("removedAt") is None}
 
     def ref(participant_id: str) -> Ref:
@@ -177,7 +178,11 @@ def build_account_export(
         closed_at=account.get("closedAt"),
         pending_expenses=result.pending,
         participants=tuple(
-            ParticipantRow(id=p["id"], name=p["name"], is_removed=p.get("removedAt") is not None)
+            ParticipantRow(
+                id=p["id"],
+                name=participant_display_name(p, language),
+                is_removed=p.get("removedAt") is not None,
+            )
             for p in account["participants"]
         ),
         expenses=expense_rows,

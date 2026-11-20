@@ -35,7 +35,8 @@
   "footer": {
     "rights": "ChePagame. Para que la guita no sea un problema.",
     "privacy": "Privacidad",
-    "terms": "Términos"
+    "terms": "Términos",
+    "deleteAccount": "Eliminar mi cuenta"
   },
   "home": {
     "title": "Para que la guita no sea un problema",
@@ -506,7 +507,7 @@
     "mineButton": "Exportar mis datos"
   },
   "legal": {
-    "lastUpdated": "Última actualización: 12 de noviembre de 2026.",
+    "lastUpdated": "Última actualización: 18 de noviembre de 2026.",
     "privacy": {
       "title": "Privacidad",
       "intro": "Esta página explica qué datos guarda ChePagame y qué hace con ellos.",
@@ -534,6 +535,10 @@
         "export": {
           "title": "Tus datos son tuyos",
           "body": "Podés descargar todos tus datos en CSV o JSON desde tu Perfil, en Exportar mis datos, y cada Cuenta desde su propia página."
+        },
+        "delete": {
+          "title": "Eliminar tus datos",
+          "body": "Podés eliminar tu cuenta cuando quieras desde tu Perfil, en Eliminar mi cuenta, o siguiendo los pasos de chepagame.com.ar/delete-account. Se borran tu email, tu nombre, tus preferencias y tus sesiones. Lo que cargaste en Cuentas compartidas queda para el resto de los miembros, sin tu nombre."
         },
         "questions": {
           "title": "Consultas",
@@ -583,5 +588,34 @@
     "title": "Apoyá ChePagame",
     "body": "ChePagame es gratuito y sin publicidad. Si te sirve, podés apoyarlo con un aporte.",
     "newTab": "se abre en una pestaña nueva"
+  },
+  "deleteAccount": {
+    "title": "Eliminar mi cuenta",
+    "profileHint": "Borra tus datos personales de ChePagame. No se puede deshacer.",
+    "intro": "Antes de confirmar, mirá qué se borra y qué queda. Si querés, descargá tus datos primero.",
+    "erasedTitle": "Qué se borra",
+    "erasedBody": "Tu email, tu nombre y apellido, tu contraseña, tus preferencias, el vínculo con Google y todas tus sesiones. Las Cuentas donde sos el único miembro registrado se eliminan con sus gastos.",
+    "keptTitle": "Qué queda",
+    "keptBody": "En las Cuentas que compartís con otras personas, tus gastos y reembolsos siguen para que los saldos no cambien. Ahí vas a aparecer como «Usuario eliminado». Si eras el dueño, pasa a ser el miembro que se sumó primero.",
+    "exportHint": "Descargá tu perfil y tus Cuentas antes de eliminar la cuenta. Después no se puede.",
+    "sendCode": "Enviarme el código para eliminar",
+    "codeSentTo": "Te enviamos un código a {email}. Ingresalo para eliminar tu cuenta.",
+    "codeLabel": "Código",
+    "irreversible": "Al ingresar el código, tu cuenta se elimina enseguida y no se puede deshacer.",
+    "resend": "Enviar otro código",
+    "cancel": "Cancelar",
+    "done": "Tu cuenta fue eliminada."
+  },
+  "deleteAccountPage": {
+    "metaTitle": "Eliminar tu cuenta de ChePagame",
+    "metaDescription": "Cómo eliminar tu cuenta de ChePagame y qué datos se borran.",
+    "title": "Eliminar tu cuenta de ChePagame",
+    "intro": "Podés eliminar tu cuenta desde la web, aunque ya no tengas la App instalada.",
+    "stepsTitle": "Cómo hacerlo",
+    "step1": "Iniciá sesión en chepagame.com.ar con tu email o con Google.",
+    "step2": "Andá a Perfil → Eliminar mi cuenta y pedí el código.",
+    "step3": "Ingresá el código que te llega por email. La cuenta se elimina en ese momento.",
+    "button": "Eliminar mi cuenta",
+    "noAccess": "¿Ya no tenés acceso a tu email? Escribinos desde la página de Contacto."
   }
 }

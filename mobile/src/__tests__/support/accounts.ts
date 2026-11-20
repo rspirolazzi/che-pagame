@@ -22,8 +22,15 @@ export function makeAccount(overrides: Partial<AccountResponse> = {}): AccountRe
     isOwner: true,
     myParticipantId: "p-ana",
     participants: [
-      { id: "p-ana", name: "Ana", isLinked: true, isMe: true, isOwner: true },
-      { id: "p-leandro", name: "Leandro", isLinked: false, isMe: false, isOwner: false },
+      { id: "p-ana", name: "Ana", isAnonymized: false, isLinked: true, isMe: true, isOwner: true },
+      {
+        id: "p-leandro",
+        name: "Leandro",
+        isAnonymized: false,
+        isLinked: false,
+        isMe: false,
+        isOwner: false,
+      },
     ],
     inviteCode: "abcdefghijklmnopqrstuv",
     createdAt: "2026-11-06T00:00:00Z",
@@ -37,8 +44,15 @@ export const memberView = (overrides: Partial<AccountResponse> = {}) =>
     isOwner: false,
     myParticipantId: "p-leandro",
     participants: [
-      { id: "p-ana", name: "Ana", isLinked: true, isMe: false, isOwner: true },
-      { id: "p-leandro", name: "Leandro", isLinked: true, isMe: true, isOwner: false },
+      { id: "p-ana", name: "Ana", isAnonymized: false, isLinked: true, isMe: false, isOwner: true },
+      {
+        id: "p-leandro",
+        name: "Leandro",
+        isAnonymized: false,
+        isLinked: true,
+        isMe: true,
+        isOwner: false,
+      },
     ],
     ...overrides,
   });

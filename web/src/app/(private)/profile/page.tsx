@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { auth } from "@/auth";
@@ -7,10 +8,11 @@ import { EmailChangeForm, PreferencesForm, ProfileForm } from "@/components/Prof
 import { parseDonationUrl } from "@/lib/donation";
 
 export default async function ProfilePage() {
-  const [session, t, tExports] = await Promise.all([
+  const [session, t, tExports, tDelete] = await Promise.all([
     auth(),
     getTranslations("profile"),
     getTranslations("exports"),
+    getTranslations("deleteAccount"),
   ]);
   if (!session?.user) return null;
   const user = session.user;
@@ -26,6 +28,15 @@ export default async function ProfilePage() {
         <ExportButton endpoint="/api/exports/me" label={tExports("mineButton")} />
       </section>
       <DonateSection url={parseDonationUrl(process.env.DONATION_URL)} />
+      <section className="stack" aria-labelledby="delete-account-title">
+        <h2 id="delete-account-title">{tDelete("title")}</h2>
+        <p>{tDelete("profileHint")}</p>
+        <p>
+          <Link href="/profile/delete" className="button danger">
+            {tDelete("title")}
+          </Link>
+        </p>
+      </section>
     </section>
   );
 }

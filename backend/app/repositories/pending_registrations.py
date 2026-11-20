@@ -51,3 +51,9 @@ async def find_by_email(
 
 async def delete_by_email(email: str, session: AsyncClientSession | None = None) -> None:
     await _collection().delete_one({"email": normalize_email(email)}, session=session)
+
+
+async def delete_for_emails(emails: list[str], session: AsyncClientSession | None = None) -> None:
+    await _collection().delete_many(
+        {"email": {"$in": [normalize_email(e) for e in emails]}}, session=session
+    )

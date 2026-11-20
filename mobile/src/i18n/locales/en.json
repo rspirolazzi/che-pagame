@@ -482,5 +482,22 @@
     "body": "ChePagame is free and has no ads. If it helps you, you can support it with a contribution.",
     "opensBrowser": "Opens in the browser",
     "openError": "We could not open the contribution page. Try again later."
+  },
+  "deleteAccount": {
+    "title": "Delete my account",
+    "profileHint": "Erases your personal data from ChePagame. It cannot be undone.",
+    "intro": "Before confirming, check what is erased and what stays. You can download your data first.",
+    "erasedTitle": "What is erased",
+    "erasedBody": "Your email, your first and last name, your password, your preferences, the link to Google and all your sessions. Accounts where you are the only registered member are deleted with their expenses.",
+    "keptTitle": "What stays",
+    "keptBody": "In the accounts you share with other people, your expenses and settlements stay so balances do not change. There you will show up as “Deleted user”. If you were the owner, the member who joined first becomes the owner.",
+    "exportHint": "Download your profile and your accounts before deleting your account. You cannot do it afterwards.",
+    "sendCode": "Send me the deletion code",
+    "codeSentTo": "We sent a code to {email}. Enter it to delete your account.",
+    "codeLabel": "Code",
+    "irreversible": "Once you enter the code, your account is deleted right away and it cannot be undone.",
+    "resend": "Send another code",
+    "cancel": "Cancel",
+    "done": "Your account was deleted."
   }
 }

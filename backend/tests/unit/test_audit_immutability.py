@@ -1,4 +1,8 @@
-"""Principle IV: audit_logs can only be inserted, never updated or deleted, by application code."""
+"""Principle IV: audit_logs can only be inserted, never updated or deleted, by application code.
+
+The one exception (constitution 4.9.0, Principle VI) is `anonymize_user`, which replaces the
+personal data of a deleted user and is only called while deleting that user (feature 015).
+"""
 
 import ast
 import inspect
@@ -15,9 +19,9 @@ def test_repository_exposes_only_insert_and_reads():
     functions = [
         name
         for name, obj in inspect.getmembers(audit_logs, inspect.isfunction)
-        if obj.__module__ == audit_logs.__name__
+        if obj.__module__ == audit_logs.__name__ and not name.startswith("_")
     ]
-    assert sorted(functions) == ["insert", "list_for_entity"]
+    assert sorted(functions) == ["anonymize_user", "insert", "list_for_entity"]
 
 
 def test_no_module_mutates_audit_logs():
@@ -31,3 +35,12 @@ def test_no_module_mutates_audit_logs():
                 if "audit_logs" in target and MUTATIONS.search(node.func.attr):
                     offenders.append(f"{path.name}: {ast.unparse(node)}")
     assert offenders == []
+
+
+def test_anonymize_user_is_only_called_while_deleting_a_user():
+    callers = sorted(
+        path.name
+        for path in APP_DIR.rglob("*.py")
+        if path.name != "audit_logs.py" and "anonymize_user(" in path.read_text(encoding="utf-8")
+    )
+    assert callers == ["account_deletion_service.py"]

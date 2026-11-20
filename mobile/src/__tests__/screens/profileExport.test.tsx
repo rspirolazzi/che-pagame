@@ -9,6 +9,7 @@ import { exportsApi } from "@/services/api/exports";
 
 import { renderScreen, user } from "../support/render";
 
+jest.mock("expo-router", () => ({ useRouter: () => ({ push: jest.fn(), back: jest.fn() }) }));
 jest.mock("@/hooks/useAuth", () => ({ useAuth: jest.fn() }));
 jest.mock("@/hooks/usePreferences", () => ({ usePreferences: jest.fn() }));
 jest.mock("@/services/api/exports", () => ({

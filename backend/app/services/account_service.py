@@ -216,7 +216,14 @@ async def rename_participant(
     async def write(session: AsyncClientSession) -> dict[str, Any] | None:
         updated = await accounts.update(
             doc["_id"],
-            {"$set": {"participants.$[p].name": name.strip(), "participants.$[p].nameKey": key}},
+            {
+                "$set": {
+                    "participants.$[p].name": name.strip(),
+                    "participants.$[p].nameKey": key,
+                    # A renamed "Deleted user" becomes a plain free-text participant (feature 015).
+                    "participants.$[p].anonymizedAt": None,
+                }
+            },
             session=session,
             extra_filter={**OPEN, **_no_active_name(key, except_id=participant_id)},
             array_filters=[{"p.id": participant_id, "p.removedAt": None}],

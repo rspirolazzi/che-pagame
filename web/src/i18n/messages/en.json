@@ -35,7 +35,8 @@
   "footer": {
     "rights": "ChePagame. So money is never a problem.",
     "privacy": "Privacy",
-    "terms": "Terms"
+    "terms": "Terms",
+    "deleteAccount": "Delete my account"
   },
   "home": {
     "title": "So money is never a problem",
@@ -506,7 +507,7 @@
     "mineButton": "Export my data"
   },
   "legal": {
-    "lastUpdated": "Last updated: November 12, 2026.",
+    "lastUpdated": "Last updated: November 18, 2026.",
     "privacy": {
       "title": "Privacy",
       "intro": "This page explains what data ChePagame keeps and what it does with it.",
@@ -534,6 +535,10 @@
         "export": {
           "title": "Your data is yours",
           "body": "You can download all your data as CSV or JSON from your Profile, under Export my data, and each account from its own page."
+        },
+        "delete": {
+          "title": "Delete your data",
+          "body": "You can delete your account at any time from your Profile, under Delete my account, or by following the steps at chepagame.com.ar/delete-account. Your email, your name, your preferences and your sessions are erased. What you added to shared accounts stays for the other members, without your name."
         },
         "questions": {
           "title": "Questions",
@@ -583,5 +588,34 @@
     "title": "Support ChePagame",
     "body": "ChePagame is free and has no ads. If it helps you, you can support it with a contribution.",
     "newTab": "opens in a new tab"
+  },
+  "deleteAccount": {
+    "title": "Delete my account",
+    "profileHint": "Erases your personal data from ChePagame. It cannot be undone.",
+    "intro": "Before confirming, check what is erased and what stays. You can download your data first.",
+    "erasedTitle": "What is erased",
+    "erasedBody": "Your email, your first and last name, your password, your preferences, the link to Google and all your sessions. Accounts where you are the only registered member are deleted with their expenses.",
+    "keptTitle": "What stays",
+    "keptBody": "In the accounts you share with other people, your expenses and settlements stay so balances do not change. There you will show up as “Deleted user”. If you were the owner, the member who joined first becomes the owner.",
+    "exportHint": "Download your profile and your accounts before deleting your account. You cannot do it afterwards.",
+    "sendCode": "Send me the deletion code",
+    "codeSentTo": "We sent a code to {email}. Enter it to delete your account.",
+    "codeLabel": "Code",
+    "irreversible": "Once you enter the code, your account is deleted right away and it cannot be undone.",
+    "resend": "Send another code",
+    "cancel": "Cancel",
+    "done": "Your account was deleted."
+  },
+  "deleteAccountPage": {
+    "metaTitle": "Delete your ChePagame account",
+    "metaDescription": "How to delete your ChePagame account and which data is erased.",
+    "title": "Delete your ChePagame account",
+    "intro": "You can delete your account from the web, even if you no longer have the App installed.",
+    "stepsTitle": "How to do it",
+    "step1": "Sign in at chepagame.com.ar with your email or with Google.",
+    "step2": "Go to Profile → Delete my account and ask for the code.",
+    "step3": "Enter the code you get by email. The account is deleted right then.",
+    "button": "Delete my account",
+    "noAccess": "No longer have access to your email? Write to us from the Contact page."
   }
 }

@@ -13,7 +13,7 @@ from app.core.errors import AppError
 from app.core.money import format_amount
 from app.repositories import audit_logs, expenses
 from app.schemas.expense import HistoryChange, HistoryEntry, ParticipantRef
-from app.services.account_permissions import require_member
+from app.services.account_permissions import participant_names, require_member
 
 _ACTIONS = {
     "expense.created": "created",
@@ -67,7 +67,7 @@ async def history(account_id: str, expense_id: str, user_id: ObjectId) -> list[H
     expense = await expenses.find_active(account["_id"], expense_id)
     if expense is None:
         raise AppError(404, errors.NOT_FOUND)
-    names = {p["id"]: p["name"] for p in account["participants"]}
+    names = participant_names(account)
     currency = expense["currency"]
     entries = []
     for entry in await audit_logs.list_for_entity("expense", expense["_id"]):

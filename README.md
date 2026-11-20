@@ -99,6 +99,21 @@ docker compose up -d --build
 - CSV always uses `,` and a decimal point, whatever the language. A spreadsheet set to Spanish may
   need "Import CSV" (with a dot as the decimal separator) instead of a double click.
 
+## Delete my account (feature 015)
+
+- Profile → "Eliminar mi cuenta" on Web (`/profile/delete`) and in the App. The user confirms with
+  a one-time code sent by email (same expiry, attempts and limits as the login code), so it works
+  for password and Google-only users alike.
+- API: `POST /api/v1/users/me/deletion` (202, sends the code) and
+  `POST /api/v1/users/me/deletion/confirm` with `{ "code" }` (204). One transaction deletes the
+  user document, its sessions, codes and pending registrations; in shared accounts its participant
+  becomes "Usuario eliminado" / "Deleted user" (balances do not change) and the Owner role moves
+  to the member who joined first; accounts without other registered members are deleted
+  (soft delete). The user's email and names are replaced by `[deleted]` in existing audit entries,
+  the only change audit entries ever get (constitution 4.9.0).
+- Public page (no session) for Google Play's Data safety form:
+  `https://chepagame.com.ar/delete-account`. The Privacy page links it.
+
 ## Visual identity (feature 006)
 
 - The "Celeste y sol" identity lives in one place: `design/tokens.json` (colors per role for light

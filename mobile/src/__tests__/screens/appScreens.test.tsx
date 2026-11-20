@@ -16,7 +16,10 @@ const prefs = { setLanguage: jest.fn(), setTheme: jest.fn(), setCurrency: jest.f
 
 jest.mock("expo-router", () => {
   const { Text } = require("react-native");
-  return { Link: ({ children }: { children: React.ReactNode }) => <Text>{children}</Text> };
+  return {
+    Link: ({ children }: { children: React.ReactNode }) => <Text>{children}</Text>,
+    useRouter: () => ({ push: jest.fn(), back: jest.fn() }),
+  };
 });
 jest.mock("@/hooks/useAuth", () => ({ useAuth: jest.fn() }));
 jest.mock("@/hooks/usePreferences", () => ({ usePreferences: jest.fn() }));

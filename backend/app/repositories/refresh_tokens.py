@@ -77,3 +77,7 @@ async def revoke_by_hash(token_hash: str) -> dict[str, Any] | None:
         {"tokenHash": token_hash, "revokedAt": None},
         {"$set": {"revokedAt": datetime.now(UTC)}},
     )
+
+
+async def delete_all_for_user(user_id: ObjectId, session: AsyncClientSession | None = None) -> None:
+    await _collection().delete_many({"userId": user_id}, session=session)

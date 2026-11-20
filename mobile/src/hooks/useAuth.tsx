@@ -23,10 +23,12 @@ interface AuthContextValue {
   user: UserResponse | null;
   /** True when the session ended on its own (expired), not through Logout. */
   sessionExpired: boolean;
+  /** True right after the user deleted their account (feature 015): the login shows a notice. */
+  accountDeleted: boolean;
   signInWithTokens: (auth: AuthResponse) => Promise<void>;
   refreshUser: () => Promise<void>;
   setUser: (user: UserResponse) => void;
-  logout: () => Promise<void>;
+  logout: (reason?: "accountDeleted") => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -41,6 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<AuthStatus>("loading");
   const [user, setUserState] = useState<UserResponse | null>(null);
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [accountDeleted, setAccountDeleted] = useState(false);
 
   const setUser = useCallback((next: UserResponse) => {
     setUserState(next);
@@ -88,20 +91,30 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(await usersApi.getMe());
   }, [setUser]);
 
-  const logout = useCallback(async () => {
+  const logout = useCallback(async (reason?: "accountDeleted") => {
     const tokens = await getTokens();
-    // The local session ends even if the API cannot be reached.
+    // The local session ends even if the API cannot be reached (or the user no longer exists).
     if (tokens) await authApi.logout(tokens.refreshToken).catch(() => undefined);
     await clearTokens();
     await signOutFromGoogle();
     setUserState(null);
     setSessionExpired(false);
+    setAccountDeleted(reason === "accountDeleted");
     setStatus("unauthenticated");
   }, []);
 
   const value = useMemo(
-    () => ({ status, user, sessionExpired, signInWithTokens, refreshUser, setUser, logout }),
-    [status, user, sessionExpired, signInWithTokens, refreshUser, setUser, logout],
+    () => ({
+      status,
+      user,
+      sessionExpired,
+      accountDeleted,
+      signInWithTokens,
+      refreshUser,
+      setUser,
+      logout,
+    }),
+    [status, user, sessionExpired, accountDeleted, signInWithTokens, refreshUser, setUser, logout],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -8,6 +8,7 @@ import { AppButton } from "../components/AppButton";
 import { ErrorText, formStyles } from "../components/FormBits";
 import { GoogleSignInButton } from "../components/GoogleSignInButton";
 import { Logo } from "../components/Logo";
+import { StatusNotice } from "../components/StatusNotice";
 import { useAuth } from "../hooks/useAuth";
 import { authApi } from "../services/api/auth";
 import { ApiError, type ApiErrorCode, errorCodeOf } from "../services/api/types";
@@ -16,7 +17,7 @@ import { validateEmail } from "../utils/validation";
 export default function LoginScreen() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const { signInWithTokens, sessionExpired } = useAuth();
+  const { signInWithTokens, sessionExpired, accountDeleted } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<ApiErrorCode | null>(null);
@@ -62,6 +63,7 @@ export default function LoginScreen() {
           {t("common.slogan")}
         </Text>
       </View>
+      {accountDeleted && <StatusNotice kind="info">{t("deleteAccount.done")}</StatusNotice>}
       <Text variant="titleLarge" accessibilityRole="header" style={formStyles.title}>
         {t("auth.login.title")}
       </Text>

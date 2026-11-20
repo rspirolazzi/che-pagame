@@ -13,12 +13,12 @@ from app.core.money import currency_decimals, format_amount
 from app.repositories import expenses, settlements
 from app.schemas.expense import ParticipantRef
 from app.schemas.settlement import AccountBalances, BalanceEntry, SuggestedTransfer
-from app.services.account_permissions import my_participant, require_member
+from app.services.account_permissions import my_participant, participant_names, require_member
 from app.services.balance_math import compute_balances, suggest_transfers
 
 
 def _names(account: dict[str, Any]) -> dict[str, str]:
-    return {p["id"]: p["name"] for p in account["participants"]}
+    return participant_names(account)
 
 
 def _ref(names: dict[str, str], participant_id: str) -> ParticipantRef:

@@ -82,3 +82,7 @@ class EmailChangeConfirmRequest(CamelModel):
     @classmethod
     def _strip(cls, value: object) -> object:
         return value.strip() if isinstance(value, str) else value
+
+
+class DeletionConfirmRequest(EmailChangeConfirmRequest):
+    """Confirms the deletion of the current user with the emailed code (feature 015)."""

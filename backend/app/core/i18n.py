@@ -1,3 +1,4 @@
+from contextvars import ContextVar
 from typing import Literal
 
 from app.core import errors
@@ -5,6 +6,12 @@ from app.core import errors
 Language = Literal["es", "en"]
 SUPPORTED_LANGUAGES: tuple[Language, ...] = ("es", "en")
 DEFAULT_LANGUAGE: Language = "es"
+
+# Language of the current request, set by a global dependency (app.main); used where a text shown
+# to the reader is built deep in a service, such as the name of a deleted user's participant.
+request_language: ContextVar[Language] = ContextVar("request_language", default=DEFAULT_LANGUAGE)
+
+DELETED_USER_NAME: dict[Language, str] = {"es": "Usuario eliminado", "en": "Deleted user"}
 
 
 def resolve_language(accept_language: str | None) -> Language:

@@ -175,6 +175,8 @@ export default function AccountDetailScreen() {
           <List.Item
             key={p.id}
             title={p.name}
+            // A deleted user's participant reads differently (feature 015).
+            titleStyle={p.isAnonymized ? { fontStyle: "italic" } : undefined}
             description={[
               p.isMe ? t("accounts.detail.you") : null,
               p.isOwner ? t("accounts.detail.owner") : null,

@@ -6,9 +6,22 @@ from bson import ObjectId
 
 from app.core import errors
 from app.core.errors import AppError
+from app.core.i18n import DELETED_USER_NAME, Language, request_language
 from app.core.money import currency_decimals, format_amount
 from app.repositories import accounts
 from app.schemas.account import AccountResponse, AccountSummary, ParticipantResponse
+
+
+def participant_display_name(participant: dict[str, Any], language: Language | None = None) -> str:
+    """The stored name, or "Deleted user" in the reader's language once its user was deleted."""
+    if participant.get("anonymizedAt") is None:
+        return participant["name"]
+    return DELETED_USER_NAME[language or request_language.get()]
+
+
+def participant_names(doc: dict[str, Any], language: Language | None = None) -> dict[str, str]:
+    """Participant id → display name, removed participants included."""
+    return {p["id"]: participant_display_name(p, language) for p in doc.get("participants", [])}
 
 
 def active_participants(doc: dict[str, Any]) -> list[dict[str, Any]]:
@@ -66,7 +79,8 @@ def to_account_response(doc: dict[str, Any], user_id: ObjectId) -> AccountRespon
         participants=[
             ParticipantResponse(
                 id=p["id"],
-                name=p["name"],
+                name=participant_display_name(p),
+                is_anonymized=p.get("anonymizedAt") is not None,
                 is_linked=p.get("userId") is not None,
                 is_me=p.get("userId") == user_id,
                 is_owner=p.get("userId") == doc["ownerId"],

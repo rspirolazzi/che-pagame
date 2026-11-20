@@ -22,6 +22,7 @@ from app.services import audit_service
 from app.services.account_permissions import (
     active_participants,
     is_member,
+    participant_display_name,
     to_account_response,
 )
 
@@ -44,7 +45,7 @@ async def preview(code: str, user_id: ObjectId) -> InvitationPreview:
         already_member=member,
         account_id=str(doc["_id"]) if member else None,
         available_participants=[
-            AvailableParticipant(id=p["id"], name=p["name"])
+            AvailableParticipant(id=p["id"], name=participant_display_name(p))
             for p in active_participants(doc)
             if p.get("userId") is None
         ],

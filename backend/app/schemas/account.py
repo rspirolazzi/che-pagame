@@ -117,6 +117,7 @@ class AcceptInvitation(CamelModel):
 class ParticipantResponse(CamelModel):
     id: str
     name: str
+    is_anonymized: bool = False
     is_linked: bool
     is_me: bool
     is_owner: bool

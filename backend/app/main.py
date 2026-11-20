@@ -2,7 +2,7 @@ import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
-from fastapi import APIRouter, FastAPI, Request
+from fastapi import APIRouter, Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
@@ -20,11 +20,15 @@ from app.api.v1 import (
 )
 from app.core import errors
 from app.core.errors import AppError
-from app.core.i18n import error_message, resolve_language
+from app.core.i18n import error_message, request_language, resolve_language
 from app.db import client as mongo
 from app.db.indexes import ensure_indexes
 
 logger = logging.getLogger(__name__)
+
+
+async def _set_request_language(request: Request) -> None:
+    request_language.set(resolve_language(request.headers.get("accept-language")))
 
 
 @asynccontextmanager
@@ -84,7 +88,7 @@ def create_app() -> FastAPI:
         logger.exception("Unhandled error: %s", type(exc).__name__)
         return _error_response(request, 500, errors.INTERNAL_ERROR)
 
-    api = APIRouter(prefix="/api/v1")
+    api = APIRouter(prefix="/api/v1", dependencies=[Depends(_set_request_language)])
     api.include_router(health.router)
     api.include_router(auth.router)
     api.include_router(users.router)

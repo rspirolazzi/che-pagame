@@ -11,7 +11,7 @@ from app.db.client import get_database
 COLLECTION = "auth_attempts"
 
 AttemptType = Literal["email_request", "password_failure", "password_lockout"]
-LimitPurpose = Literal["register", "login", "password_reset", "change_email"]
+LimitPurpose = Literal["register", "login", "password_reset", "change_email", "delete_account"]
 
 
 def _collection():

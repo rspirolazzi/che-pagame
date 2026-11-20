@@ -2,7 +2,7 @@
 
 import { getLocale } from "next-intl/server";
 
-import { unstable_update } from "@/auth";
+import { signOut, unstable_update } from "@/auth";
 import { apiFetch } from "@/lib/api/client";
 import { type ActionResult, failure } from "@/lib/api/errors";
 import type { UpdateMeRequest, UserResponse } from "@/lib/api/types";
@@ -49,4 +49,28 @@ export async function confirmEmailChangeAction(code: string): Promise<ActionResu
   } catch (error) {
     return failure(error);
   }
+}
+
+/** Email the code that confirms the deletion of the current user (feature 015). */
+export async function requestAccountDeletionAction(): Promise<ActionResult> {
+  try {
+    await call("/users/me/deletion", "POST", undefined);
+    return { ok: true };
+  } catch (error) {
+    return failure(error);
+  }
+}
+
+/**
+ * Delete the current user with the emailed code. On success the session cookie is cleared and
+ * the browser goes to the login with the "account deleted" notice; it only returns on errors.
+ */
+export async function confirmAccountDeletionAction(code: string): Promise<ActionResult> {
+  try {
+    await call("/users/me/deletion/confirm", "POST", { code });
+  } catch (error) {
+    return failure(error);
+  }
+  await signOut({ redirectTo: "/login?deleted=1" });
+  return { ok: true };
 }

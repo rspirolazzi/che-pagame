@@ -17,4 +17,14 @@ export const usersApi = {
       body: { code },
       authenticated: true,
     }),
+  /** Feature 015: email the code that confirms deleting the current user. */
+  requestDeletion: () =>
+    apiRequest<void>("/users/me/deletion", { method: "POST", authenticated: true }),
+  /** Feature 015: delete the current user with the emailed code (204). */
+  confirmDeletion: (code: string) =>
+    apiRequest<void>("/users/me/deletion/confirm", {
+      method: "POST",
+      body: { code },
+      authenticated: true,
+    }),
 };

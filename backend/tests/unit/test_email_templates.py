@@ -20,7 +20,13 @@ def test_every_template_exists_in_both_languages(template, language):
 @pytest.mark.parametrize("template", TEMPLATES)
 def test_only_code_templates_include_the_code(template):
     _, html = render(template, "es", CONTEXT)
-    expects_code = template in {"verify_email", "login_code", "password_reset", "change_email"}
+    expects_code = template in {
+        "verify_email",
+        "login_code",
+        "password_reset",
+        "change_email",
+        "delete_account",
+    }
     assert ("123456" in html) is expects_code
 
 

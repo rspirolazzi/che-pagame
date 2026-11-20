@@ -27,6 +27,7 @@ export default function AppLayout() {
         />
         {/* The screen shows its own title; the header keeps only the back button. */}
         <Stack.Screen name="accounts/[accountId]/settlements/new" options={{ title: "" }} />
+        <Stack.Screen name="delete-account" options={{ title: "" }} />
       </Stack.Protected>
     </Stack>
   );
