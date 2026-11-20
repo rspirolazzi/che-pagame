@@ -23,6 +23,7 @@ from app.services import (
     email_service,
     rate_limit_service,
     token_service,
+    turnstile_service,
     verification_service,
 )
 from app.services.google_service import GoogleVerifier
@@ -49,6 +50,8 @@ async def _notify(template, to: str, language: str, context: dict | None = None)
 
 
 async def register(request: RegisterRequest) -> None:
+    # Before anything else, so a bot never triggers an email (feature 017, R8).
+    await turnstile_service.verify(request.turnstile_token)
     email = normalize_email(request.email)
     _validate_password_or_422(request.password, email)
     # Hash before checking existence so both branches take the same time (R7).
@@ -70,6 +73,7 @@ async def register(request: RegisterRequest) -> None:
         first_name=request.first_name,
         last_name=request.last_name,
         language=request.language,
+        theme=request.theme,
     )
     await verification_service.issue_code(
         email=email,
@@ -112,6 +116,8 @@ async def verify_registration(email: str, code: str, client: str) -> AuthRespons
             auth_providers=["email"],
             password_hash=pending["passwordHash"],
             language=pending["language"],
+            # Pending registrations from before feature 014 have no theme.
+            theme=pending.get("theme", "system"),
         )
         user_id = await users.insert(document, session=session)
         document["_id"] = user_id
@@ -193,7 +199,11 @@ def _google_name(value: str | None) -> str | None:
 
 
 async def login_with_google(
-    id_token: str, client: str, language: str, verifier: GoogleVerifier
+    id_token: str,
+    client: str,
+    language: str,
+    verifier: GoogleVerifier,
+    theme: str = "system",
 ) -> AuthResponse:
     claims = await asyncio.to_thread(verifier, id_token)
     if not claims.email_verified:
@@ -235,6 +245,7 @@ async def login_with_google(
                     auth_providers=["google"],
                     google_subject=claims.sub,
                     language=language,
+                    theme=theme,
                 )
                 user["_id"] = await users.insert(user, session=session)
                 await audit_service.record(

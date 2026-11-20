@@ -4,6 +4,7 @@ import { ScrollView } from "react-native";
 import { Text, TextInput } from "react-native-paper";
 
 import { AppButton } from "../components/AppButton";
+import { PreferenceSheet } from "../components/PreferenceSheet";
 import { CodeInput, ErrorText, formStyles, ResendButton } from "../components/FormBits";
 import { useAuth } from "../hooks/useAuth";
 import { authApi } from "../services/api/auth";
@@ -68,6 +69,8 @@ export default function CodeSignInScreen({ kind }: { kind: "login-code" | "passw
       contentContainerStyle={[formStyles.screen, formStyles.centered]}
       keyboardShouldPersistTaps="handled"
     >
+      {/* Language and theme without a session (feature 014). */}
+      <PreferenceSheet />
       <Text variant="headlineMedium" style={formStyles.title}>
         {t(`${ns}.title`)}
       </Text>

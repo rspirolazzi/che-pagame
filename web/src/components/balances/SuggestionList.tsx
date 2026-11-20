@@ -1,14 +1,14 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 import { useCallback, useState } from "react";
 
 import { createSettlementAction } from "@/app/actions/settlements";
 import type { ApiErrorCode } from "@/lib/api/errors";
 import type { AccountResponse, SuggestedTransfer } from "@/lib/api/types";
 import { today } from "@/lib/expenseGroups";
-import { formatMoney } from "@/lib/money";
+import { Money } from "@/components/ui/Money";
 
 import { MarkPaidDialog } from "./MarkPaidDialog";
 
@@ -28,7 +28,6 @@ export function SuggestionList({
   suggestions: SuggestedTransfer[];
 }) {
   const t = useTranslations("balances");
-  const locale = useLocale();
   const router = useRouter();
   const [open, setOpen] = useState<Open | null>(null);
   const [pending, setPending] = useState(false);
@@ -81,12 +80,11 @@ export function SuggestionList({
               </span>
               <span className="row space-between">
                 <strong className="amount-figure">
-                  {formatMoney(
-                    suggestion.amount,
-                    account.currency,
-                    account.currencyDecimals,
-                    locale,
-                  )}
+                  <Money
+                    amount={suggestion.amount}
+                    currency={account.currency}
+                    decimals={account.currencyDecimals}
+                  />
                 </strong>
                 {!account.isClosed && (
                   <button

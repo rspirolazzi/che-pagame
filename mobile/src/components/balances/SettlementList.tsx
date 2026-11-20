@@ -11,11 +11,11 @@ import {
   type SettlementResponse,
 } from "../../services/api/types";
 import { formatDay } from "../../utils/expenseGroups";
-import { formatMoney } from "../../utils/money";
 import type { AppTheme } from "../../theme";
 import { ConfirmDialog } from "../accounts/AccountBits";
 import { AppButton } from "../AppButton";
 import { ErrorText } from "../FormBits";
+import { Money } from "../Money";
 import { StatusNotice } from "../StatusNotice";
 
 /**
@@ -101,9 +101,13 @@ export function SettlementList({
                   {formatDay(item.date, locale, { dateStyle: "medium" })}
                 </Text>
               </View>
-              <Text style={theme.custom.amount}>
-                {formatMoney(item.amount, account.currency, account.currencyDecimals, locale)}
-              </Text>
+              <Money
+                style={theme.custom.amount}
+                amount={item.amount}
+                currency={account.currency}
+                decimals={account.currencyDecimals}
+                locale={locale}
+              />
             </View>
             {item.isExcluded && (
               <StatusNotice kind="info">

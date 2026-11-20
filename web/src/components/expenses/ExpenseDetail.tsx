@@ -11,6 +11,7 @@ import { ErrorMessage } from "@/components/FormMessage";
 import type { ApiErrorCode } from "@/lib/api/errors";
 import type { AccountResponse, ExpenseResponse } from "@/lib/api/types";
 import { formatDay } from "@/lib/expenseGroups";
+import { MoneyWithExact } from "@/components/ui/Money";
 import { formatMoney } from "@/lib/money";
 
 import { CategoryIcon } from "./CategoryIcon";
@@ -50,15 +51,19 @@ export function ExpenseDetail({ account, expense }: ExpenseDetailProps) {
 
   return (
     <section className="card stack">
-      <header className="row space-between">
+      <header className="row space-between detail-header">
         <span className="row">
           <CategoryIcon icon={expense.categoryIcon} size="2rem" />
-          <span>
+          <span className="detail-title">
             <h1>{expense.title}</h1>
             <small>{formatDay(expense.date, locale)}</small>
           </span>
         </span>
-        <strong>{money(expense.amount)}</strong>
+        <MoneyWithExact
+          amount={expense.amount}
+          currency={expense.currency}
+          decimals={account.currencyDecimals}
+        />
       </header>
       {expense.isPending && (
         <p role="status" className="badge">

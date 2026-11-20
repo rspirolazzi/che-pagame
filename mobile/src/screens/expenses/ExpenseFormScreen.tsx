@@ -31,7 +31,13 @@ import {
 import { DEFAULT_CATEGORY } from "../../utils/categoryIcons";
 import { formatDay, today } from "../../utils/expenseGroups";
 import type { AppTheme } from "../../theme";
-import { type AmountError, amountToInput, parseAmountInput } from "../../utils/money";
+import {
+  type AmountError,
+  amountToInput,
+  formatMoney,
+  parseAmountInput,
+  splitEqual,
+} from "../../utils/money";
 import { newRequestId } from "../../utils/requestId";
 
 const TITLE_MAX = 80;
@@ -114,6 +120,17 @@ export default function ExpenseFormScreen() {
   }
 
   const decimals = account.currencyDecimals;
+  // Each person's share while typing, with the server's rule (feature 013).
+  const parsedAmount = parseAmountInput(state.amount, locale, decimals);
+  const shares =
+    parsedAmount.ok && state.participantIds.length > 0
+      ? splitEqual(
+          parsedAmount.value,
+          decimals,
+          state.participantIds,
+          account.participants.map((p) => p.id),
+        )
+      : null;
   const set = <K extends keyof FormState>(key: K, value: FormState[K]) =>
     setState((current) => (current ? { ...current, [key]: value } : current));
 
@@ -288,14 +305,44 @@ export default function ExpenseFormScreen() {
             },
           ]}
         >
-          {account.participants.map((p) => (
-            <Checkbox.Item
-              key={p.id}
-              label={p.name}
-              status={state.participantIds.includes(p.id) ? "checked" : "unchecked"}
-              onPress={() => toggle(p.id)}
-            />
-          ))}
+          {account.participants.map((p) => {
+            const checked = state.participantIds.includes(p.id);
+            const share = shares?.get(p.id);
+            const shareText =
+              share !== undefined
+                ? formatMoney(share, account.currency, decimals, locale)
+                : checked
+                  ? null
+                  : t("expenses.form.notSharing");
+            return (
+              <View key={p.id} style={styles.shareRow}>
+                <View style={styles.shareName}>
+                  <Checkbox.Item
+                    label={p.name}
+                    labelVariant="bodyLarge"
+                    accessibilityLabel={shareText ? `${p.name}, ${shareText}` : p.name}
+                    status={checked ? "checked" : "unchecked"}
+                    onPress={() => toggle(p.id)}
+                  />
+                </View>
+                {shareText && (
+                  <Text
+                    style={[
+                      styles.shareAmount,
+                      share === undefined && {
+                        color: theme.colors.onSurfaceVariant,
+                        fontStyle: "italic",
+                      },
+                    ]}
+                    importantForAccessibility="no"
+                    accessibilityElementsHidden
+                  >
+                    {shareText}
+                  </Text>
+                )}
+              </View>
+            );
+          })}
         </View>
 
         <CategoryPicker value={state.categoryIcon} onChange={(icon) => set("categoryIcon", icon)} />
@@ -337,6 +384,9 @@ export default function ExpenseFormScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
+  shareRow: { flexDirection: "row", alignItems: "center" },
+  shareName: { flex: 1, minWidth: 0 },
+  shareAmount: { paddingRight: 16, fontVariant: ["tabular-nums"] },
   header: { flexDirection: "row", alignItems: "center", gap: 4 },
   touch: { margin: 0, width: 48, height: 48 },
   card: { borderWidth: 1, overflow: "hidden" },

@@ -2,6 +2,11 @@ import { getTranslations } from "next-intl/server";
 
 import { GoogleSignInButton } from "@/components/GoogleSignInButton";
 import { RegisterForm } from "@/components/RegisterForm";
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo";
+import { turnstileSiteKey } from "@/lib/turnstile";
+
+export const metadata: Metadata = { robots: NOINDEX };
 
 interface RegisterPageProps {
   searchParams: Promise<{ callbackUrl?: string }>;
@@ -15,7 +20,7 @@ export default async function RegisterPage({ searchParams }: RegisterPageProps) 
       <h1>{t("auth.register.title")}</h1>
       <GoogleSignInButton callbackUrl={callbackUrl} />
       <p className="divider">{t("common.or")}</p>
-      <RegisterForm callbackUrl={callbackUrl} />
+      <RegisterForm callbackUrl={callbackUrl} siteKey={turnstileSiteKey()} />
     </section>
   );
 }

@@ -21,6 +21,7 @@ async def upsert_by_email(
     first_name: str | None,
     last_name: str | None,
     language: str,
+    theme: str = "system",
 ) -> None:
     """A new registration replaces any previous pending one for the same email."""
     now = datetime.now(UTC)
@@ -32,6 +33,7 @@ async def upsert_by_email(
             "firstName": first_name,
             "lastName": last_name,
             "language": language,
+            "theme": theme,
             "createdAt": now,
             "expiresAt": now + PENDING_REGISTRATION_TTL,
         },

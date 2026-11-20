@@ -195,6 +195,7 @@ export function makeSettlement(overrides: Partial<SettlementResponse> = {}): Set
     amount: "30.00",
     currency: "ARS",
     isExcluded: false,
+    recordedBy: { id: "p-ana", name: "Ana" },
     createdAt: "2026-11-11T12:00:00Z",
     ...overrides,
   };

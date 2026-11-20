@@ -15,7 +15,13 @@ import type { ApiErrorCode } from "@/lib/api/errors";
 import type { AccountResponse, CategoryIcon, ExpenseResponse } from "@/lib/api/types";
 import { DEFAULT_CATEGORY } from "@/lib/categoryIcons";
 import { today } from "@/lib/expenseGroups";
-import { type AmountError, amountToInput, parseAmountInput } from "@/lib/money";
+import {
+  type AmountError,
+  amountToInput,
+  formatMoney,
+  parseAmountInput,
+  splitEqual,
+} from "@/lib/money";
 import { useHydrated } from "@/lib/useHydrated";
 
 import { CategoryPicker } from "./CategoryIcon";
@@ -70,6 +76,18 @@ export function ExpenseForm({ account, expense }: ExpenseFormProps) {
   const [notice, setNotice] = useState<"conflict" | "gone" | null>(null);
   const [pending, setPending] = useState(false);
   const decimals = account.currencyDecimals;
+  // Each person's share while typing, with the server's rule (feature 013): only with a valid
+  // amount and someone sharing; never computed with JavaScript numbers.
+  const parsedAmount = parseAmountInput(state.amount, locale, decimals);
+  const shares =
+    parsedAmount.ok && state.participantIds.length > 0
+      ? splitEqual(
+          parsedAmount.value,
+          decimals,
+          state.participantIds,
+          account.participants.map((p) => p.id),
+        )
+      : null;
   // "Today" depends on the device's time zone: only computed after hydration (research R3).
   const date = state.date ?? (hydrated ? today() : "");
 
@@ -211,16 +229,23 @@ export function ExpenseForm({ account, expense }: ExpenseFormProps) {
       </div>
       <fieldset className="field">
         <legend>{t("form.participants")}</legend>
-        {account.participants.map((p) => (
-          <label key={p.id} className="row">
-            <input
-              type="checkbox"
-              checked={state.participantIds.includes(p.id)}
-              onChange={() => toggleParticipant(p.id)}
-            />
-            {p.name}
-          </label>
-        ))}
+        {account.participants.map((p) => {
+          const checked = state.participantIds.includes(p.id);
+          const share = shares?.get(p.id);
+          return (
+            <label key={p.id} className="row share-row">
+              <input type="checkbox" checked={checked} onChange={() => toggleParticipant(p.id)} />
+              <span className="share-name">{p.name}</span>
+              {share !== undefined ? (
+                <span className="share-amount">
+                  {formatMoney(share, account.currency, decimals, locale)}
+                </span>
+              ) : (
+                !checked && <span className="share-off">{t("form.notSharing")}</span>
+              )}
+            </label>
+          );
+        })}
       </fieldset>
       <CategoryPicker value={state.categoryIcon} onChange={(icon) => set("categoryIcon", icon)} />
       <div className="field">

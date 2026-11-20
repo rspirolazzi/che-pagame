@@ -16,6 +16,7 @@ import { AppButton } from "../../components/AppButton";
 import { ConfirmDialog } from "../../components/accounts/AccountBits";
 import { CategoryIcon, ExpenseHistory } from "../../components/expenses/ExpenseBits";
 import { ErrorText, formStyles } from "../../components/FormBits";
+import { MoneyWithExact } from "../../components/Money";
 import { accountsApi } from "../../services/api/accounts";
 import { expensesApi } from "../../services/api/expenses";
 import {
@@ -26,7 +27,6 @@ import {
   type HistoryEntry,
 } from "../../services/api/types";
 import { formatDay } from "../../utils/expenseGroups";
-import type { AppTheme } from "../../theme";
 import { formatMoney } from "../../utils/money";
 
 export default function ExpenseDetailScreen() {
@@ -104,14 +104,21 @@ export default function ExpenseDetailScreen() {
 
   return (
     <ScrollView contentContainerStyle={formStyles.screen}>
+      {/* Two rows: the amount never competes with the title for the width, so a long amount
+          can't break the title letter by letter (feature 016, FR-009). */}
       <View style={styles.row}>
         <CategoryIcon icon={expense.categoryIcon} size={36} />
         <View style={styles.flex}>
           <Text variant="headlineSmall">{expense.title}</Text>
           <Text>{formatDay(expense.date, locale)}</Text>
         </View>
-        <Text style={(theme as AppTheme).custom.amountLarge}>{money(expense.amount)}</Text>
       </View>
+      <MoneyWithExact
+        amount={expense.amount}
+        currency={expense.currency}
+        decimals={account.currencyDecimals}
+        locale={locale}
+      />
       {expense.isPending && <Chip icon="alert-circle-outline">{t("expenses.pending")}</Chip>}
       {expense.isPending && <Text>{t("expenses.detail.pendingHint")}</Text>}
       {notice === "conflict" && (
@@ -175,6 +182,6 @@ export default function ExpenseDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: "row", alignItems: "center", gap: 12, flexWrap: "wrap" },
-  flex: { flex: 1 },
+  row: { flexDirection: "row", alignItems: "center", gap: 12 },
+  flex: { flex: 1, flexShrink: 1, minWidth: 0 },
 });

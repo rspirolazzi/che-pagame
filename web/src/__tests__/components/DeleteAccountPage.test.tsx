@@ -19,5 +19,13 @@ it("the privacy page explains how to delete your data", () => {
   renderWithIntl(<LegalPage kind="privacy" />);
   expect(screen.getByRole("heading", { name: "Eliminar tus datos" })).toBeInTheDocument();
   expect(screen.getByText(/chepagame.com.ar\/delete-account/)).toBeInTheDocument();
-  expect(screen.getByText(/18 de noviembre de 2026/)).toBeInTheDocument();
+  expect(screen.getByText(/20 de noviembre de 2026/)).toBeInTheDocument();
+});
+
+it("the footer links to the FAQ (feature 011)", () => {
+  renderWithIntl(<SiteFooter />);
+  expect(screen.getByRole("link", { name: "Preguntas frecuentes" })).toHaveAttribute(
+    "href",
+    "/faq",
+  );
 });

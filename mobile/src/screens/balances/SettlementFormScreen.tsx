@@ -18,12 +18,14 @@ type FieldError = AmountError | "fromRequired" | "toRequired" | "sameParticipant
 
 const SETTLEMENT_ERRORS = new Set<FieldError>(["fromRequired", "toRequired", "sameParticipant"]);
 
-/** Manual settlement between two active participants (FR-013); it always starts empty. */
+/** Manual settlement between two active participants (FR-013), or an income (feature 012). */
 export default function SettlementFormScreen() {
   const { t, i18n } = useTranslation();
   const locale = i18n.language;
   const router = useRouter();
-  const { accountId } = useLocalSearchParams<{ accountId: string }>();
+  const { accountId, from } = useLocalSearchParams<{ accountId: string; from?: string }>();
+  // An "Ingreso" from the expense list: "me" receives by default (feature 012).
+  const fromList = from === "list";
   const [account, setAccount] = useState<AccountResponse | null>(null);
   const [fromId, setFromId] = useState("");
   const [toId, setToId] = useState("");
@@ -39,9 +41,13 @@ export default function SettlementFormScreen() {
   useEffect(() => {
     accountsApi
       .get(accountId)
-      .then(setAccount)
+      .then((loaded) => {
+        setAccount(loaded);
+        if (fromList)
+          setToId((current) => current || (loaded.participants.find((p) => p.isMe)?.id ?? ""));
+      })
       .catch((err) => setApiError(errorCodeOf(err)));
-  }, [accountId]);
+  }, [accountId, fromList]);
 
   if (!account) {
     return (
@@ -99,7 +105,10 @@ export default function SettlementFormScreen() {
 
   return (
     <ScrollView contentContainerStyle={formStyles.screen} keyboardShouldPersistTaps="handled">
-      <Text variant="headlineSmall">{t("settlements.newTitle")}</Text>
+      <Text variant="headlineSmall">
+        {fromList ? t("settlements.incomeTitle") : t("settlements.newTitle")}
+      </Text>
+      {fromList && <Text>{t("settlements.incomeHint")}</Text>}
       <Text variant="labelLarge">{t("settlements.from")}</Text>
       <RadioButton.Group value={fromId} onValueChange={setFromId}>
         {account.participants.map((p) => (

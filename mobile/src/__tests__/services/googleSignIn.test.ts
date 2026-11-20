@@ -22,7 +22,8 @@ it("configures the web client ID and sends the ID token to the backend", async (
   loginMock.mockResolvedValue(authResponse);
   const result = await signInWithGoogle();
   expect(GoogleSignin.configure).toHaveBeenCalledWith({ webClientId: "web-client-id" });
-  expect(loginMock).toHaveBeenCalledWith("google-id-token");
+  // The device's language and theme travel for a first sign-up (feature 014).
+  expect(loginMock).toHaveBeenCalledWith("google-id-token", { language: "es", theme: "system" });
   expect(result).toEqual({ cancelled: false, auth: authResponse });
 });
 

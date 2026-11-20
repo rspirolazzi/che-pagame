@@ -28,6 +28,9 @@ export type SuggestedTransfer = Schemas["SuggestedTransfer"];
 export type SettlementResponse = Schemas["SettlementResponse"];
 export type SettlementPage = Schemas["SettlementPage"];
 export type SettlementCreate = Schemas["SettlementCreate"];
+export type PublicConfig = Schemas["PublicConfig"];
+export type MovementPage = Schemas["MovementPage"];
+export type Movement = MovementPage["items"][number];
 
 export type ApiErrorCode =
   | "validation_error"
@@ -52,6 +55,8 @@ export type ApiErrorCode =
   | "participant_taken"
   | "expense_conflict"
   | "invalid_participant"
+  | "bot_check_failed"
+  | "contact_unavailable"
   | "network_error"
   | "internal_error";
 

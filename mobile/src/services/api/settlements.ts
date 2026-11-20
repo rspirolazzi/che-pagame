@@ -31,6 +31,11 @@ export const settlementsApi = {
       method: "POST",
       body: { ...input, clientRequestId },
     }),
+  get: (accountId: string, settlementId: string) =>
+    apiRequest<SettlementResponse>(
+      `${settlements(accountId)}/${encodeURIComponent(settlementId)}`,
+      auth,
+    ),
   remove: (accountId: string, settlementId: string) =>
     apiRequest<void>(`${settlements(accountId)}/${encodeURIComponent(settlementId)}`, {
       ...auth,

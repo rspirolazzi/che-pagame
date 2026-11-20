@@ -145,3 +145,36 @@ write(join(WEB, "src", "app", "icon.png"), png(webIcon, 64));
 write(join(WEB, "src", "app", "apple-icon.png"), png(webIcon, 180));
 write(join(WEB, "public", "icons", "icon-192.png"), png(webIcon, 192));
 write(join(WEB, "public", "icons", "icon-512.png"), png(webIcon, 512));
+
+// Social preview (feature 011): 1200×630 with the wordmark and the slogan on the dark background.
+const ogWidth = 1200;
+const ogHeight = 630;
+const ogWordWidth = 760;
+const nestedWord = wordDark.replace(
+  /^<svg xmlns="http:\/\/www\.w3\.org\/2000\/svg" (viewBox="[^"]+") width="[^"]+" height="[^"]+">/,
+  `<svg x="${(ogWidth - ogWordWidth) / 2}" y="170" width="${ogWordWidth}" height="${Math.round((ogWordWidth * 125) / 686)}" $1>`,
+);
+const ogImage =
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${ogWidth}" height="${ogHeight}">` +
+  `<rect width="${ogWidth}" height="${ogHeight}" fill="${dark.background}"/>` +
+  `<rect y="${ogHeight - 16}" width="${ogWidth}" height="16" fill="${dark.accent}"/>` +
+  nestedWord +
+  `<text x="${ogWidth / 2}" y="450" text-anchor="middle" font-family="${FAMILY}" font-weight="700" ` +
+  `font-size="52" fill="${dark.text}">Dividí gastos con amigos, al centavo</text></svg>`;
+write(join(WEB, "public", "og-image.png"), png(ogImage, ogWidth));
+
+// favicon.ico at the standard address: one 48×48 PNG inside an ICO container.
+const favicon = png(webIcon, 48);
+const icoHeader = Buffer.alloc(22);
+icoHeader.writeUInt16LE(0, 0); // reserved
+icoHeader.writeUInt16LE(1, 2); // type: icon
+icoHeader.writeUInt16LE(1, 4); // one image
+icoHeader.writeUInt8(48, 6); // width
+icoHeader.writeUInt8(48, 7); // height
+icoHeader.writeUInt8(0, 8); // no palette
+icoHeader.writeUInt8(0, 9); // reserved
+icoHeader.writeUInt16LE(1, 10); // color planes
+icoHeader.writeUInt16LE(32, 12); // bits per pixel
+icoHeader.writeUInt32LE(favicon.length, 14); // image size
+icoHeader.writeUInt32LE(22, 18); // image offset
+write(join(WEB, "src", "app", "favicon.ico"), Buffer.concat([icoHeader, favicon]));

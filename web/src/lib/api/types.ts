@@ -28,3 +28,5 @@ export type SuggestedTransfer = Schemas["SuggestedTransfer"];
 export type SettlementResponse = Schemas["SettlementResponse"];
 export type SettlementPage = Schemas["SettlementPage"];
 export type SettlementCreate = Schemas["SettlementCreate"];
+export type MovementPage = Schemas["MovementPage"];
+export type Movement = MovementPage["items"][number];

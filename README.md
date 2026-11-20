@@ -82,6 +82,14 @@ docker compose up -d --build
 - Settlements are not edited: a wrong one is deleted (logical delete, audited) and recorded again.
   A closed account is read only.
 
+### Income entries (feature 012)
+
+The expense list shows expenses and settlements together (`GET /accounts/{id}/movements`, one
+keyset cursor for both). "+" offers **Gasto** or **Ingreso**; an income is a settlement of
+feature 004 (same rules, audit and balances), shown with its own icon and label. Its detail
+(`GET /accounts/{id}/settlements/{settlementId}`) shows who recorded it and allows deleting it;
+settlements are never edited.
+
 ## Data export (feature 005)
 
 - Any member exports an account, open or closed, with "Exportar" next to the "Gastos" and "Saldos"
@@ -98,6 +106,50 @@ docker compose up -d --build
   pulling this feature (`npx expo run:android` or `npx expo run:ios`).
 - CSV always uses `,` and a decimal point, whatever the language. A spreadsheet set to Spanish may
   need "Import CSV" (with a dot as the decimal separator) instead of a double click.
+
+## SEO and public pages (feature 011)
+
+- Every public page (home, how it works, about, contact, FAQ, privacy, terms, delete account) has
+  its own title, description, canonical URL and social preview (`web/public/og-image.png`).
+  Private, authentication and invitation pages send `noindex`.
+- `/robots.txt` and `/sitemap.xml` are generated from `PUBLIC_PAGES` in `web/src/lib/seo.ts`; update
+  its `lastModified` when a page's content changes.
+- The home page describes the app and the FAQ page its questions with JSON-LD.
+- `SITE_URL` (optional, falls back to `AUTH_URL`) is the origin used in canonical links and the
+  sitemap.
+- Spanish is the indexed version: crawlers send no `Accept-Language`, so they get Spanish.
+- The App shows the same pages in Profile → "Acerca de".
+- After the deploy, add the site to Google Search Console and submit
+  `https://chepagame.com.ar/sitemap.xml`.
+- The social image and `favicon.ico` come from `design/build-icons.ts`.
+
+## Contact and anti-bot check (feature 017)
+
+The Contact page (Web and App) sends the message to the maintainer's WhatsApp through CallMeBot,
+after an explicit consent checkbox. Sign-up and Contact are protected by Cloudflare Turnstile.
+
+Both only run with `ENVIRONMENT=production`. Variables, with no values in the repository (put them
+only in the server `.env`):
+
+| Variable | Used by |
+|----------|---------|
+| `CALLMEBOT_URL` (https), `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY` | API, WhatsApp relay |
+| `CLOUDFLARE_TURNSTILE_SECRET_KEY` | API, server-side token check |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Web (read at runtime) and `GET /public-config` for the App |
+
+- **Production:** the API refuses to start if any variable is missing and names it. The forms show
+  the widget and the API rejects requests without a valid token (`403 bot_check_failed`). Contact
+  is limited to 5 messages per email and 30 in total per hour; a CallMeBot failure gives
+  `502 contact_unavailable` and keeps what was typed.
+- **Development and tests:** no widget, no calls to Cloudflare or CallMeBot. A contact message is
+  accepted (`202`) and only logged without its content. `GET /public-config` returns
+  `{"turnstileSiteKey": null}`.
+- **App:** the widget runs in a WebView that loads `${EXPO_PUBLIC_WEB_BASE_URL}/turnstile`, so the
+  APK needs that variable and a rebuild (it now includes `react-native-webview`).
+- In Cloudflare, allow the `chepagame.com.ar` hostname for the widget.
+
+To try it locally, open `/contact` in the Web or *Profile → About → Contact* in the App, send a
+message and look for it in the backend log.
 
 ## Delete my account (feature 015)
 

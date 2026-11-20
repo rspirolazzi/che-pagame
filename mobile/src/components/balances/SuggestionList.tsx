@@ -17,6 +17,7 @@ import type { AppTheme } from "../../theme";
 import { ConfirmDialog } from "../accounts/AccountBits";
 import { AppButton } from "../AppButton";
 import { ErrorText } from "../FormBits";
+import { Money } from "../Money";
 
 interface Open {
   suggestion: SuggestedTransfer;
@@ -116,7 +117,13 @@ export function SuggestionList({
                 {t("balances.suggested")}
               </Text>
             </View>
-            <Text style={theme.custom.amountLarge}>{money(suggestion.amount)}</Text>
+            <Money
+              style={theme.custom.amountLarge}
+              amount={suggestion.amount}
+              currency={account.currency}
+              decimals={account.currencyDecimals}
+              locale={locale}
+            />
             {!account.isClosed && (
               <AppButton
                 mode="contained"

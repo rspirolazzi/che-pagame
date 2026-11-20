@@ -55,6 +55,7 @@ def new_user_document(
     password_hash: str | None = None,
     google_subject: str | None = None,
     language: str = "es",
+    theme: str = "system",
 ) -> dict[str, Any]:
     now = datetime.now(UTC)
     return {
@@ -65,7 +66,7 @@ def new_user_document(
         "googleSubject": google_subject,
         "passwordHash": password_hash,
         "pendingEmail": None,
-        "preferences": {"language": language, "defaultCurrency": None, "theme": "system"},
+        "preferences": {"language": language, "defaultCurrency": None, "theme": theme},
         "createdAt": now,
         "updatedAt": now,
     }

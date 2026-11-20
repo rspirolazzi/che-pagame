@@ -4,11 +4,13 @@
 
 **Input**: Feature specification from `specs/017-contact-form-turnstile/spec.md`
 
+> **Nota de implementación:** en lugar de `httpx` se usó `urllib.request` de la biblioteca estándar, ejecutado con `asyncio.to_thread` y timeout de 5 s. No suma dependencias y los tests mockean la función de transporte (`_post` / `_get`).
+
 ## Summary
 
 - **Backend**:
   - Configuración nueva: CallMeBot y Turnstile, obligatoria solo con `ENVIRONMENT=production`.
-  - `turnstile_service.verify(token)` llama a `siteverify` de Cloudflare con `httpx`.
+  - `turnstile_service.verify(token)` llama a `siteverify` de Cloudflare con `urllib` (ver nota).
   - `contact_service.send(...)` arma el texto y llama a CallMeBot.
   - `POST /api/v1/contact` (nuevo) exige Turnstile y aplica límites por email y en total.
   - `POST /api/v1/auth/register` exige Turnstile.
@@ -35,7 +37,7 @@
 **Language/Version**: Python 3.13; TypeScript (Next.js 16; Expo 56 / RN 0.85)
 
 **Primary Dependencies**:
-- `httpx`: pasa de dependencia de desarrollo a dependencia de la app.
+- Sin dependencias nuevas en el backend: `urllib` de la biblioteca estándar.
 - `react-native-webview`: dependencia nueva de la App, soportada por Expo.
 - Script de Cloudflare Turnstile, solo en registro, Contacto y `/turnstile`.
 

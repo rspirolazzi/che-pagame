@@ -5,6 +5,10 @@ import { LoginForm } from "@/components/LoginForm";
 import { StatusNotice } from "@/components/ui/StatusNotice";
 import { Logo } from "@/components/ui/Logo";
 import { loginErrorKey } from "@/lib/loginError";
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo";
+
+export const metadata: Metadata = { robots: NOINDEX };
 
 interface LoginPageProps {
   searchParams: Promise<{ callbackUrl?: string; error?: string; deleted?: string }>;

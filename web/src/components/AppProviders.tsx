@@ -3,14 +3,30 @@
 import { ThemeProvider, useTheme } from "next-themes";
 import { type ReactNode, useEffect } from "react";
 
-import type { ThemeName } from "@/lib/api/types";
+import type { LanguageCode, ThemeName } from "@/lib/api/types";
+import {
+  LOCALE_COOKIE,
+  readDeviceCookie,
+  THEME_COOKIE,
+  writeDeviceCookie,
+} from "@/lib/devicePreferences";
 
-/** Applies the theme saved in the user's profile, so every device follows it (FR-022). */
-function ThemeSync({ theme }: { theme: ThemeName | undefined }) {
+/**
+ * Applies the profile's theme and language on this device, so every device follows the profile
+ * (FR-022) and the device keeps it after signing out (feature 014, FR-009).
+ */
+function ProfileSync({ theme, language }: { theme?: ThemeName; language?: LanguageCode }) {
   const { setTheme } = useTheme();
   useEffect(() => {
-    if (theme) setTheme(theme);
+    if (!theme) return;
+    setTheme(theme);
+    writeDeviceCookie(THEME_COOKIE, theme);
   }, [theme, setTheme]);
+  useEffect(() => {
+    if (language && readDeviceCookie(LOCALE_COOKIE) !== language) {
+      writeDeviceCookie(LOCALE_COOKIE, language);
+    }
+  }, [language]);
   return null;
 }
 
@@ -23,7 +39,15 @@ function ThemeSync({ theme }: { theme: ThemeName | undefined }) {
 const themeScriptProps =
   typeof window === "undefined" ? undefined : ({ type: "application/json" } as const);
 
-export function AppProviders({ theme, children }: { theme?: ThemeName; children: ReactNode }) {
+export function AppProviders({
+  theme,
+  language,
+  children,
+}: {
+  theme?: ThemeName;
+  language?: LanguageCode;
+  children: ReactNode;
+}) {
   return (
     <ThemeProvider
       attribute="data-theme"
@@ -32,7 +56,7 @@ export function AppProviders({ theme, children }: { theme?: ThemeName; children:
       disableTransitionOnChange
       scriptProps={themeScriptProps}
     >
-      <ThemeSync theme={theme} />
+      <ProfileSync theme={theme} language={language} />
       {children}
     </ThemeProvider>
   );

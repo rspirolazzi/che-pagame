@@ -10,11 +10,13 @@ import type {
   HistoryChange,
   HistoryEntry,
   ParticipantRef,
+  SettlementResponse,
 } from "../../services/api/types";
 import type { AppTheme } from "../../theme";
 import { CATEGORY_ICONS, CATEGORY_MATERIAL_ICON } from "../../utils/categoryIcons";
 import { formatDay } from "../../utils/expenseGroups";
-import { formatMoney } from "../../utils/money";
+import { formatCompactMoney, formatMoney } from "../../utils/money";
+import { Money } from "../Money";
 
 export function CategoryIcon({ icon, size = 28 }: { icon: Category; size?: number }) {
   const { t } = useTranslation();
@@ -111,9 +113,67 @@ export function ExpenseListItem({
           </Text>
         )}
       </View>
-      <Text style={theme.custom.amount}>
-        {formatMoney(item.amount, account.currency, account.currencyDecimals, locale)}
-      </Text>
+      <Money
+        style={theme.custom.amount}
+        amount={item.amount}
+        currency={account.currency}
+        decimals={account.currencyDecimals}
+        locale={locale}
+      />
+    </Pressable>
+  );
+}
+
+/**
+ * A settlement in the expense list, shown as "Ingreso" (feature 012, R7): its own icon, the
+ * visible label and the "Ana le pagó a Beto" text, so it never relies on color alone.
+ */
+export function IncomeListItem({
+  account,
+  settlement,
+  locale,
+  onPress,
+}: {
+  account: AccountResponse;
+  settlement: SettlementResponse;
+  locale: string;
+  onPress: () => void;
+}) {
+  const { t } = useTranslation();
+  const theme = useTheme<AppTheme>();
+  const { spacing } = theme.custom;
+  const amount = formatMoney(settlement.amount, account.currency, account.currencyDecimals, locale);
+  // Compact on screen (feature 016); the exact amount is in the row's accessible name.
+  const compact = formatCompactMoney(
+    settlement.amount,
+    account.currency,
+    account.currencyDecimals,
+    locale,
+  );
+  const names = { from: settlement.from.name, to: settlement.to.name };
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityLabel={t("expenses.income.a11y", { ...names, amount })}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.row,
+        { padding: spacing.md, gap: spacing.md },
+        pressed && { backgroundColor: theme.colors.surfaceVariant },
+      ]}
+    >
+      <View style={[styles.tile, styles.incomeTile, { borderColor: theme.custom.positive }]}>
+        <MaterialCommunityIcons name="swap-horizontal" size={22} color={theme.custom.positive} />
+      </View>
+      <View style={styles.body}>
+        <Text variant="titleMedium" numberOfLines={2}>
+          {t("expenses.income.row", names)}
+        </Text>
+        <Text variant="bodySmall" style={[styles.bold, { color: theme.custom.positive }]}>
+          {t("expenses.income.label")}
+        </Text>
+      </View>
+      <Text style={theme.custom.amount}>{compact}</Text>
     </Pressable>
   );
 }
@@ -187,6 +247,7 @@ const styles = StyleSheet.create({
   pick: { width: 48, height: 48 },
   row: { flexDirection: "row", alignItems: "center", minHeight: 48 },
   tile: { width: 40, height: 40, alignItems: "center", justifyContent: "center" },
+  incomeTile: { borderWidth: 1.5, borderRadius: 20 },
   body: { flex: 1, minWidth: 0, gap: 2 },
   pending: { flexDirection: "row", alignItems: "center" },
   bold: { fontWeight: "600" },

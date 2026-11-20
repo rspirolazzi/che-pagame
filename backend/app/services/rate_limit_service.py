@@ -40,6 +40,28 @@ async def check_and_record_email_request(email: str, purpose: LimitPurpose) -> O
     return await auth_attempts.insert(email_hash, "email_request", purpose)
 
 
+CONTACT_PER_EMAIL_PER_HOUR = 5
+CONTACT_TOTAL_PER_HOUR = 30
+# Every contact message counts against this key too: it protects the maintainer's number.
+_CONTACT_GLOBAL_KEY = "*"
+
+
+async def check_and_record_contact(email: str) -> list[ObjectId]:
+    """Raise 429 over 5 messages per email or 30 in total per hour; otherwise record both."""
+    now = datetime.now(UTC)
+    since = now - timedelta(hours=1)
+    checks: list[tuple[str, LimitPurpose, int]] = [
+        (hash_email(email), "contact", CONTACT_PER_EMAIL_PER_HOUR),
+        (hash_email(_CONTACT_GLOBAL_KEY), "contact_global", CONTACT_TOTAL_PER_HOUR),
+    ]
+    for key, purpose, limit in checks:
+        if await auth_attempts.count_since(key, "email_request", purpose, since) >= limit:
+            oldest = await auth_attempts.oldest_since(key, "email_request", purpose, since)
+            retry_at = (oldest["createdAt"] if oldest else now) + timedelta(hours=1)
+            raise AppError(429, errors.RATE_LIMITED, _seconds_until(retry_at, now))
+    return [await auth_attempts.insert(key, "email_request", purpose) for key, purpose, _ in checks]
+
+
 async def release(attempt_id: ObjectId) -> None:
     """Forget a recorded request (used when the email could not be sent)."""
     await auth_attempts.delete_by_id(attempt_id)

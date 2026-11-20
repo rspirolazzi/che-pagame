@@ -3,10 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 import { type FormEvent, useState, useSyncExternalStore } from "react";
 
 import { registerAction } from "@/app/actions/auth";
 import type { ApiErrorCode } from "@/lib/api/errors";
+import { isTheme } from "@/lib/devicePreferences";
 import { pendingEmailStore, savePendingEmail } from "@/lib/pendingEmail";
 import { savePendingRedirect } from "@/lib/pendingRedirect";
 import {
@@ -17,8 +19,12 @@ import {
 } from "@/lib/validation";
 
 import { ErrorMessage } from "./FormMessage";
+import { TurnstileWidget } from "./TurnstileWidget";
 
-export function RegisterForm({ callbackUrl }: { callbackUrl?: string } = {}) {
+export function RegisterForm({
+  callbackUrl,
+  siteKey = null,
+}: { callbackUrl?: string; siteKey?: string | null } = {}) {
   const t = useTranslations();
   const router = useRouter();
   // "Fix the email" comes back here with the previous email filled in.
@@ -31,6 +37,8 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string } = {}) {
   const [invalid, setInvalid] = useState<ValidationKey | null>(null);
   const [error, setError] = useState<ApiErrorCode | null>(null);
   const [pending, setPending] = useState(false);
+  const { theme } = useTheme();
+  const [token, setToken] = useState<string | null>(null);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -44,10 +52,20 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string } = {}) {
     if (problem) return;
 
     setPending(true);
-    const result = await registerAction({ email: email.trim(), password, firstName, lastName });
+    // The theme chosen on this device before signing up goes to the profile (feature 014).
+    const result = await registerAction({
+      email: email.trim(),
+      password,
+      firstName,
+      lastName,
+      theme: isTheme(theme) ? theme : undefined,
+      turnstileToken: token,
+    });
     setPending(false);
     if (!result.ok) {
       setError(result.code);
+      // A used token is no good for a retry (feature 017).
+      setToken(null);
       return;
     }
     savePendingEmail(email.trim());
@@ -103,8 +121,9 @@ export function RegisterForm({ callbackUrl }: { callbackUrl?: string } = {}) {
           {t(`validation.${invalid}`)}
         </p>
       )}
+      {siteKey && <TurnstileWidget siteKey={siteKey} onToken={setToken} />}
       <ErrorMessage code={error} />
-      <button type="submit" disabled={pending}>
+      <button type="submit" disabled={pending || (siteKey !== null && token === null)}>
         {t("auth.register.submit")}
       </button>
       <p>

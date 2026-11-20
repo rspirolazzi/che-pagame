@@ -9,11 +9,13 @@ import { PaperProvider } from "react-native-paper";
 
 import { AuthProvider, useAuth } from "../src/hooks/useAuth";
 import { usePendingInvite } from "../src/hooks/usePendingInvite";
+import { useDevicePreferences } from "../src/services/devicePreferences";
 import { useAppTheme } from "../src/theme";
 
 function RootNavigator() {
   const { status, user, sessionExpired } = useAuth();
-  const theme = useAppTheme(user?.preferences.theme);
+  const device = useDevicePreferences();
+  const theme = useAppTheme(user?.preferences.theme ?? device.theme);
   const pathname = usePathname();
   const router = useRouter();
   const returnTo = useRef<string | null>(null);

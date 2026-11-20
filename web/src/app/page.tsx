@@ -1,10 +1,18 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { auth } from "@/auth";
 import { HomePreview } from "@/components/HomePreview";
+import { JsonLd } from "@/components/JsonLd";
 import { Icon, type IconName } from "@/components/ui/Icon";
 import { Logo } from "@/components/ui/Logo";
+import { pageMetadata } from "@/lib/seo";
+import { organizationJsonLd, webApplicationJsonLd } from "@/lib/structuredData";
+
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata("home");
+}
 
 const BENEFITS: [key: string, icon: IconName][] = [
   ["split", "split"],
@@ -40,10 +48,18 @@ export default async function HomePage() {
         ))}
       </ul>
       <HomePreview />
-      <Link href="/how-it-works" className="more-link">
-        {t("home.howItWorks")}
-        <Icon name="arrowRight" />
-      </Link>
+      <p className="row">
+        <Link href="/how-it-works" className="more-link">
+          {t("home.howItWorks")}
+          <Icon name="arrowRight" />
+        </Link>
+        <Link href="/faq" className="more-link">
+          {t("home.faq")}
+          <Icon name="arrowRight" />
+        </Link>
+      </p>
+      <JsonLd data={organizationJsonLd()} />
+      <JsonLd data={webApplicationJsonLd(t("seo.home.description"))} />
     </>
   );
 }

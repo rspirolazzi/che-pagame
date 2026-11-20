@@ -536,11 +536,32 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** Get Settlement */
+        get: operations["get_settlement_api_v1_accounts__account_id__settlements__settlement_id__get"];
         put?: never;
         post?: never;
         /** Delete Settlement */
         delete: operations["delete_settlement_api_v1_accounts__account_id__settlements__settlement_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/accounts/{account_id}/movements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Movements
+         * @description Expenses and settlements together, newest first (feature 012).
+         */
+        get: operations["list_movements_api_v1_accounts__account_id__movements_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -608,6 +629,46 @@ export interface paths {
         put?: never;
         /** Accept Invitation */
         post: operations["accept_invitation_api_v1_invitations__code__accept_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/contact": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Send Contact Message
+         * @description Relays the message to the maintainer's WhatsApp (feature 017). Nothing is stored.
+         */
+        post: operations["send_contact_message_api_v1_contact_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/public-config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Public Config
+         * @description The Turnstile site key in production, null elsewhere (feature 017, research R5).
+         */
+        get: operations["public_config_api_v1_public_config_get"];
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -769,6 +830,31 @@ export interface components {
             /** Isme */
             isMe: boolean;
         };
+        /** ContactRequest */
+        ContactRequest: {
+            /** Name */
+            name: string;
+            /**
+             * Email
+             * Format: email
+             */
+            email: string;
+            /** Message */
+            message: string;
+            /**
+             * Language
+             * @default es
+             * @enum {string}
+             */
+            language: "es" | "en";
+            /**
+             * Consent
+             * @constant
+             */
+            consent: true;
+            /** Turnstiletoken */
+            turnstileToken?: string | null;
+        };
         /**
          * DeletionConfirmRequest
          * @description Confirms the deletion of the current user with the emailed code (feature 015).
@@ -853,6 +939,15 @@ export interface components {
             paidBy: components["schemas"]["ParticipantRef"] | null;
             /** Ispending */
             isPending: boolean;
+        };
+        /** ExpenseMovement */
+        ExpenseMovement: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "expense";
+            expense: components["schemas"]["ExpenseListItem"];
         };
         /** ExpensePage */
         ExpensePage: {
@@ -939,6 +1034,10 @@ export interface components {
         GoogleLoginRequest: {
             /** Idtoken */
             idToken: string;
+            /** Language */
+            language?: ("es" | "en") | null;
+            /** Theme */
+            theme?: ("light" | "dark" | "system") | null;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1018,6 +1117,17 @@ export interface components {
         LogoutRequest: {
             /** Refreshtoken */
             refreshToken: string;
+        };
+        /** MovementPage */
+        MovementPage: {
+            /** Items */
+            items: (components["schemas"]["ExpenseMovement"] | components["schemas"]["SettlementMovement"])[];
+            /** Nextcursor */
+            nextCursor: string | null;
+            /** Total */
+            total: string | null;
+            /** Count */
+            count: number | null;
         };
         /** ParticipantImpact */
         ParticipantImpact: {
@@ -1100,6 +1210,14 @@ export interface components {
             /** Theme */
             theme?: ("light" | "dark" | "system") | null;
         };
+        /**
+         * PublicConfig
+         * @description What clients need before signing in. The site key is public by design.
+         */
+        PublicConfig: {
+            /** Turnstilesitekey */
+            turnstileSiteKey: string | null;
+        };
         /** RefreshRequest */
         RefreshRequest: {
             /** Refreshtoken */
@@ -1124,6 +1242,14 @@ export interface components {
              * @enum {string}
              */
             language: "es" | "en";
+            /**
+             * Theme
+             * @default system
+             * @enum {string}
+             */
+            theme: "light" | "dark" | "system";
+            /** Turnstiletoken */
+            turnstileToken?: string | null;
         };
         /** ResendRegistrationRequest */
         ResendRegistrationRequest: {
@@ -1161,6 +1287,15 @@ export interface components {
              */
             source: "suggestion" | "manual";
         };
+        /** SettlementMovement */
+        SettlementMovement: {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            kind: "settlement";
+            settlement: components["schemas"]["SettlementResponse"];
+        };
         /** SettlementPage */
         SettlementPage: {
             /** Items */
@@ -1187,6 +1322,7 @@ export interface components {
             currency: string;
             /** Isexcluded */
             isExcluded: boolean;
+            recordedBy?: components["schemas"]["ParticipantRef"] | null;
             /**
              * Createdat
              * Format: date-time
@@ -3946,6 +4082,67 @@ export interface operations {
             };
         };
     };
+    get_settlement_api_v1_accounts__account_id__settlements__settlement_id__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                account_id: string;
+                settlement_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettlementResponse"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     delete_settlement_api_v1_accounts__account_id__settlements__settlement_id__delete: {
         parameters: {
             query?: never;
@@ -3988,6 +4185,60 @@ export interface operations {
             };
             /** @description Conflict */
             409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    list_movements_api_v1_accounts__account_id__movements_get: {
+        parameters: {
+            query?: {
+                limit?: number;
+                cursor?: string | null;
+            };
+            header?: {
+                authorization?: string | null;
+            };
+            path: {
+                account_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MovementPage"];
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -4228,6 +4479,86 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    send_contact_message_api_v1_contact_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "x-client"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ContactRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Content */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Bad Gateway */
+            502: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    public_config_api_v1_public_config_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicConfig"];
                 };
             };
         };

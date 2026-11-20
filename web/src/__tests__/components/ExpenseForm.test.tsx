@@ -59,7 +59,8 @@ it("validates before sending", async () => {
   await userEvent.clear(screen.getByLabelText("Importe (ARS)"));
   await userEvent.type(screen.getByLabelText("Importe (ARS)"), "100");
   for (const name of ["Ana", "Leandro", "Javier"]) {
-    await userEvent.click(screen.getByRole("checkbox", { name }));
+    // With an amount, each name carries its share (feature 013).
+    await userEvent.click(screen.getByRole("checkbox", { name: new RegExp(`^${name}`) }));
   }
   await userEvent.click(save);
   expect(screen.getByRole("alert")).toHaveTextContent("al menos un participante");
@@ -104,4 +105,40 @@ it("shows translated API errors", async () => {
   await userEvent.type(screen.getByLabelText("Importe (ARS)"), "10");
   await userEvent.click(screen.getByRole("button", { name: "Guardar gasto" }));
   expect(screen.getByRole("alert")).toHaveTextContent("participantes activos");
+});
+
+describe("each person's share (feature 013)", () => {
+  it("shows the exact shares and recalculates on every change", async () => {
+    renderWithIntl(<ExpenseForm account={makeAccount()} />);
+    const amount = screen.getByLabelText("Importe (ARS)");
+    await userEvent.type(amount, "100");
+    // Ana, Leandro, Javier in the account's order: the extra cent goes to Ana.
+    expect(screen.getByRole("checkbox", { name: /^Ana\s*33,34\sARS$/ })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /^Leandro\s*33,33/ })).toBeChecked();
+    expect(screen.getByRole("checkbox", { name: /^Javier\s*33,33/ })).toBeChecked();
+
+    await userEvent.click(screen.getByRole("checkbox", { name: /^Javier/ }));
+    expect(screen.getByRole("checkbox", { name: /^Ana\s*50,00/ })).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: /^Leandro\s*50,00/ })).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: "Javier No participa" })).not.toBeChecked();
+
+    await userEvent.clear(amount);
+    await userEvent.type(amount, "101");
+    expect(screen.getByRole("checkbox", { name: /^Ana\s*50,50/ })).toBeInTheDocument();
+  });
+
+  it("shows no shares without a valid amount or with nobody sharing", async () => {
+    renderWithIntl(<ExpenseForm account={makeAccount()} />);
+    expect(screen.queryByText(/ARS$/)).not.toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText("Importe (ARS)"), "abc");
+    expect(screen.queryByText(/ARS$/)).not.toBeInTheDocument();
+    await userEvent.clear(screen.getByLabelText("Importe (ARS)"));
+    await userEvent.type(screen.getByLabelText("Importe (ARS)"), "10,555");
+    expect(screen.queryByText(/ARS$/)).not.toBeInTheDocument();
+  });
+
+  it("starts with the current shares when editing", () => {
+    renderWithIntl(<ExpenseForm account={makeAccount()} expense={makeExpense()} />);
+    expect(screen.getAllByText(/^[\d.,]+\sARS$/).length).toBeGreaterThan(0);
+  });
 });

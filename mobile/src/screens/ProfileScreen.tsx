@@ -184,6 +184,13 @@ export default function ProfileScreen() {
         </Section>
       )}
 
+      <Section title={t("profile.about")}>
+        <Text variant="bodySmall">{t("profile.aboutHint")}</Text>
+        <AppButton mode="outlined" icon="information-outline" onPress={() => router.push("/about")}>
+          {t("profile.about")}
+        </AppButton>
+      </Section>
+
       <Section title={t("deleteAccount.title")}>
         <Text variant="bodySmall">{t("deleteAccount.profileHint")}</Text>
         <AppButton

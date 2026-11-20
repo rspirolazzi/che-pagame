@@ -6,7 +6,7 @@ import { Text } from "react-native-paper";
 import type { BalanceEntry } from "../services/api/types";
 import { useAppColors } from "../theme";
 import { absAmount, amountSign } from "../utils/balanceTotals";
-import { formatMoney } from "../utils/money";
+import { formatCompactMoney, formatMoney } from "../utils/money";
 
 type Translate = (key: string, options?: Record<string, unknown>) => string;
 
@@ -17,8 +17,10 @@ export function balanceText(
   currency: string,
   decimals: number,
   locale: string,
+  compact = false,
 ): string {
-  const amount = formatMoney(absAmount(entry.amount), currency, decimals, locale);
+  const format = compact ? formatCompactMoney : formatMoney;
+  const amount = format(absAmount(entry.amount), currency, decimals, locale);
   const sign = amountSign(entry.amount);
   if (entry.isMe) {
     if (sign > 0) return t("balances.owedToYou", { amount });
@@ -58,10 +60,13 @@ export function AmountText({
   const sign = amountSign(amount);
   const tone = sign > 0 ? colors.positive : sign < 0 ? colors.negative : colors.textMuted;
   const label = sign > 0 ? t("a11y.owed") : sign < 0 ? t("a11y.owes") : t("a11y.settled");
-  const text =
+  // Large amounts read "2,3 M" (feature 016); the exact sentence is the accessible name.
+  const describe = (compact: boolean) =>
     subject === "none"
-      ? formatMoney(absAmount(amount), currency, decimals, locale)
-      : balanceText(t, { amount, isMe: subject === "me" }, currency, decimals, locale);
+      ? (compact ? formatCompactMoney : formatMoney)(absAmount(amount), currency, decimals, locale)
+      : balanceText(t, { amount, isMe: subject === "me" }, currency, decimals, locale, compact);
+  const text = describe(true);
+  const exactText = describe(false);
   const size = variant === "large" ? 26 : 20;
   return (
     <View style={styles.row}>
@@ -79,6 +84,7 @@ export function AmountText({
         )}
       </View>
       <Text
+        accessibilityLabel={exactText === text ? undefined : exactText}
         style={[
           variant === "large" ? colors.amountLarge : colors.amount,
           styles.text,

@@ -15,6 +15,7 @@ import type { AuthResponse, UserResponse } from "../services/api/types";
 import { usersApi } from "../services/api/users";
 import { signOutFromGoogle } from "../services/auth/googleSignIn";
 import { clearTokens, getTokens, saveTokens } from "../services/auth/tokenStorage";
+import { loadDevicePreferences, setDevicePreferences } from "../services/devicePreferences";
 
 export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 
@@ -37,6 +38,10 @@ function applyLanguage(user: UserResponse | null) {
   const language = user?.preferences.language;
   if (language && i18n.language !== language) void i18n.changeLanguage(language);
   setRequestLanguage(language ?? i18n.language);
+  // The device follows the profile, so the choice stays after signing out (feature 014).
+  if (user) {
+    setDevicePreferences({ language: user.preferences.language, theme: user.preferences.theme });
+  }
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -53,6 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
     (async () => {
+      await loadDevicePreferences();
       const tokens = await getTokens();
       if (!tokens) {
         if (active) setStatus("unauthenticated");

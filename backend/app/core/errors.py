@@ -23,6 +23,8 @@ ALREADY_MEMBER = "already_member"
 PARTICIPANT_TAKEN = "participant_taken"
 EXPENSE_CONFLICT = "expense_conflict"
 INVALID_PARTICIPANT = "invalid_participant"
+BOT_CHECK_FAILED = "bot_check_failed"
+CONTACT_UNAVAILABLE = "contact_unavailable"
 
 ERROR_CODES = (
     VALIDATION_ERROR,
@@ -48,6 +50,8 @@ ERROR_CODES = (
     PARTICIPANT_TAKEN,
     EXPENSE_CONFLICT,
     INVALID_PARTICIPANT,
+    BOT_CHECK_FAILED,
+    CONTACT_UNAVAILABLE,
 )
 
 

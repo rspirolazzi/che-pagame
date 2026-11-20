@@ -11,7 +11,12 @@ function Form() {
   const [title, setTitle] = useState("");
   return (
     <View testID="screen" style={{ backgroundColor: theme.colors.background }}>
-      <TextInput label="Concepto" accessibilityLabel="Concepto" value={title} onChangeText={setTitle} />
+      <TextInput
+        label="Concepto"
+        accessibilityLabel="Concepto"
+        value={title}
+        onChangeText={setTitle}
+      />
     </View>
   );
 }

@@ -1,7 +1,18 @@
 import { useTranslations } from "next-intl";
 
 export const LEGAL_SECTIONS = {
-  privacy: ["data", "use", "members", "providers", "history", "export", "delete", "questions"],
+  privacy: [
+    "data",
+    "use",
+    "members",
+    "providers",
+    "history",
+    "export",
+    "delete",
+    "device",
+    "thirdParties",
+    "questions",
+  ],
   terms: ["service", "access", "balances", "data", "changes"],
 } as const;
 

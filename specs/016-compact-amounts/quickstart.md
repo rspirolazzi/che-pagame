@@ -25,4 +25,4 @@ de al menos 2.300.000. Otra en CLP.
 9. **Exportación**: exportar CSV → importes exactos.
 10. **Inglés**: "ARS 25.5K" y "ARS 10M".
 11. **CLP**: 25.500 CLP → "25,5 K CLP" (sin decimales en el exacto).
-12. **Totales grandes**: un saldo de 1.250.000.000 → "1.250 M".
+12. **Totales grandes**: un saldo de 1.250.000.000 → "1250 M".

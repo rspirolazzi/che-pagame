@@ -21,15 +21,23 @@ const SETTLEMENT_ERRORS = new Set([
   "dateRequired",
 ]);
 
-/** Manual settlement between two active participants (FR-013); it always starts empty. */
-export function SettlementForm({ account }: { account: AccountResponse }) {
+interface SettlementFormProps {
+  account: AccountResponse;
+  /** Preselected receiver: "me" when it is an income from the expense list (feature 012). */
+  defaultToId?: string;
+  /** Where to go after saving; Balances by default. */
+  returnTo?: string;
+}
+
+/** Manual settlement between two active participants (FR-013). */
+export function SettlementForm({ account, defaultToId = "", returnTo }: SettlementFormProps) {
   const t = useTranslations("settlements");
   const tExpenses = useTranslations("expenses");
   const locale = useLocale();
   const router = useRouter();
   const hydrated = useHydrated();
   const [fromId, setFromId] = useState("");
-  const [toId, setToId] = useState("");
+  const [toId, setToId] = useState(defaultToId);
   const [amount, setAmount] = useState("");
   const [chosenDate, setChosenDate] = useState<string | null>(null);
   // Stable across retries of the same form, so a lost response never records two (FR-018).
@@ -72,7 +80,7 @@ export function SettlementForm({ account }: { account: AccountResponse }) {
     const result = await createSettlementAction(account.id, checked.input, clientRequestId);
     setPending(false);
     if (result.ok) {
-      router.push(`/accounts/${account.id}/balances`);
+      router.push(returnTo ?? `/accounts/${account.id}/balances`);
       router.refresh();
       return;
     }

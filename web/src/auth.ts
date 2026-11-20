@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import NextAuth, { CredentialsSignin, type User } from "next-auth";
 import type { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
@@ -6,6 +7,7 @@ import Google from "next-auth/providers/google";
 import { apiFetch } from "@/lib/api/client";
 import { ApiError } from "@/lib/api/errors";
 import type { AuthResponse, TokenPair } from "@/lib/api/types";
+import { isLanguage, isTheme, LOCALE_COOKIE, THEME_COOKIE } from "@/lib/devicePreferences";
 
 const THIRTY_DAYS_SECONDS = 30 * 24 * 60 * 60;
 const REFRESH_MARGIN_MS = 60 * 1000;
@@ -112,9 +114,17 @@ export const { handlers, auth, signIn, signOut, unstable_update } = NextAuth({
       if (account?.provider !== "google") return true;
       if (!account.id_token) return "/login?error=invalid_google_token";
       try {
+        const jar = await cookies();
+        const language = jar.get(LOCALE_COOKIE)?.value;
+        const theme = jar.get(THEME_COOKIE)?.value;
         const response = await apiFetch<AuthResponse>("/auth/google", {
           method: "POST",
-          body: { idToken: account.id_token },
+          body: {
+            idToken: account.id_token,
+            // Only used when this sign-in creates the account (feature 014).
+            language: isLanguage(language) ? language : undefined,
+            theme: isTheme(theme) ? theme : undefined,
+          },
         });
         user.backend = response;
         return true;

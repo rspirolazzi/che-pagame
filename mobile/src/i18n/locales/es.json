@@ -39,16 +39,162 @@
   },
   "pages": {
     "howItWorks": {
-      "title": "Cómo funciona",
-      "body": "Creá una cuenta compartida, cargá los gastos y mirá los saldos. Esta página se completa en una próxima versión."
+      "title": "Cómo dividir gastos en grupo con ChePagame",
+      "intro": "Cuatro pasos para hacer la vaca sin que nadie tenga que andar haciendo cuentas.",
+      "stepsTitle": "Paso a paso",
+      "usesTitle": "Para qué la usan",
+      "uses": {
+        "trip": {
+          "title": "Viajes en grupo",
+          "body": "Nafta, alojamiento y excursiones: cada uno carga lo que pagó y al volver saben quién le debe a quién."
+        },
+        "bbq": {
+          "title": "El asado del finde",
+          "body": "La carne, el carbón y las bebidas los pagan distintos; ChePagame calcula cuánto pone cada uno."
+        },
+        "flat": {
+          "title": "Departamento compartido",
+          "body": "Alquiler, expensas y servicios del mes, divididos entre los que viven juntos, con las cuentas claras."
+        },
+        "couple": {
+          "title": "En pareja",
+          "body": "Pagar a medias el súper o las salidas sin llevar la cuenta en la cabeza."
+        }
+      },
+      "faqLink": "¿Te quedó alguna duda? Mirá las preguntas frecuentes",
+      "steps": {
+        "create": {
+          "title": "Creá una Cuenta e invitá",
+          "body": "Ponele nombre, elegí la moneda y compartí el enlace con el grupo."
+        },
+        "add": {
+          "title": "Cargá los gastos",
+          "body": "Quién pagó, cuánto y entre quiénes se divide. Cualquiera del grupo puede cargarlos."
+        },
+        "balances": {
+          "title": "Mirá los saldos",
+          "body": "ChePagame calcula quién le debe a quién, al centavo, y sugiere cómo saldar."
+        },
+        "settle": {
+          "title": "Saldá las cuentas",
+          "body": "Registrá los pagos cuando se hagan y todos quedan al día."
+        }
+      }
     },
     "about": {
       "title": "Quiénes somos",
-      "body": "ChePagame es un proyecto para que dividir gastos entre amigos sea simple y transparente."
+      "whatTitle": "Qué es ChePagame",
+      "body": "ChePagame es una app gratuita para dividir gastos entre amigos, familia, pareja o compañeros de casa. Cada gasto queda registrado, los saldos se calculan con exactitud en la moneda de cada Cuenta y siempre sabés quién le debe a quién.",
+      "whyTitle": "Por qué existe",
+      "why": "Porque hacer la vaca no debería terminar en una discusión. Nació en Argentina para que pagar a medias sea simple y transparente, sin planillas ni cuentas en servilletas.",
+      "privacyTitle": "Tus datos son tuyos",
+      "privacy": "Sin publicidad y sin vender datos. Podés exportar todo cuando quieras y borrar tu cuenta en cualquier momento.",
+      "version": "Versión {version}",
+      "versionBuild": "Versión {version} · build {build}"
     },
     "contact": {
       "title": "Contacto",
-      "body": "Muy pronto vas a poder escribirnos desde acá."
+      "intro": "¿Tenés una consulta, encontraste un error o tenés una idea? Escribinos.",
+      "faq": "Para dudas comunes sobre cómo dividir gastos, mirá primero las preguntas frecuentes.",
+      "copy": "Copiar",
+      "copied": "Copiado.",
+      "write": "Escribinos",
+      "unavailable": "Pronto vas a poder escribirnos desde acá."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "intro": "Respuestas cortas sobre cómo dividir gastos, hacer la vaca y tener las cuentas claras con ChePagame.",
+      "groups": {
+        "basics": {
+          "title": "Lo básico",
+          "items": {
+            "what": {
+              "q": "¿Qué es ChePagame?",
+              "a": "Es una app para dividir gastos en grupo. Cargan lo que pagó cada uno y ChePagame calcula quién le debe a quién, al centavo."
+            },
+            "free": {
+              "q": "¿Es gratis?",
+              "a": "Sí. ChePagame es gratis y no tiene publicidad."
+            },
+            "app": {
+              "q": "¿Hay App para el celular?",
+              "a": "Estamos preparando la App para Android. Mientras tanto, la Web funciona en el navegador del celular y la podés agregar a la pantalla de inicio."
+            }
+          }
+        },
+        "accounts": {
+          "title": "Cuentas compartidas",
+          "items": {
+            "create": {
+              "q": "¿Cómo creo una cuenta compartida?",
+              "a": "Entrá a Cuentas, tocá Nueva Cuenta, ponele un nombre (por ejemplo, Viaje a Bariloche), elegí la moneda y sumá a los participantes."
+            },
+            "invite": {
+              "q": "¿Cómo invito al grupo?",
+              "a": "Desde la Cuenta, compartí el enlace de invitación por WhatsApp o donde quieras. Quien lo abre se une y elige qué participante es."
+            },
+            "currency": {
+              "q": "¿En qué moneda se cargan los gastos?",
+              "a": "Cada Cuenta tiene su moneda, que elegís al crearla. Todos los gastos y saldos de esa Cuenta usan esa moneda."
+            }
+          }
+        },
+        "expenses": {
+          "title": "Gastos",
+          "items": {
+            "split": {
+              "q": "¿Cómo se divide un gasto?",
+              "a": "Elegís quién pagó, el importe y entre quiénes se comparte. El importe se divide en partes iguales entre las personas elegidas."
+            },
+            "cents": {
+              "q": "¿Qué pasa con los centavos que sobran?",
+              "a": "Si el importe no se divide exacto, el centavo que sobra se asigna a una persona según el orden de la Cuenta, así la suma siempre da el total."
+            },
+            "who": {
+              "q": "¿Quién puede cargar gastos?",
+              "a": "Cualquier miembro de la Cuenta. Cada cambio queda registrado con quién lo hizo y cuándo."
+            }
+          }
+        },
+        "balances": {
+          "title": "Saldos y pagos",
+          "items": {
+            "owes": {
+              "q": "¿Cómo sé quién le debe a quién?",
+              "a": "En Saldos ves cuánto le deben o debe cada persona, y ChePagame sugiere la menor cantidad de pagos para que todos queden al día."
+            },
+            "settle": {
+              "q": "¿Qué es un pago entre miembros?",
+              "a": "Es cuando alguien le devuelve plata a otro del grupo. Al registrarlo, los saldos se actualizan y la deuda baja."
+            },
+            "income": {
+              "q": "¿Cómo registro que alguien me devolvió plata?",
+              "a": "En la lista de gastos de la Cuenta tocá Ingreso, elegí quién pagó y cuánto. Baja la deuda entre los dos y también aparece en Saldos."
+            },
+            "close": {
+              "q": "¿Puedo cerrar una Cuenta cuando termina el viaje?",
+              "a": "Sí. El Owner puede cerrarla: queda como solo lectura y se pueden seguir viendo los gastos y saldos."
+            }
+          }
+        },
+        "privacy": {
+          "title": "Privacidad y datos",
+          "items": {
+            "data": {
+              "q": "¿Qué datos guardan?",
+              "a": "Tu email, tu nombre si lo cargás, tus preferencias y lo que cargás en tus Cuentas. No vendemos datos ni usamos publicidad."
+            },
+            "export": {
+              "q": "¿Puedo exportar mis datos?",
+              "a": "Sí. Desde tu Perfil o desde cada Cuenta podés descargar tus datos en CSV o JSON."
+            },
+            "delete": {
+              "q": "¿Cómo borro mi cuenta?",
+              "a": "Desde Perfil, en Eliminar mi cuenta. Confirmás con un código que te llega por email y tus datos personales se borran."
+            }
+          }
+        }
+      }
     }
   },
   "auth": {
@@ -140,7 +286,9 @@
     "already_member": "Ya sos miembro de esta Cuenta.",
     "participant_taken": "Ese participante ya no está disponible. Elegí otro.",
     "expense_conflict": "Otro miembro cambió este gasto mientras lo editabas.",
-    "invalid_participant": "El pagador y los participantes tienen que ser participantes activos de la Cuenta."
+    "invalid_participant": "El pagador y los participantes tienen que ser participantes activos de la Cuenta.",
+    "bot_check_failed": "No pudimos verificar que no sos un robot. Reintentá.",
+    "contact_unavailable": "No pudimos enviar tu mensaje. Probá de nuevo en un rato."
   },
   "onboarding": {
     "title": "Elegí tu moneda",
@@ -187,7 +335,9 @@
     "codeLabel": "Código",
     "confirm": "Confirmar cambio",
     "emailChanged": "Tu email ahora es {email}.",
-    "pendingEmail": "Cambio pendiente a {email}"
+    "pendingEmail": "Cambio pendiente a {email}",
+    "about": "Acerca de",
+    "aboutHint": "Cómo funciona, quiénes somos, contacto y preguntas frecuentes."
   },
   "mobile": {
     "loading": "Cargando…",
@@ -324,7 +474,8 @@
       "description": "Descripción (opcional)",
       "save": "Guardar gasto",
       "saving": "Guardando…",
-      "choosePayer": "Elegí quién pagó"
+      "choosePayer": "Elegí quién pagó",
+      "notSharing": "No participa"
     },
     "validation": {
       "titleRequired": "Ingresá un concepto de 1 a 80 caracteres.",
@@ -369,7 +520,17 @@
       "sports": "Deportes"
     },
     "count_one": "{count} gasto",
-    "count_other": "{count} gastos"
+    "count_other": "{count} gastos",
+    "add": {
+      "label": "Agregar",
+      "expense": "Gasto",
+      "income": "Ingreso"
+    },
+    "income": {
+      "label": "Ingreso",
+      "row": "{from} le pagó a {to}",
+      "a11y": "Ingreso: {from} le pagó a {to}, {amount}"
+    }
   },
   "history": {
     "title": "Historial",
@@ -451,6 +612,16 @@
       "toRequired": "Elegí quién recibió.",
       "sameParticipant": "Quien paga y quien recibe tienen que ser distintos.",
       "dateRequired": "Elegí una fecha."
+    },
+    "incomeTitle": "Nuevo ingreso",
+    "incomeHint": "Registrá que alguien le devolvió plata a otro del grupo. Baja la deuda entre los dos.",
+    "backToList": "Volver a Gastos",
+    "detail": {
+      "title": "Ingreso",
+      "recordedBy": "Registrado por {name} el {date}",
+      "recordedOn": "Registrado el {date}",
+      "noEdit": "Los ingresos no se editan: si se cargó mal, eliminalo y cargalo de nuevo.",
+      "gone": "Este ingreso ya no existe: lo eliminó otro miembro."
     }
   },
   "exports": {
@@ -499,5 +670,35 @@
     "resend": "Enviar otro código",
     "cancel": "Cancelar",
     "done": "Tu cuenta fue eliminada."
+  },
+  "preferences": {
+    "saveFailed": "Se aplicó en este dispositivo, pero no pudimos guardarlo en tu perfil.",
+    "open": "Idioma y tema"
+  },
+  "contact": {
+    "form": {
+      "title": "Escribinos",
+      "name": "Nombre",
+      "email": "Email",
+      "message": "Mensaje",
+      "remaining": "Te quedan {count} caracteres",
+      "consent": "Acepto que mi nombre, email y mensaje se envíen por WhatsApp al responsable del proyecto mediante el servicio CallMeBot.",
+      "send": "Enviar mensaje",
+      "sending": "Enviando…",
+      "sent": "¡Mensaje enviado! Te vamos a responder por email.",
+      "waitingCheck": "Esperando la verificación anti-bots…",
+      "fallback": "También podés escribirnos a",
+      "errors": {
+        "nameRequired": "Ingresá tu nombre.",
+        "emailInvalid": "Ingresá un email válido.",
+        "messageTooShort": "El mensaje tiene que tener al menos 10 caracteres.",
+        "consentRequired": "Para enviar el mensaje, aceptá que se envíe por WhatsApp."
+      }
+    }
+  },
+  "botCheck": {
+    "failed": "No pudimos cargar la verificación anti-bots.",
+    "retry": "Reintentar",
+    "disabled": "Verificación desactivada fuera de producción."
   }
 }

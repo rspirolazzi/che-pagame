@@ -1,4 +1,5 @@
-import { act, fireEvent, screen, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, screen, waitFor, within } from "@testing-library/react-native";
+import { StyleSheet } from "react-native";
 
 import { ExpenseHistory } from "@/components/expenses/ExpenseBits";
 import i18n from "@/i18n";
@@ -7,10 +8,17 @@ import ExpenseDetailScreen from "@/screens/expenses/ExpenseDetailScreen";
 import ExpenseFormScreen from "@/screens/expenses/ExpenseFormScreen";
 import { accountsApi } from "@/services/api/accounts";
 import { expensesApi } from "@/services/api/expenses";
+import { movementsApi } from "@/services/api/movements";
 import { ApiError } from "@/services/api/types";
 import { today } from "@/utils/expenseGroups";
 
-import { makeAccount, makeExpense, makeHistory, makeListItem } from "../support/accounts";
+import {
+  makeAccount,
+  makeExpense,
+  makeHistory,
+  makeListItem,
+  makeSettlement,
+} from "../support/accounts";
 import { renderScreen } from "../support/render";
 
 const mockRouter = { push: jest.fn(), replace: jest.fn(), back: jest.fn() };
@@ -42,7 +50,14 @@ jest.mock("@/services/api/expenses", () => ({
   },
 }));
 
+jest.mock("@/services/api/movements", () => ({ movementsApi: { list: jest.fn() } }));
+
 const api = expensesApi as jest.Mocked<typeof expensesApi>;
+const movements = movementsApi.list as jest.Mock;
+const expense = (overrides: Parameters<typeof makeListItem>[0]) => ({
+  kind: "expense" as const,
+  expense: makeListItem(overrides),
+});
 
 beforeEach(async () => {
   jest.clearAllMocks();
@@ -54,8 +69,8 @@ beforeEach(async () => {
 describe("account expenses (US2)", () => {
   const firstPage = {
     items: [
-      makeListItem({ id: "a", date: "2026-11-11", title: "Cena" }),
-      makeListItem({ id: "b", date: "2026-11-10", title: "Nafta", paidBy: null, isPending: true }),
+      expense({ id: "a", date: "2026-11-11", title: "Cena" }),
+      expense({ id: "b", date: "2026-11-10", title: "Nafta", paidBy: null, isPending: true }),
     ],
     nextCursor: "c1",
     total: "150.00",
@@ -63,7 +78,7 @@ describe("account expenses (US2)", () => {
   };
 
   it("shows the total, day sections and rows", async () => {
-    api.list.mockResolvedValue(firstPage);
+    movements.mockResolvedValue(firstPage);
     renderScreen(<AccountExpensesScreen />);
     expect(await screen.findByText("Cena")).toBeOnTheScreen();
     expect(screen.getByText("Total gastado")).toBeOnTheScreen();
@@ -75,8 +90,8 @@ describe("account expenses (US2)", () => {
   });
 
   it("loads the next page once and merges days", async () => {
-    api.list.mockResolvedValueOnce(firstPage).mockResolvedValueOnce({
-      items: [makeListItem({ id: "c", date: "2026-11-10", title: "Peaje" })],
+    movements.mockResolvedValueOnce(firstPage).mockResolvedValueOnce({
+      items: [expense({ id: "c", date: "2026-11-10", title: "Peaje" })],
       nextCursor: null,
       total: null,
       count: null,
@@ -89,14 +104,14 @@ describe("account expenses (US2)", () => {
       sectionList.props.onEndReached();
       sectionList.props.onEndReached();
     });
-    expect(api.list).toHaveBeenCalledTimes(2);
-    expect(api.list).toHaveBeenLastCalledWith("acc1", "c1");
+    expect(movements).toHaveBeenCalledTimes(2);
+    expect(movements).toHaveBeenLastCalledWith("acc1", "c1");
     expect(await screen.findByText("Peaje")).toBeOnTheScreen();
     expect(screen.getAllByText(/10 de noviembre/)).toHaveLength(1);
   });
 
   it("reloads on pull to refresh and when coming back to the screen", async () => {
-    api.list.mockResolvedValue(firstPage);
+    movements.mockResolvedValue(firstPage);
     renderScreen(<AccountExpensesScreen />);
     await screen.findByText("Cena");
     const sectionList = screen.UNSAFE_getByType(require("react-native").SectionList);
@@ -106,16 +121,72 @@ describe("account expenses (US2)", () => {
     await act(async () => {
       mockFocus.run?.();
     });
-    await waitFor(() => expect(api.list).toHaveBeenCalledTimes(3));
-    expect(api.list).toHaveBeenCalledWith("acc1");
+    await waitFor(() => expect(movements).toHaveBeenCalledTimes(3));
+    expect(movements).toHaveBeenCalledWith("acc1");
   });
 
   it("a closed account has no New expense button", async () => {
     (accountsApi.get as jest.Mock).mockResolvedValue(makeAccount({ isClosed: true }));
-    api.list.mockResolvedValue({ items: [], nextCursor: null, total: "0.00", count: 0 });
+    movements.mockResolvedValue({ items: [], nextCursor: null, total: "0.00", count: 0 });
     renderScreen(<AccountExpensesScreen />);
     expect(await screen.findByText(/Todavía no hay gastos/)).toBeOnTheScreen();
     expect(screen.queryByText("Nuevo gasto")).toBeNull();
+    expect(screen.queryByLabelText("Agregar")).toBeNull();
+  });
+
+  it("shows an income among the expenses and opens its detail (feature 012)", async () => {
+    movements.mockResolvedValue({
+      ...firstPage,
+      items: [...firstPage.items, { kind: "settlement", settlement: makeSettlement({ id: "s1" }) }],
+    });
+    renderScreen(<AccountExpensesScreen />);
+    const row = await screen.findByLabelText(/^Ingreso: Leandro le pagó a Ana, /);
+    expect(screen.getByText("Leandro le pagó a Ana")).toBeOnTheScreen();
+    fireEvent.press(row);
+    expect(mockRouter.push).toHaveBeenCalledWith({
+      pathname: "/accounts/[accountId]/settlements/[settlementId]",
+      params: { accountId: "acc1", settlementId: "s1" },
+    });
+  });
+
+  it("the + button offers an expense or an income (feature 012)", async () => {
+    movements.mockResolvedValue(firstPage);
+    renderScreen(<AccountExpensesScreen />);
+    await screen.findByText("Cena");
+    const group = screen.UNSAFE_getByType(require("react-native-paper").FAB.Group);
+    const actions = group.props.actions as { label: string; onPress: () => void }[];
+    expect(actions.map((action) => action.label)).toEqual(["Gasto", "Ingreso"]);
+    actions[1].onPress();
+    expect(mockRouter.push).toHaveBeenCalledWith({
+      pathname: "/accounts/[accountId]/settlements/new",
+      params: { accountId: "acc1", from: "list" },
+    });
+  });
+});
+
+describe("each person's share (feature 013)", () => {
+  it("shows the exact shares and recalculates on every change", async () => {
+    renderScreen(<ExpenseFormScreen />);
+    await screen.findByText("Nuevo gasto");
+    // Ana and Leandro, in the account's order: the extra cent goes to Ana.
+    fireEvent.changeText(screen.getByLabelText("Importe (ARS)"), "100,01");
+    expect(screen.getAllByLabelText(/^Ana, 50,01\sARS$/)[0]).toBeOnTheScreen();
+    expect(screen.getAllByLabelText(/^Leandro, 50,00\sARS$/)[0]).toBeOnTheScreen();
+
+    fireEvent.press(screen.getAllByLabelText(/^Leandro, /)[0]);
+    expect(screen.getAllByLabelText(/^Ana, 100,01\sARS$/)[0]).toBeOnTheScreen();
+    expect(screen.getAllByLabelText("Leandro, No participa")[0]).toBeOnTheScreen();
+
+    fireEvent.changeText(screen.getByLabelText("Importe (ARS)"), "20");
+    expect(screen.getAllByLabelText(/^Ana, 20,00\sARS$/)[0]).toBeOnTheScreen();
+  });
+
+  it("shows no shares without a valid amount", async () => {
+    renderScreen(<ExpenseFormScreen />);
+    await screen.findByText("Nuevo gasto");
+    fireEvent.changeText(screen.getByLabelText("Importe (ARS)"), "abc");
+    expect(screen.queryByText(/ARS$/)).toBeNull();
+    expect(screen.getAllByLabelText("Ana").length).toBeGreaterThan(0);
   });
 });
 
@@ -218,6 +289,26 @@ describe("expense detail (US1, US3, US5)", () => {
     fireEvent.press(await screen.findByText("Continuar"));
     await waitFor(() => expect(api.remove).toHaveBeenCalledWith("acc1", "exp1", 3));
     expect(mockRouter.back).toHaveBeenCalled();
+  });
+
+  it("puts the amount below the title, never in the same row (feature 016, FR-009)", async () => {
+    api.get.mockResolvedValue(makeExpense({ amount: "12500000.00" }));
+    renderScreen(<ExpenseDetailScreen />);
+    const title = await screen.findByText("Cena");
+    let row = title.parent;
+    while (
+      row &&
+      !(
+        (row.type as unknown) === "View" &&
+        StyleSheet.flatten(row.props.style)?.flexDirection === "row"
+      )
+    ) {
+      row = row.parent;
+    }
+    expect(row).toBeTruthy();
+    // Icon + title/date in the first row; the compact amount and the exact one below it.
+    expect(within(row!).queryByText(/ARS/)).toBeNull();
+    expect(screen.getAllByText(/12,5\sM/).length).toBeGreaterThan(0);
   });
 
   it("a closed account offers no edit or delete", async () => {

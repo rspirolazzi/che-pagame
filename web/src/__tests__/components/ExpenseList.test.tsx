@@ -1,24 +1,29 @@
 import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
-import { loadMoreExpensesAction } from "@/app/actions/expenses";
+import { loadMoreMovementsAction } from "@/app/actions/expenses";
 import { ExpenseList } from "@/components/expenses/ExpenseList";
 
-import { makeAccount, makeListItem } from "../support/accounts";
+import { makeAccount, makeListItem, makeSettlement } from "../support/accounts";
 import { router } from "../support/mocks";
 import { renderWithIntl } from "../support/render";
 
 jest.mock("next/navigation", () => ({ useRouter: () => require("../support/mocks").router }));
-jest.mock("@/app/actions/expenses", () => ({ loadMoreExpensesAction: jest.fn() }));
+jest.mock("@/app/actions/expenses", () => ({ loadMoreMovementsAction: jest.fn() }));
 
-const loadMore = loadMoreExpensesAction as jest.Mock;
+const loadMore = loadMoreMovementsAction as jest.Mock;
+
+const expense = (overrides: Parameters<typeof makeListItem>[0]) => ({
+  kind: "expense" as const,
+  expense: makeListItem(overrides),
+});
 
 beforeEach(() => jest.clearAllMocks());
 
 const page = {
   items: [
-    makeListItem({ id: "a", date: "2026-11-11", title: "Cena" }),
-    makeListItem({
+    expense({ id: "a", date: "2026-11-11", title: "Cena" }),
+    expense({
       id: "b",
       date: "2026-11-10",
       title: "Nafta",
@@ -53,8 +58,8 @@ it("loads the next page keeping one group per day and no repeats", async () => {
     ok: true,
     data: {
       items: [
-        makeListItem({ id: "b", date: "2026-11-10", title: "Nafta" }),
-        makeListItem({ id: "c", date: "2026-11-10", title: "Peaje" }),
+        expense({ id: "b", date: "2026-11-10", title: "Nafta" }),
+        expense({ id: "c", date: "2026-11-10", title: "Peaje" }),
       ],
       nextCursor: null,
       total: null,
@@ -85,4 +90,20 @@ it("empty state invites to add the first one unless the account is closed", () =
   renderWithIntl(<ExpenseList account={makeAccount({ isClosed: true })} firstPage={empty} />);
   expect(screen.getByText(/Todavía no hay gastos/)).toBeInTheDocument();
   expect(screen.queryByText(/Cargá el primero/)).not.toBeInTheDocument();
+});
+
+it("shows an income between the expenses, with its own label and text (feature 012)", () => {
+  const settlement = makeSettlement({ id: "s1", date: "2026-11-10" });
+  renderWithIntl(
+    <ExpenseList
+      account={makeAccount()}
+      firstPage={{ ...page, items: [...page.items, { kind: "settlement", settlement }] }}
+    />,
+  );
+  const row = screen.getByRole("link", { name: /^Ingreso: Leandro le pagó a Ana, / });
+  expect(row).toHaveAttribute("href", "/accounts/acc1/settlements/s1");
+  expect(row).toHaveTextContent(`${settlement.from.name} le pagó a ${settlement.to.name}`);
+  expect(within(row).getByText("Ingreso")).toBeInTheDocument();
+  // Same day group as the expense of the 10th.
+  expect(screen.getAllByRole("heading", { level: 2 })).toHaveLength(2);
 });

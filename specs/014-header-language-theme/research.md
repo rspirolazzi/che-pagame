@@ -2,8 +2,8 @@
 
 ## R1. Idioma sin sesión en la Web
 
-- **Decision**: cookie `NEXT_LOCALE` (`es`|`en`, `Path=/`, `SameSite=Lax`, 1 año y
-  `HttpOnly`, porque el cliente no necesita leerla). `i18n/request.ts`: idioma de la
+- **Decision**: cookie `NEXT_LOCALE` (`es`|`en`, `Path=/`, `SameSite=Lax`, 1 año; sin
+  `HttpOnly`, porque al iniciar sesión el navegador la alinea con el idioma del perfil). `i18n/request.ts`: idioma de la
   sesión → cookie válida → `negotiateLocale(Accept-Language)`. La acción `setLocaleAction` escribe
   la cookie y hace `router.refresh()` para mantener la página (FR-004).
 - **Rationale**: next-intl renderiza en el servidor; una cookie es lo único que el servidor ve en

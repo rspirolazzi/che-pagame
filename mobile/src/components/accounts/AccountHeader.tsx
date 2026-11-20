@@ -14,7 +14,13 @@ import { type AccountTab, AccountTabs } from "./AccountTabs";
  * Top of an account (Gastos and Saldos): back, icon, name, currency, closed badge, settings,
  * export and the two tabs. Replaces the stack header on these screens (feature 006 mockup).
  */
-export function AccountHeader({ account, active }: { account: AccountResponse; active: AccountTab }) {
+export function AccountHeader({
+  account,
+  active,
+}: {
+  account: AccountResponse;
+  active: AccountTab;
+}) {
   const { t } = useTranslation();
   const theme = useTheme<AppTheme>();
   const router = useRouter();

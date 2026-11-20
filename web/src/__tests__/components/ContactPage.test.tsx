@@ -17,3 +17,11 @@ it("shows a neutral text, never an empty address, without CONTACT_EMAIL", () => 
   expect(screen.queryByRole("link", { name: /Escribinos/ })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: /Copiar/ })).not.toBeInTheDocument();
 });
+
+it("points to the FAQ for common questions (feature 011)", () => {
+  renderWithIntl(<ContactContent email={null} />);
+  expect(screen.getByRole("link", { name: /preguntas frecuentes/ })).toHaveAttribute(
+    "href",
+    "/faq",
+  );
+});

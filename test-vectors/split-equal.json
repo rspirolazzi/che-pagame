@@ -1,0 +1,486 @@
+[
+  {
+    "name": "100 between 3",
+    "amount": "100.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c"
+    ],
+    "expected": {
+      "a": "33.34",
+      "b": "33.33",
+      "c": "33.33"
+    }
+  },
+  {
+    "name": "100 between 3, picked out of order",
+    "amount": "100.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "c",
+      "a",
+      "b"
+    ],
+    "expected": {
+      "a": "33.34",
+      "b": "33.33",
+      "c": "33.33"
+    }
+  },
+  {
+    "name": "101 between 2",
+    "amount": "101.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b"
+    ],
+    "expected": {
+      "a": "50.50",
+      "b": "50.50"
+    }
+  },
+  {
+    "name": "one person takes it all",
+    "amount": "57.31",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "d"
+    ],
+    "expected": {
+      "d": "57.31"
+    }
+  },
+  {
+    "name": "skips an unselected participant in the middle",
+    "amount": "10.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "c",
+      "d"
+    ],
+    "expected": {
+      "a": "3.34",
+      "c": "3.33",
+      "d": "3.33"
+    }
+  },
+  {
+    "name": "no leftover",
+    "amount": "90.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c"
+    ],
+    "expected": {
+      "a": "30.00",
+      "b": "30.00",
+      "c": "30.00"
+    }
+  },
+  {
+    "name": "leftover n-1",
+    "amount": "100.05",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c"
+    ],
+    "expected": {
+      "a": "33.35",
+      "b": "33.35",
+      "c": "33.35"
+    }
+  },
+  {
+    "name": "six people",
+    "amount": "1000.01",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "expected": {
+      "a": "166.67",
+      "b": "166.67",
+      "c": "166.67",
+      "d": "166.67",
+      "e": "166.67",
+      "f": "166.66"
+    }
+  },
+  {
+    "name": "one cent between three",
+    "amount": "0.01",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c"
+    ],
+    "expected": {
+      "a": "0.01",
+      "b": "0.00",
+      "c": "0.00"
+    }
+  },
+  {
+    "name": "maximum amount",
+    "amount": "999999999.99",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c"
+    ],
+    "expected": {
+      "a": "333333333.33",
+      "b": "333333333.33",
+      "c": "333333333.33"
+    }
+  },
+  {
+    "name": "whole number currency",
+    "amount": "100",
+    "currency": "CLP",
+    "decimals": 0,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c"
+    ],
+    "expected": {
+      "a": "34",
+      "b": "33",
+      "c": "33"
+    }
+  },
+  {
+    "name": "whole number currency, picked out of order",
+    "amount": "1001",
+    "currency": "CLP",
+    "decimals": 0,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "f",
+      "b",
+      "e"
+    ],
+    "expected": {
+      "b": "334",
+      "e": "334",
+      "f": "333"
+    }
+  },
+  {
+    "name": "whole number currency, one unit",
+    "amount": "1",
+    "currency": "CLP",
+    "decimals": 0,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b"
+    ],
+    "expected": {
+      "a": "1",
+      "b": "0"
+    }
+  },
+  {
+    "name": "three decimals",
+    "amount": "10.000",
+    "currency": "KWD",
+    "decimals": 3,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c"
+    ],
+    "expected": {
+      "a": "3.334",
+      "b": "3.333",
+      "c": "3.333"
+    }
+  },
+  {
+    "name": "three decimals, leftover",
+    "amount": "1.001",
+    "currency": "KWD",
+    "decimals": 3,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "b",
+      "c"
+    ],
+    "expected": {
+      "b": "0.501",
+      "c": "0.500"
+    }
+  },
+  {
+    "name": "three decimals, maximum",
+    "amount": "999999999.999",
+    "currency": "KWD",
+    "decimals": 3,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "expected": {
+      "a": "250000000.000",
+      "b": "250000000.000",
+      "c": "250000000.000",
+      "d": "249999999.999"
+    }
+  },
+  {
+    "name": "dollars",
+    "amount": "33.33",
+    "currency": "USD",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e"
+    ],
+    "expected": {
+      "a": "6.67",
+      "b": "6.67",
+      "c": "6.67",
+      "d": "6.66",
+      "e": "6.66"
+    }
+  },
+  {
+    "name": "large split among four",
+    "amount": "1234567.89",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "expected": {
+      "a": "308641.98",
+      "b": "308641.97",
+      "c": "308641.97",
+      "d": "308641.97"
+    }
+  },
+  {
+    "name": "two decimals typed with one",
+    "amount": "10.5",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "a",
+      "b",
+      "c",
+      "d"
+    ],
+    "expected": {
+      "a": "2.63",
+      "b": "2.63",
+      "c": "2.62",
+      "d": "2.62"
+    }
+  },
+  {
+    "name": "selection at the end of the order",
+    "amount": "7.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "accountOrder": [
+      "a",
+      "b",
+      "c",
+      "d",
+      "e",
+      "f"
+    ],
+    "selected": [
+      "e",
+      "f"
+    ],
+    "expected": {
+      "e": "3.50",
+      "f": "3.50"
+    }
+  }
+]

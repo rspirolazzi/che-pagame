@@ -43,6 +43,8 @@ class SettlementResponse(CamelModel):
     amount: str
     currency: str
     is_excluded: bool
+    # The participant linked to whoever recorded it; null once nobody is linked (feature 012).
+    recorded_by: ParticipantRef | None = None
     created_at: datetime
 
 

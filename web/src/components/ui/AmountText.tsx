@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from "next-intl";
 
 import { absAmount, amountSign } from "@/lib/balanceTotals";
-import { formatMoney } from "@/lib/money";
+import { formatCompactMoney, formatMoney } from "@/lib/money";
 
 import { Icon } from "./Icon";
 
@@ -31,23 +31,28 @@ export function AmountText({
   const t = useTranslations();
   const locale = useLocale();
   const sign = amountSign(amount);
-  const money = formatMoney(absAmount(amount), currency, decimals, locale);
-  let text = money;
-  if (subject === "me") {
-    text =
-      sign > 0
+  const exact = formatMoney(absAmount(amount), currency, decimals, locale);
+  // Large amounts read "2,3 M" (feature 016); the exact one stays in the accessible name.
+  const compact = formatCompactMoney(absAmount(amount), currency, decimals, locale);
+  function sentence(money: string): string {
+    if (subject === "me") {
+      return sign > 0
         ? t("balances.owedToYou", { amount: money })
         : sign < 0
           ? t("balances.youOwe", { amount: money })
           : t("balances.youSettled");
-  } else if (subject === "other") {
-    text =
-      sign > 0
+    }
+    if (subject === "other") {
+      return sign > 0
         ? t("balances.owed", { amount: money })
         : sign < 0
           ? t("balances.owes", { amount: money })
           : t("balances.settled");
+    }
+    return money;
   }
+  const text = sentence(compact);
+  const exactText = compact === exact ? undefined : sentence(exact);
   const tone = sign > 0 ? "amount-positive" : sign < 0 ? "amount-negative" : "amount-neutral";
   const label = sign > 0 ? t("a11y.owed") : sign < 0 ? t("a11y.owes") : t("a11y.settled");
   return (
@@ -55,7 +60,9 @@ export function AmountText({
       <span className="amount-badge" role="img" aria-label={label}>
         {sign === 0 ? <Icon name="check" size="0.8em" /> : sign > 0 ? "+" : "−"}
       </span>
-      <span className="amount-text">{text}</span>
+      <span className="amount-text" title={exactText} aria-label={exactText}>
+        {text}
+      </span>
     </span>
   );
 }

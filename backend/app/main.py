@@ -11,10 +11,13 @@ from app.api.v1 import (
     accounts,
     auth,
     balances,
+    contact,
     expenses,
     exports,
     health,
     invitations,
+    movements,
+    public_config,
     settlements,
     users,
 )
@@ -96,8 +99,11 @@ def create_app() -> FastAPI:
     api.include_router(expenses.router)
     api.include_router(balances.router)
     api.include_router(settlements.router)
+    api.include_router(movements.router)
     api.include_router(exports.router)
     api.include_router(invitations.router)
+    api.include_router(contact.router)
+    api.include_router(public_config.router)
     app.include_router(api)
     return app
 

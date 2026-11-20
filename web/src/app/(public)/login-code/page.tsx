@@ -1,6 +1,10 @@
 import { getTranslations } from "next-intl/server";
 
 import { CodeSignInFlow } from "@/components/CodeSignInFlow";
+import type { Metadata } from "next";
+import { NOINDEX } from "@/lib/seo";
+
+export const metadata: Metadata = { robots: NOINDEX };
 
 interface LoginCodePageProps {
   searchParams: Promise<{ callbackUrl?: string }>;

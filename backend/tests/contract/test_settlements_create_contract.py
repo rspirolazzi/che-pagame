@@ -13,6 +13,7 @@ SETTLEMENT_FIELDS = {
     "amount",
     "currency",
     "isExcluded",
+    "recordedBy",
     "createdAt",
 }
 

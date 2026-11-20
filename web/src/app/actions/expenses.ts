@@ -8,6 +8,7 @@ import type {
   CategoryIcon,
   ExpensePage,
   ExpenseResponse,
+  MovementPage,
   ParticipantImpact,
 } from "@/lib/api/types";
 import { getAccessToken } from "@/lib/session";
@@ -84,6 +85,19 @@ export async function loadMoreExpensesAction(
 ): Promise<ActionResult<ExpensePage>> {
   return run(() =>
     call<ExpensePage>(`${expenses(accountId)}?cursor=${encodeURIComponent(cursor)}`, "GET"),
+  );
+}
+
+/** Next page of expenses and settlements together (feature 012). */
+export async function loadMoreMovementsAction(
+  accountId: string,
+  cursor: string,
+): Promise<ActionResult<MovementPage>> {
+  return run(() =>
+    call<MovementPage>(
+      `/accounts/${encodeURIComponent(accountId)}/movements?cursor=${encodeURIComponent(cursor)}`,
+      "GET",
+    ),
   );
 }
 

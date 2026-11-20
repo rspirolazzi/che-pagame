@@ -19,7 +19,7 @@
 
 - `< 10.000` → `formatMoney` exacto (como hoy).
 - `10.000 ≤ x < 999.950` → K ("999,9 K"); `999.950` redondea a 1.000,0 K → se muestra "1 M".
-- `≥ 1.000.000` → M; por encima de 999 M sigue en M con separador de miles ("1.250 M").
+- `≥ 1.000.000` → M; por encima de 999 M sigue en M ("1250 M", sin separador de miles: así agrupa el español los números de 4 cifras).
 - Negativos: se abrevia el valor absoluto y el signo lo pone quien ya lo pone hoy (`AmountText`).
 - Monedas con 0 o 3 decimales: el cálculo usa sus decimales; el umbral es sobre unidades mayores.
 

@@ -6,20 +6,21 @@ import { ActivityIndicator, FAB, Text, useTheme } from "react-native-paper";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AccountHeader } from "../../components/accounts/AccountHeader";
-import { ExpenseListItem } from "../../components/expenses/ExpenseBits";
+import { ExpenseListItem, IncomeListItem } from "../../components/expenses/ExpenseBits";
 import { ErrorText } from "../../components/FormBits";
+import { Money } from "../../components/Money";
 import { StatusNotice } from "../../components/StatusNotice";
 import { accountsApi } from "../../services/api/accounts";
-import { expensesApi } from "../../services/api/expenses";
+import { movementsApi } from "../../services/api/movements";
+import { type AccountResponse, type ApiErrorCode, errorCodeOf } from "../../services/api/types";
 import {
-  type AccountResponse,
-  type ApiErrorCode,
-  errorCodeOf,
-  type ExpenseListItem as Item,
-} from "../../services/api/types";
-import { formatDay, groupByDay, mergePages } from "../../utils/expenseGroups";
+  formatDay,
+  groupByDay,
+  mergePages,
+  type MovementEntry,
+  toEntries,
+} from "../../utils/expenseGroups";
 import type { AppTheme } from "../../theme";
-import { formatMoney } from "../../utils/money";
 
 const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
 
@@ -36,7 +37,8 @@ export default function AccountExpensesScreen() {
   const { spacing, radius } = theme.custom;
   const { accountId } = useLocalSearchParams<{ accountId: string }>();
   const [account, setAccount] = useState<AccountResponse | null>(null);
-  const [items, setItems] = useState<Item[]>([]);
+  const [items, setItems] = useState<MovementEntry[]>([]);
+  const [fabOpen, setFabOpen] = useState(false);
   const [cursor, setCursor] = useState<string | null>(null);
   const [total, setTotal] = useState("0");
   const [count, setCount] = useState(0);
@@ -50,10 +52,10 @@ export default function AccountExpensesScreen() {
     try {
       const [nextAccount, page] = await Promise.all([
         accountsApi.get(accountId),
-        expensesApi.list(accountId),
+        movementsApi.list(accountId),
       ]);
       setAccount(nextAccount);
-      setItems(page.items);
+      setItems(toEntries(page.items));
       setCursor(page.nextCursor);
       setTotal(page.total ?? "0");
       setCount(page.count ?? 0);
@@ -81,8 +83,8 @@ export default function AccountExpensesScreen() {
     loadingMoreRef.current = true;
     setLoadingMore(true);
     try {
-      const page = await expensesApi.list(accountId, cursor);
-      setItems((current) => mergePages(current, page.items));
+      const page = await movementsApi.list(accountId, cursor);
+      setItems((current) => mergePages(current, toEntries(page.items)));
       setCursor(page.nextCursor);
     } catch (err) {
       setError(errorCodeOf(err));
@@ -104,7 +106,9 @@ export default function AccountExpensesScreen() {
     title: capitalize(formatDay(group.date, locale)),
     data: group.items,
   }));
-  const pending = items.filter((item) => item.isPending).length;
+  const pending = items.filter(
+    ({ movement }) => movement.kind === "expense" && movement.expense.isPending,
+  ).length;
 
   return (
     <View style={styles.flex}>
@@ -131,9 +135,13 @@ export default function AccountExpensesScreen() {
               <Text variant="labelLarge" style={{ color: theme.colors.onSurfaceVariant }}>
                 {t("expenses.total")}
               </Text>
-              <Text style={theme.custom.amountLarge}>
-                {formatMoney(total, account.currency, account.currencyDecimals, locale)}
-              </Text>
+              <Money
+                style={theme.custom.amountLarge}
+                amount={total}
+                currency={account.currency}
+                decimals={account.currencyDecimals}
+                locale={locale}
+              />
               <Text variant="bodySmall" style={{ color: theme.colors.onSurfaceVariant }}>
                 {t("expenses.count", { count })}
               </Text>
@@ -176,17 +184,38 @@ export default function AccountExpensesScreen() {
               overflow: "hidden",
             }}
           >
-            <ExpenseListItem
-              account={account}
-              item={item}
-              locale={locale}
-              onPress={() =>
-                router.push({
-                  pathname: "/accounts/[accountId]/expenses/[expenseId]",
-                  params: { accountId: account.id, expenseId: item.id },
-                })
-              }
-            />
+            {item.movement.kind === "expense" ? (
+              <ExpenseListItem
+                account={account}
+                item={item.movement.expense}
+                locale={locale}
+                onPress={() =>
+                  router.push({
+                    pathname: "/accounts/[accountId]/expenses/[expenseId]",
+                    params: {
+                      accountId: account.id,
+                      expenseId: item.movement.kind === "expense" ? item.movement.expense.id : "",
+                    },
+                  })
+                }
+              />
+            ) : (
+              <IncomeListItem
+                account={account}
+                settlement={item.movement.settlement}
+                locale={locale}
+                onPress={() =>
+                  router.push({
+                    pathname: "/accounts/[accountId]/settlements/[settlementId]",
+                    params: {
+                      accountId: account.id,
+                      settlementId:
+                        item.movement.kind === "settlement" ? item.movement.settlement.id : "",
+                    },
+                  })
+                }
+              />
+            )}
           </View>
         )}
         ListEmptyComponent={
@@ -197,16 +226,36 @@ export default function AccountExpensesScreen() {
         ListFooterComponent={loadingMore ? <ActivityIndicator /> : null}
       />
       {!account.isClosed && (
-        <FAB
-          icon="plus"
-          label={t("expenses.new")}
-          style={[styles.fab, { right: spacing.lg, bottom: spacing.lg }]}
-          onPress={() =>
-            router.push({
-              pathname: "/accounts/[accountId]/new-expense",
-              params: { accountId: account.id },
-            })
-          }
+        // "+" offers an expense or an income (a settlement, feature 012).
+        <FAB.Group
+          open={fabOpen}
+          visible
+          icon={fabOpen ? "close" : "plus"}
+          label={fabOpen ? undefined : t("expenses.add.label")}
+          accessibilityLabel={t("expenses.add.label")}
+          onStateChange={({ open }) => setFabOpen(open)}
+          actions={[
+            {
+              icon: "receipt-text-outline",
+              label: t("expenses.add.expense"),
+              accessibilityLabel: t("expenses.add.expense"),
+              onPress: () =>
+                router.push({
+                  pathname: "/accounts/[accountId]/new-expense",
+                  params: { accountId: account.id },
+                }),
+            },
+            {
+              icon: "swap-horizontal",
+              label: t("expenses.add.income"),
+              accessibilityLabel: t("expenses.add.income"),
+              onPress: () =>
+                router.push({
+                  pathname: "/accounts/[accountId]/settlements/new",
+                  params: { accountId: account.id, from: "list" },
+                }),
+            },
+          ]}
         />
       )}
     </View>

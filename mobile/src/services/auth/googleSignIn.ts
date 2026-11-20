@@ -7,6 +7,7 @@ import {
 } from "@react-native-google-signin/google-signin";
 
 import { authApi } from "../api/auth";
+import { getDevicePreferences } from "../devicePreferences";
 import { ApiError, type AuthResponse } from "../api/types";
 
 let configured = false;
@@ -30,7 +31,7 @@ export async function signInWithGoogle(): Promise<GoogleSignInResult> {
     if (!isSuccessResponse(response) || !response.data.idToken) {
       throw new ApiError(401, "invalid_google_token");
     }
-    const auth = await authApi.loginWithGoogle(response.data.idToken);
+    const auth = await authApi.loginWithGoogle(response.data.idToken, getDevicePreferences());
     return { cancelled: false, auth };
   } catch (error) {
     if (isErrorWithCode(error) && error.code === statusCodes.SIGN_IN_CANCELLED) {

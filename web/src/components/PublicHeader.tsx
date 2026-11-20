@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { CompactMenu } from "./CompactMenu";
+import { PreferenceControls } from "./PreferenceControls";
 import { Logo } from "./ui/Logo";
 
 const LINKS = [
@@ -32,6 +33,7 @@ export function PublicHeader() {
       >
         {t("loginRegister")}
       </Link>
+      <PreferenceControls />
     </>
   );
   return (

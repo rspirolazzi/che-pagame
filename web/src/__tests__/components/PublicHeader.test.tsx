@@ -5,7 +5,14 @@ import { SkipLink } from "@/components/SkipLink";
 
 import { renderWithIntl } from "../support/render";
 
-jest.mock("next/navigation", () => ({ usePathname: () => "/how-it-works" }));
+jest.mock("next/navigation", () => ({
+  usePathname: () => "/how-it-works",
+  useRouter: () => ({ refresh: jest.fn() }),
+}));
+jest.mock("@/app/actions/preferences", () => ({
+  setLanguageAction: jest.fn(),
+  setThemeAction: jest.fn(),
+}));
 
 it("shows the public navigation without a session (constitution v4.6.0)", () => {
   renderWithIntl(<PublicHeader />);

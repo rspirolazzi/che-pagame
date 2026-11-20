@@ -6,7 +6,14 @@ import { SideNav } from "@/components/SideNav";
 import { renderWithIntl } from "../support/render";
 
 jest.mock("@/app/actions/auth", () => ({ signOutAction: jest.fn() }));
-jest.mock("next/navigation", () => ({ usePathname: () => "/accounts/a1/balances" }));
+jest.mock("next/navigation", () => ({
+  usePathname: () => "/accounts/a1/balances",
+  useRouter: () => ({ refresh: jest.fn() }),
+}));
+jest.mock("@/app/actions/preferences", () => ({
+  setLanguageAction: jest.fn(),
+  setThemeAction: jest.fn(),
+}));
 
 // Replaces the signed-in user menu checks of the old header (spec Clarifications, R13).
 it("shows Inicio, Cuentas and Perfil with their destinations (FR-005a)", () => {

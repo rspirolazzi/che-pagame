@@ -97,3 +97,9 @@ jest.mock("expo-file-system", () => {
   }
   return { __files: files, Directory, File, Paths: { cache: new Directory("file:///cache") } };
 });
+
+// The WebView is native; tests only need a placeholder (feature 017, TurnstileGate).
+jest.mock("react-native-webview", () => {
+  const { View } = jest.requireActual("react-native");
+  return { WebView: View };
+});

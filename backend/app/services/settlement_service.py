@@ -22,6 +22,8 @@ from app.services import audit_service
 from app.services.account_permissions import (
     active_participants,
     my_participant,
+    participant_display_name,
+    participant_names,
     require_member,
     require_open,
 )
@@ -33,9 +35,20 @@ AUDITED_FIELDS = ("date", "fromParticipantId", "toParticipantId", "amountMinor",
 # --- Views ----------------------------------------------------------------------------------------
 
 
+def _recorded_by(doc: dict[str, Any], account: dict[str, Any]) -> ParticipantRef | None:
+    """The participant linked to the user who recorded it, if there still is one."""
+    creator = doc.get("createdBy")
+    linked = next(
+        (p for p in account["participants"] if creator and p.get("userId") == creator), None
+    )
+    if linked is None:
+        return None
+    return ParticipantRef(id=linked["id"], name=participant_display_name(linked))
+
+
 def to_settlement_response(doc: dict[str, Any], account: dict[str, Any]) -> SettlementResponse:
     """Names come from every participant, removed ones included, so history keeps them."""
-    names = {p["id"]: p["name"] for p in account["participants"]}
+    names = participant_names(account)
     active = {p["id"] for p in active_participants(account)}
     from_id, to_id = doc["fromParticipantId"], doc["toParticipantId"]
     return SettlementResponse(
@@ -47,6 +60,7 @@ def to_settlement_response(doc: dict[str, Any], account: dict[str, Any]) -> Sett
         amount=format_amount(doc["amountMinor"], doc["currency"]),
         currency=doc["currency"],
         is_excluded=from_id not in active or to_id not in active,
+        recorded_by=_recorded_by(doc, account),
         created_at=doc["createdAt"],
     )
 
@@ -169,6 +183,17 @@ async def list_settlements(
         items=[to_settlement_response(doc, account) for doc in docs],
         next_cursor=encode_cursor(docs[-1]) if has_more and docs else None,
     )
+
+
+async def get_settlement(
+    account_id: str, settlement_id: str, user_id: ObjectId
+) -> SettlementResponse:
+    """One active settlement; 404 when it does not exist or was deleted (feature 012)."""
+    account = await require_member(account_id, user_id)
+    doc = await settlements.find_active(account["_id"], settlement_id)
+    if doc is None:
+        raise AppError(404, errors.NOT_FOUND)
+    return to_settlement_response(doc, account)
 
 
 # --- Delete ---------------------------------------------------------------------------------------

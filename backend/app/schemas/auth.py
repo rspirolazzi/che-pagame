@@ -4,7 +4,7 @@ from pydantic import EmailStr, Field, field_validator
 
 from app.core.security import PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH
 from app.schemas.common import CamelModel
-from app.schemas.user import LanguageCode, PersonName, UserResponse
+from app.schemas.user import LanguageCode, PersonName, ThemeName, UserResponse
 
 CODE_PATTERN = r"^\d{6}$"
 
@@ -45,6 +45,10 @@ class RegisterRequest(CamelModel):
     first_name: PersonName = None
     last_name: PersonName = None
     language: LanguageCode = "es"
+    # The theme chosen on the device before signing up (feature 014).
+    theme: ThemeName = "system"
+    # Cloudflare Turnstile token, required in production (feature 017).
+    turnstile_token: str | None = Field(default=None, max_length=2048)
 
 
 class EmailRequest(CamelModel):
@@ -74,6 +78,9 @@ class LoginRequest(CamelModel):
 
 class GoogleLoginRequest(CamelModel):
     id_token: str = Field(min_length=1, max_length=8192)
+    # Only used when this sign-in creates the account (feature 014).
+    language: LanguageCode | None = None
+    theme: ThemeName | None = None
 
 
 class PasswordResetConfirmRequest(_CodeMixin):

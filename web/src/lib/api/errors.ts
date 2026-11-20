@@ -22,6 +22,8 @@ export type ApiErrorCode =
   | "participant_taken"
   | "expense_conflict"
   | "invalid_participant"
+  | "bot_check_failed"
+  | "contact_unavailable"
   | "network_error"
   | "internal_error";
 

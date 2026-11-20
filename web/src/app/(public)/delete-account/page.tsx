@@ -3,10 +3,10 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
 import { DeletionSummary } from "@/components/DeleteAccountFlow";
+import { pageMetadata } from "@/lib/seo";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("deleteAccountPage");
-  return { title: t("metaTitle"), description: t("metaDescription") };
+export function generateMetadata(): Promise<Metadata> {
+  return pageMetadata("deleteAccount");
 }
 
 /**

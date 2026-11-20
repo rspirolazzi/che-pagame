@@ -1,0 +1,142 @@
+[
+  {
+    "amount": "9999.99",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "9999,99 ARS"
+  },
+  {
+    "amount": "10000.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "10 K ARS"
+  },
+  {
+    "amount": "25500.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "25,5 K ARS"
+  },
+  {
+    "amount": "999949.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "999,9 K ARS"
+  },
+  {
+    "amount": "999950.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "1 M ARS"
+  },
+  {
+    "amount": "1000000.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "1 M ARS"
+  },
+  {
+    "amount": "1234567.89",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "1,2 M ARS"
+  },
+  {
+    "amount": "10000000.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "10 M ARS"
+  },
+  {
+    "amount": "999999999.99",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "1000 M ARS"
+  },
+  {
+    "amount": "1250000000.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "1250 M ARS"
+  },
+  {
+    "amount": "-2300000.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "-2,3 M ARS"
+  },
+  {
+    "amount": "25500",
+    "currency": "CLP",
+    "decimals": 0,
+    "locale": "es",
+    "expected": "25,5 K CLP"
+  },
+  {
+    "amount": "12345.678",
+    "currency": "KWD",
+    "decimals": 3,
+    "locale": "es",
+    "expected": "12,3 K KWD"
+  },
+  {
+    "amount": "25500.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "en",
+    "expected": "ARS 25.5K"
+  },
+  {
+    "amount": "10000000.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "en",
+    "expected": "ARS 10M"
+  },
+  {
+    "amount": "1250000000.00",
+    "currency": "USD",
+    "decimals": 2,
+    "locale": "en",
+    "expected": "$1,250M"
+  },
+  {
+    "amount": "950.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "950,00 ARS"
+  },
+  {
+    "amount": "10050.00",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "10,1 K ARS"
+  },
+  {
+    "amount": "10049.99",
+    "currency": "ARS",
+    "decimals": 2,
+    "locale": "es",
+    "expected": "10 K ARS"
+  },
+  {
+    "amount": "-25500.00",
+    "currency": "USD",
+    "decimals": 2,
+    "locale": "en",
+    "expected": "-$25.5K"
+  }
+]

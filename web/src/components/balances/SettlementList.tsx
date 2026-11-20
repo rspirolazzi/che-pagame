@@ -10,7 +10,7 @@ import { ErrorMessage } from "@/components/FormMessage";
 import type { ApiErrorCode } from "@/lib/api/errors";
 import type { AccountResponse, SettlementPage, SettlementResponse } from "@/lib/api/types";
 import { formatDay } from "@/lib/expenseGroups";
-import { formatMoney } from "@/lib/money";
+import { Money } from "@/components/ui/Money";
 
 import { StatusNotice } from "../ui/StatusNotice";
 
@@ -102,7 +102,11 @@ export function SettlementList({ account, firstPage }: SettlementListProps) {
               </span>
               <span className="row">
                 <strong className="amount-figure">
-                  {formatMoney(item.amount, account.currency, account.currencyDecimals, locale)}
+                  <Money
+                    amount={item.amount}
+                    currency={account.currency}
+                    decimals={account.currencyDecimals}
+                  />
                 </strong>
                 {!account.isClosed && (
                   <button type="button" className="danger-text" onClick={() => setToDelete(item)}>

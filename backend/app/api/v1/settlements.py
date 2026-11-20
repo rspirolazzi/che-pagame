@@ -37,6 +37,13 @@ async def create_settlement(
     return await settlement_service.create_settlement(account_id, user_id, body, client)
 
 
+@router.get("/{settlement_id}", response_model=SettlementResponse, responses=_errors)
+async def get_settlement(
+    account_id: str, settlement_id: str, user_id: CurrentUserId
+) -> SettlementResponse:
+    return await settlement_service.get_settlement(account_id, settlement_id, user_id)
+
+
 @router.delete(
     "/{settlement_id}",
     status_code=status.HTTP_204_NO_CONTENT,

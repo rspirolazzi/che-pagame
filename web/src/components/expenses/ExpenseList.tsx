@@ -5,25 +5,26 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
 
-import { loadMoreExpensesAction } from "@/app/actions/expenses";
+import { loadMoreMovementsAction } from "@/app/actions/expenses";
 import { ErrorMessage } from "@/components/FormMessage";
 import type { ApiErrorCode } from "@/lib/api/errors";
-import type { AccountResponse, ExpenseListItem as Item, ExpensePage } from "@/lib/api/types";
-import { formatDay, groupByDay, mergePages } from "@/lib/expenseGroups";
-import { formatMoney } from "@/lib/money";
+import type { AccountResponse, ExpenseListItem as Item, MovementPage } from "@/lib/api/types";
+import { formatDay, groupByDay, mergePages, toEntries } from "@/lib/expenseGroups";
+import { Money } from "@/components/ui/Money";
 
 import { CategoryIcon } from "./CategoryIcon";
+import { IncomeRow } from "./IncomeRow";
 
 interface ExpenseListProps {
   account: AccountResponse;
-  firstPage: ExpensePage;
+  /** Expenses and settlements together (feature 012). */
+  firstPage: MovementPage;
   /** False when the page shows ExpenseSummary in the side column. */
   showSummary?: boolean;
 }
 
 export function ExpenseListItem({ account, item }: { account: AccountResponse; item: Item }) {
   const t = useTranslations("expenses");
-  const locale = useLocale();
   return (
     <li>
       <Link href={`/accounts/${account.id}/expenses/${item.id}`} className="expense-row">
@@ -36,7 +37,11 @@ export function ExpenseListItem({ account, item }: { account: AccountResponse; i
           </small>
         </span>
         <strong>
-          {formatMoney(item.amount, account.currency, account.currencyDecimals, locale)}
+          <Money
+            amount={item.amount}
+            currency={account.currency}
+            decimals={account.currencyDecimals}
+          />
         </strong>
       </Link>
     </li>
@@ -50,7 +55,6 @@ export function ExpenseListItem({ account, item }: { account: AccountResponse; i
 /** "Total gastado", the count and "Actualizar" (in the side column on desktop, FR-013a). */
 export function ExpenseSummary({ account, firstPage }: ExpenseListProps) {
   const t = useTranslations("expenses");
-  const locale = useLocale();
   const router = useRouter();
   const total = firstPage.total ?? "0";
   return (
@@ -58,7 +62,7 @@ export function ExpenseSummary({ account, firstPage }: ExpenseListProps) {
       <div>
         <small>{t("total")}</small>
         <p className="expense-total">
-          {formatMoney(total, account.currency, account.currencyDecimals, locale)}
+          <Money amount={total} currency={account.currency} decimals={account.currencyDecimals} />
         </p>
         <small>{t("count", { count: firstPage.count ?? 0 })}</small>
       </div>
@@ -72,7 +76,7 @@ export function ExpenseSummary({ account, firstPage }: ExpenseListProps) {
 export function ExpenseList({ account, firstPage, showSummary = true }: ExpenseListProps) {
   const t = useTranslations("expenses");
   const locale = useLocale();
-  const [items, setItems] = useState(firstPage.items);
+  const [items, setItems] = useState(() => toEntries(firstPage.items));
   const [cursor, setCursor] = useState(firstPage.nextCursor);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<ApiErrorCode | null>(null);
@@ -84,14 +88,14 @@ export function ExpenseList({ account, firstPage, showSummary = true }: ExpenseL
     loadingRef.current = true;
     setLoading(true);
     setError(null);
-    const result = await loadMoreExpensesAction(account.id, cursor);
+    const result = await loadMoreMovementsAction(account.id, cursor);
     loadingRef.current = false;
     setLoading(false);
     if (!result.ok) {
       setError(result.code);
       return;
     }
-    setItems((current) => mergePages(current, result.data.items));
+    setItems((current) => mergePages(current, toEntries(result.data.items)));
     setCursor(result.data.nextCursor);
   }
 
@@ -119,9 +123,13 @@ export function ExpenseList({ account, firstPage, showSummary = true }: ExpenseL
           <section key={group.date} aria-label={formatDay(group.date, locale)}>
             <h2 className="day-heading">{formatDay(group.date, locale)}</h2>
             <ul className="expense-list card">
-              {group.items.map((item) => (
-                <ExpenseListItem key={item.id} account={account} item={item} />
-              ))}
+              {group.items.map(({ id, movement }) =>
+                movement.kind === "expense" ? (
+                  <ExpenseListItem key={id} account={account} item={movement.expense} />
+                ) : (
+                  <IncomeRow key={id} account={account} settlement={movement.settlement} />
+                ),
+              )}
             </ul>
           </section>
         ))

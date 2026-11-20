@@ -36,7 +36,8 @@
     "rights": "ChePagame. So money is never a problem.",
     "privacy": "Privacy",
     "terms": "Terms",
-    "deleteAccount": "Delete my account"
+    "deleteAccount": "Delete my account",
+    "faq": "FAQ"
   },
   "home": {
     "title": "So money is never a problem",
@@ -61,15 +62,37 @@
     "preview": {
       "label": "Example",
       "title": "Bariloche holidays"
-    }
+    },
+    "faq": "FAQ"
   },
   "pages": {
     "howItWorks": {
-      "title": "How it works",
+      "title": "How to split group expenses with ChePagame",
       "intro": "Four steps so nobody has to do the math.",
+      "stepsTitle": "Step by step",
+      "usesTitle": "What people use it for",
+      "uses": {
+        "trip": {
+          "title": "Group trips",
+          "body": "Fuel, lodging and tours: everyone adds what they paid and back home you know who owes whom."
+        },
+        "bbq": {
+          "title": "The weekend barbecue",
+          "body": "Different people pay for the meat, the charcoal and the drinks; ChePagame works out each share."
+        },
+        "flat": {
+          "title": "Shared flat",
+          "body": "Rent, fees and bills split among flatmates, with clear accounts every month."
+        },
+        "couple": {
+          "title": "Couples",
+          "body": "Split groceries or nights out without keeping score in your head."
+        }
+      },
+      "faqLink": "Still have questions? Check the FAQ",
       "steps": {
         "create": {
-          "title": "Create an account and invite",
+          "title": "Create an Account and invite",
           "body": "Name it, choose the currency and share the link with the group."
         },
         "add": {
@@ -82,23 +105,124 @@
         },
         "settle": {
           "title": "Settle up",
-          "body": "Record the settlements when they are paid and everyone is even."
+          "body": "Record the payments when they happen and everyone is even."
         }
       }
     },
     "about": {
       "title": "About us",
-      "body": "ChePagame was born to make splitting expenses among friends, family or housemates simple and transparent. Every expense is recorded, balances are calculated exactly in each account's currency and your data is yours: no ads, and you can export it whenever you want.",
+      "whatTitle": "What ChePagame is",
+      "body": "ChePagame is a free app to split expenses among friends, family, couples or flatmates. Every expense is recorded, balances are calculated exactly in each Account's currency and you always know who owes whom.",
+      "whyTitle": "Why it exists",
+      "why": "Because splitting costs shouldn't end in an argument. It was born in Argentina to make paying your share simple and transparent, without spreadsheets or math on napkins.",
+      "privacyTitle": "Your data is yours",
+      "privacy": "No ads and no data sales. You can export everything whenever you want and delete your account at any time.",
       "version": "Version {version}",
       "versionBuild": "Version {version} · build {build}"
     },
     "contact": {
       "title": "Contact",
-      "intro": "Do you have a question or an idea? Write to us.",
+      "intro": "Have a question, found a bug or have an idea? Write to us.",
+      "faq": "For common questions about splitting expenses, check the FAQ first.",
       "copy": "Copy",
       "copied": "Copied.",
       "write": "Write to us",
-      "unavailable": "Soon you will be able to write to us from here."
+      "unavailable": "Soon you'll be able to write to us from here."
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "intro": "Short answers on splitting expenses and keeping accounts clear with ChePagame.",
+      "groups": {
+        "basics": {
+          "title": "The basics",
+          "items": {
+            "what": {
+              "q": "What is ChePagame?",
+              "a": "An app to split group expenses. Everyone adds what they paid and ChePagame works out who owes whom, to the cent."
+            },
+            "free": {
+              "q": "Is it free?",
+              "a": "Yes. ChePagame is free and has no ads."
+            },
+            "app": {
+              "q": "Is there a mobile app?",
+              "a": "We are preparing the Android app. Meanwhile, the Web works in your phone's browser and you can add it to your home screen."
+            }
+          }
+        },
+        "accounts": {
+          "title": "Shared accounts",
+          "items": {
+            "create": {
+              "q": "How do I create a shared account?",
+              "a": "Go to Accounts, tap New Account, give it a name (for example, Trip to Bariloche), choose the currency and add the participants."
+            },
+            "invite": {
+              "q": "How do I invite the group?",
+              "a": "From the Account, share the invitation link on WhatsApp or anywhere. Whoever opens it joins and picks which participant they are."
+            },
+            "currency": {
+              "q": "Which currency are expenses in?",
+              "a": "Each Account has its own currency, chosen when you create it. All its expenses and balances use that currency."
+            }
+          }
+        },
+        "expenses": {
+          "title": "Expenses",
+          "items": {
+            "split": {
+              "q": "How is an expense split?",
+              "a": "You choose who paid, the amount and who shares it. The amount is split equally among the chosen people."
+            },
+            "cents": {
+              "q": "What happens to leftover cents?",
+              "a": "If the amount doesn't split evenly, the extra cent goes to one person following the Account's order, so the shares always add up to the total."
+            },
+            "who": {
+              "q": "Who can add expenses?",
+              "a": "Any member of the Account. Every change is recorded with who made it and when."
+            }
+          }
+        },
+        "balances": {
+          "title": "Balances and payments",
+          "items": {
+            "owes": {
+              "q": "How do I know who owes whom?",
+              "a": "Balances shows how much each person is owed or owes, and ChePagame suggests the fewest payments to settle everyone."
+            },
+            "settle": {
+              "q": "What is a payment between members?",
+              "a": "When someone pays money back to another member. Recording it updates the balances and lowers the debt."
+            },
+            "income": {
+              "q": "How do I record that someone paid me back?",
+              "a": "In the Account's expense list tap Income, choose who paid and how much. It lowers the debt between you and also shows in Balances."
+            },
+            "close": {
+              "q": "Can I close an Account when the trip is over?",
+              "a": "Yes. The Owner can close it: it becomes read-only and its expenses and balances stay visible."
+            }
+          }
+        },
+        "privacy": {
+          "title": "Privacy and data",
+          "items": {
+            "data": {
+              "q": "What data do you keep?",
+              "a": "Your email, your name if you add it, your preferences and what you add to your Accounts. We don't sell data or show ads."
+            },
+            "export": {
+              "q": "Can I export my data?",
+              "a": "Yes. From your Profile or from each Account you can download your data as CSV or JSON."
+            },
+            "delete": {
+              "q": "How do I delete my account?",
+              "a": "From Profile, in Delete my account. You confirm with a code sent to your email and your personal data is deleted."
+            }
+          }
+        }
+      }
     }
   },
   "auth": {
@@ -189,7 +313,9 @@
     "already_member": "You are already a member of this account.",
     "participant_taken": "That participant is no longer available. Choose another one.",
     "expense_conflict": "Another member changed this expense while you were editing it.",
-    "invalid_participant": "The payer and the participants must be active participants of the account."
+    "invalid_participant": "The payer and the participants must be active participants of the account.",
+    "bot_check_failed": "We couldn't verify that you're not a robot. Try again.",
+    "contact_unavailable": "We couldn't send your message. Try again in a while."
   },
   "onboarding": {
     "title": "Choose your currency",
@@ -367,7 +493,8 @@
       "description": "Description (optional)",
       "save": "Save expense",
       "saving": "Saving…",
-      "choosePayer": "Choose who paid"
+      "choosePayer": "Choose who paid",
+      "notSharing": "Not sharing"
     },
     "validation": {
       "titleRequired": "Enter a title of 1 to 80 characters.",
@@ -410,6 +537,16 @@
       "party": "Party",
       "shopping": "Shopping",
       "sports": "Sports"
+    },
+    "add": {
+      "label": "Add",
+      "expense": "Expense",
+      "income": "Income"
+    },
+    "income": {
+      "label": "Income",
+      "row": "{from} paid {to}",
+      "a11y": "Income: {from} paid {to}, {amount}"
     }
   },
   "history": {
@@ -491,6 +628,16 @@
       "toRequired": "Choose who received.",
       "sameParticipant": "The payer and the receiver must be different.",
       "dateRequired": "Choose a date."
+    },
+    "incomeTitle": "New income",
+    "incomeHint": "Record that someone paid money back to another member. It lowers the debt between them.",
+    "backToList": "Back to Expenses",
+    "detail": {
+      "title": "Income",
+      "recordedBy": "Recorded by {name} on {date}",
+      "recordedOn": "Recorded on {date}",
+      "noEdit": "Income entries can't be edited: if it's wrong, delete it and add it again.",
+      "gone": "This income no longer exists: another member deleted it."
     }
   },
   "exports": {
@@ -507,7 +654,7 @@
     "mineButton": "Export my data"
   },
   "legal": {
-    "lastUpdated": "Last updated: November 18, 2026.",
+    "lastUpdated": "Last updated: November 20, 2026.",
     "privacy": {
       "title": "Privacy",
       "intro": "This page explains what data ChePagame keeps and what it does with it.",
@@ -539,6 +686,14 @@
         "delete": {
           "title": "Delete your data",
           "body": "You can delete your account at any time from your Profile, under Delete my account, or by following the steps at chepagame.com.ar/delete-account. Your email, your name, your preferences and your sessions are erased. What you added to shared accounts stays for the other members, without your name."
+        },
+        "device": {
+          "title": "Preferences on your device",
+          "body": "We keep the language and theme you choose in your browser or in the App, so the site looks the way you left it even when you are not signed in. They are strictly functional: they identify no one and are never shared with third parties."
+        },
+        "thirdParties": {
+          "title": "Contact and anti-bot check",
+          "body": "If you write to us from the contact form and agree to it, your name, email and message are sent by WhatsApp to the project's maintainer through CallMeBot; we don't store them. Sign-up and the contact form use Cloudflare Turnstile to stop bots: Cloudflare processes technical data from your browser only for that check."
         },
         "questions": {
           "title": "Questions",
@@ -607,8 +762,6 @@
     "done": "Your account was deleted."
   },
   "deleteAccountPage": {
-    "metaTitle": "Delete your ChePagame account",
-    "metaDescription": "How to delete your ChePagame account and which data is erased.",
     "title": "Delete your ChePagame account",
     "intro": "You can delete your account from the web, even if you no longer have the App installed.",
     "stepsTitle": "How to do it",
@@ -617,5 +770,75 @@
     "step3": "Enter the code you get by email. The account is deleted right then.",
     "button": "Delete my account",
     "noAccess": "No longer have access to your email? Write to us from the Contact page."
+  },
+  "seo": {
+    "home": {
+      "title": "ChePagame: split group expenses with friends",
+      "description": "Free app to split expenses with friends, on trips, at a barbecue or in a shared flat. Add expenses and see who owes whom, to the cent."
+    },
+    "howItWorks": {
+      "title": "How to split group expenses",
+      "description": "Create a shared account, add expenses and settle debts. This is how ChePagame works for trips, barbecues, couples and shared flats."
+    },
+    "about": {
+      "title": "About us",
+      "description": "ChePagame is a free Argentine app to split expenses with friends without doing the math. No ads, and your data stays under your control."
+    },
+    "contact": {
+      "title": "Contact",
+      "description": "Have a question or an idea for ChePagame? Write to us. First, check the FAQ on splitting expenses and settling debts."
+    },
+    "faq": {
+      "title": "FAQ about splitting expenses",
+      "description": "Is it free? How is an expense split? Who owes whom? Short answers on splitting costs and keeping accounts clear with ChePagame."
+    },
+    "privacy": {
+      "title": "Privacy policy",
+      "description": "What data ChePagame keeps, what it is used for, how to export it and how to delete your account. No ads and no data sales."
+    },
+    "terms": {
+      "title": "Terms and conditions",
+      "description": "The terms of use of ChePagame, the free app to split group expenses and know who owes whom."
+    },
+    "deleteAccount": {
+      "title": "Delete your account",
+      "description": "How to delete your ChePagame account from the Web or the App, which data is deleted and what is kept for the rest of the group."
+    }
+  },
+  "notFound": {
+    "title": "We couldn't find this page",
+    "body": "The link may be wrong or the page may no longer exist.",
+    "home": "Go to the home page",
+    "faq": "See the FAQ"
+  },
+  "preferences": {
+    "saveFailed": "Applied on this device, but we couldn't save it to your profile.",
+    "open": "Language and theme"
+  },
+  "contact": {
+    "form": {
+      "title": "Write to us",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "remaining": "{count} characters left",
+      "consent": "I agree that my name, email and message are sent by WhatsApp to the project's maintainer through the CallMeBot service.",
+      "send": "Send message",
+      "sending": "Sending…",
+      "sent": "Message sent! We'll answer you by email.",
+      "waitingCheck": "Waiting for the anti-bot check…",
+      "fallback": "You can also write to",
+      "errors": {
+        "nameRequired": "Enter your name.",
+        "emailInvalid": "Enter a valid email.",
+        "messageTooShort": "The message must have at least 10 characters.",
+        "consentRequired": "To send the message, agree to send it by WhatsApp."
+      }
+    }
+  },
+  "botCheck": {
+    "failed": "We couldn't load the anti-bot check.",
+    "retry": "Retry",
+    "disabled": "Check disabled outside production."
   }
 }

@@ -641,3 +641,74 @@ input[type="radio"] {
 .muted {
   color: var(--color-text-muted);
 }
+
+/* Ingreso in the expense list (feature 012): icon, label and text, never color alone. */
+.expense-row > .income-icon {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  flex: none;
+  border-radius: var(--radius-full);
+  border: 1.5px solid var(--color-positive);
+  background: transparent;
+  color: var(--color-positive);
+}
+
+.income-badge {
+  border-color: var(--color-positive);
+  color: var(--color-positive);
+}
+
+.add-movement {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+/* Each person's share in the expense form (feature 013) */
+.share-row {
+  flex-wrap: nowrap;
+}
+
+.share-name {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.share-amount,
+.share-off {
+  margin-left: auto;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.share-off {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Compact amounts (feature 016): the detail shows the exact amount below the compact one. */
+.money-with-exact {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.money-exact {
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* The title wraps before the amount squeezes it letter by letter (FR-009). */
+.detail-header {
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.detail-title {
+  min-width: 12ch;
+  flex: 1;
+  overflow-wrap: break-word;
+}

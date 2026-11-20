@@ -19,7 +19,7 @@
 - **Decision**: `turnstile_service.verify(token, remote_ip=None)`:
   - hace `POST https://challenges.cloudflare.com/turnstile/v0/siteverify` con `secret`,
     `response` y, si existe, `idempotency_key`;
-  - usa `httpx.AsyncClient` con timeout de 5 s;
+  - usa `urllib.request` en `asyncio.to_thread` con timeout de 5 s (en lugar de `httpx`, para no sumar dependencias);
   - si `success` es falso, el token está vacío, ya se usó o hay timeout o error de red, levanta
     `AppError(403, BOT_CHECK_FAILED)`;
   - fuera de producción devuelve `None` sin llamar a Cloudflare.

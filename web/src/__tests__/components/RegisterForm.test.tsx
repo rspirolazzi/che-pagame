@@ -9,6 +9,14 @@ import { renderWithIntl } from "../support/render";
 
 jest.mock("next/navigation", () => ({ useRouter: () => require("../support/mocks").router }));
 jest.mock("@/app/actions/auth", () => ({ registerAction: jest.fn() }));
+jest.mock("next-themes", () => ({ useTheme: () => ({ theme: "dark", resolvedTheme: "dark" }) }));
+jest.mock("@/components/TurnstileWidget", () => ({
+  TurnstileWidget: ({ onToken }: { onToken: (token: string) => void }) => (
+    <button type="button" onClick={() => onToken("token-1")}>
+      check
+    </button>
+  ),
+}));
 
 const registerMock = registerAction as jest.Mock;
 
@@ -53,4 +61,17 @@ it("goes to the verification step without putting the email in the URL", async (
   );
   expect(router.push).toHaveBeenCalledWith("/verify-email");
   expect(window.sessionStorage.getItem("chepagame.pendingEmail")).toBe("ana@mail.com");
+});
+
+it("sends the device theme and, in production, the anti-bot token (features 014 and 017)", async () => {
+  registerMock.mockResolvedValue({ ok: true });
+  renderWithIntl(<RegisterForm siteKey="site-key" />);
+  await userEvent.type(screen.getByLabelText("Email"), "ana@mail.com");
+  await userEvent.type(screen.getByLabelText("Contraseña"), "secret-123");
+  expect(screen.getByRole("button", { name: "Crear cuenta" })).toBeDisabled();
+  await userEvent.click(screen.getByRole("button", { name: "check" }));
+  await userEvent.click(screen.getByRole("button", { name: "Crear cuenta" }));
+  expect(registerMock).toHaveBeenCalledWith(
+    expect.objectContaining({ theme: "dark", turnstileToken: "token-1" }),
+  );
 });

@@ -38,6 +38,14 @@ def resolve_language(accept_language: str | None) -> Language:
 
 
 ERROR_MESSAGES: dict[str, dict[Language, str]] = {
+    errors.BOT_CHECK_FAILED: {
+        "es": "No pudimos verificar que no sos un robot. Reintentá.",
+        "en": "We couldn't verify that you're not a robot. Try again.",
+    },
+    errors.CONTACT_UNAVAILABLE: {
+        "es": "No pudimos enviar tu mensaje. Escribinos por email.",
+        "en": "We couldn't send your message. Please write to us by email.",
+    },
     errors.VALIDATION_ERROR: {
         "es": "Los datos enviados no son válidos.",
         "en": "The submitted data is not valid.",

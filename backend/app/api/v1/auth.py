@@ -94,7 +94,14 @@ async def google_login(
     language: LanguageDep,
     verifier: Annotated[GoogleVerifier, Depends(get_google_verifier)],
 ) -> AuthResponse:
-    return await auth_service.login_with_google(body.id_token, client, language, verifier)
+    # The device's choice wins over Accept-Language when this sign-in creates the account.
+    return await auth_service.login_with_google(
+        body.id_token,
+        client,
+        body.language or language,
+        verifier,
+        theme=body.theme or "system",
+    )
 
 
 @router.post(

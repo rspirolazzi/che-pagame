@@ -16,6 +16,8 @@ class Settings(BaseSettings):
         env_file=(_REPO_ROOT_ENV, ".env"),
         env_file_encoding="utf-8",
         extra="ignore",
+        # A failed check must never print the settings: they hold secrets (Principle VI).
+        hide_input_in_errors=True,
     )
 
     environment: Literal["development", "test", "production"] = "development"
@@ -40,6 +42,19 @@ class Settings(BaseSettings):
     email_delivery: Literal["resend", "console"] = "resend"
     email_dev_outbox_path: str = ".dev-outbox/emails.jsonl"
 
+    # Contact form and anti-bot check, only active in production (feature 017).
+    callmebot_url: str = ""
+    callmebot_phone: str = ""
+    callmebot_apikey: str = ""
+    cloudflare_turnstile_secret_key: str = ""
+    # Public: the App reads it from GET /public-config (the web reads it from its own env).
+    next_public_turnstile_site_key: str = ""
+
+    @field_validator("environment", mode="before")
+    @classmethod
+    def _lowercase_environment(cls, value: object) -> object:
+        return value.strip().lower() if isinstance(value, str) else value
+
     @field_validator("google_client_ids", mode="before")
     @classmethod
     def _split_client_ids(cls, value: object) -> object:
@@ -56,6 +71,30 @@ class Settings(BaseSettings):
                 "RESEND_API_KEY and EMAIL_FROM are required when EMAIL_DELIVERY=resend"
             )
         return self
+
+    @model_validator(mode="after")
+    def _check_production_integrations(self) -> "Settings":
+        """Production does not start without them; the message names them, never their values."""
+        if self.environment != "production":
+            return self
+        required = {
+            "CALLMEBOT_URL": self.callmebot_url,
+            "CALLMEBOT_PHONE": self.callmebot_phone,
+            "CALLMEBOT_APIKEY": self.callmebot_apikey,
+            "CLOUDFLARE_TURNSTILE_SECRET_KEY": self.cloudflare_turnstile_secret_key,
+            "NEXT_PUBLIC_TURNSTILE_SITE_KEY": self.next_public_turnstile_site_key,
+        }
+        missing = [name for name, value in required.items() if not value.strip()]
+        if missing:
+            raise ValueError(f"missing when ENVIRONMENT=production: {', '.join(missing)}")
+        if not self.callmebot_url.startswith("https://"):
+            raise ValueError("CALLMEBOT_URL must be an https:// URL")
+        return self
+
+    @property
+    def bot_check_enabled(self) -> bool:
+        """Turnstile and the WhatsApp delivery only run in production (feature 017)."""
+        return self.environment == "production"
 
     @property
     def mongodb_connection_uri(self) -> str:

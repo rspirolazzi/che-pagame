@@ -5,14 +5,20 @@ import { ScrollView } from "react-native";
 import { HelperText, Text, TextInput } from "react-native-paper";
 
 import { AppButton } from "../components/AppButton";
+import { PreferenceSheet } from "../components/PreferenceSheet";
+import { TurnstileGate, useBotCheck } from "../components/TurnstileGate";
 import { ErrorText, formStyles } from "../components/FormBits";
 import { GoogleSignInButton } from "../components/GoogleSignInButton";
+import { getDevicePreferences } from "../services/devicePreferences";
 import { authApi } from "../services/api/auth";
 import { type ApiErrorCode, errorCodeOf } from "../services/api/types";
 import { validateEmail, validateName, validatePassword } from "../utils/validation";
 
 export default function RegisterScreen() {
   const { t, i18n } = useTranslation();
+  // Cloudflare Turnstile in production (feature 017, US2).
+  const { required: botCheckRequired } = useBotCheck();
+  const [botToken, setBotToken] = useState<string | null>(null);
   const router = useRouter();
   const params = useLocalSearchParams<{ email?: string }>();
   const [email, setEmail] = useState(params.email ?? "");
@@ -41,6 +47,8 @@ export default function RegisterScreen() {
         firstName: firstName.trim() || null,
         lastName: lastName.trim() || null,
         language: i18n.language,
+        theme: getDevicePreferences().theme,
+        turnstileToken: botToken,
       });
       router.push({ pathname: "/verify-email", params: { email: email.trim() } });
     } catch (err) {
@@ -55,6 +63,8 @@ export default function RegisterScreen() {
       contentContainerStyle={[formStyles.screen, formStyles.centered]}
       keyboardShouldPersistTaps="handled"
     >
+      {/* Language and theme without a session (feature 014). */}
+      <PreferenceSheet />
       <Text variant="headlineMedium" style={formStyles.title}>
         {t("auth.register.title")}
       </Text>
@@ -97,7 +107,13 @@ export default function RegisterScreen() {
       />
       <ErrorText messageKey={message} />
       <ErrorText code={error} />
-      <AppButton mode="contained" loading={pending} disabled={pending} onPress={submit}>
+      {botCheckRequired && <TurnstileGate onToken={setBotToken} />}
+      <AppButton
+        mode="contained"
+        loading={pending}
+        disabled={pending || (botCheckRequired === true && botToken === null)}
+        onPress={submit}
+      >
         {t("auth.register.submit")}
       </AppButton>
       <Link href="/login">

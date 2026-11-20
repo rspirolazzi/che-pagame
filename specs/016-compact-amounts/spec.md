@@ -105,7 +105,7 @@ dentro de una palabra.
 - Redondeo: la abreviatura redondea al decimal más cercano solo para mostrar; nunca se usa para
   calcular, totalizar ni prellenar formularios.
 - Totales que superan 999.999.999 (por ejemplo, la suma de varios gastos): se muestran en M
-  ("1.250 M"); no se usan "B" ni "mil millones", que cambian de significado entre idiomas.
+  ("1250 M", sin separador de miles: así agrupa el español los números de 4 cifras); no se usan "B" ni "mil millones", que cambian de significado entre idiomas.
 - Monedas con 0 decimales (por ejemplo, CLP o JPY) y con 3 decimales: la abreviatura funciona
   igual.
 - Cero y saldos "al día": se muestran como hoy.
@@ -124,7 +124,7 @@ dentro de una palabra.
   separador decimal del idioma ("2,5 M" en español, "2.5M" en inglés), y la moneda en la posición
   que usa hoy cada idioma.
 - **FR-003**: Las letras MUST ser "K" y "M" en español y en inglés. Por encima de 999 M se sigue
-  usando "M" con separador de miles.
+  usando "M".
 - **FR-004**: La abreviatura MUST ser solo de presentación: cálculos, totales, validaciones,
   formularios, prellenados, API y exportaciones MUST usar el importe exacto (Principio III).
 - **FR-005**: Todo importe abreviado MUST exponer el importe exacto: como nombre accesible para

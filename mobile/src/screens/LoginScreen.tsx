@@ -5,6 +5,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, TextInput, useTheme } from "react-native-paper";
 
 import { AppButton } from "../components/AppButton";
+import { PreferenceSheet } from "../components/PreferenceSheet";
 import { ErrorText, formStyles } from "../components/FormBits";
 import { GoogleSignInButton } from "../components/GoogleSignInButton";
 import { Logo } from "../components/Logo";
@@ -54,6 +55,8 @@ export default function LoginScreen() {
       contentContainerStyle={[formStyles.screen, formStyles.centered]}
       keyboardShouldPersistTaps="handled"
     >
+      {/* Language and theme without a session (feature 014). */}
+      <PreferenceSheet />
       <View style={styles.brand}>
         <Logo />
         <Text

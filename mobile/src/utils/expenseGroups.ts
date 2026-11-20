@@ -1,22 +1,36 @@
-import type { ExpenseListItem } from "../services/api/types";
+import type { Movement } from "../services/api/types";
 
-export interface DayGroup {
+interface Dated {
+  id: string;
   date: string;
-  items: ExpenseListItem[];
+}
+
+export interface DayGroup<T extends Dated = Dated> {
+  date: string;
+  items: T[];
+}
+
+/** A list row: an expense or a settlement, with a key unique across both (feature 012). */
+export interface MovementEntry extends Dated {
+  movement: Movement;
+}
+
+export function toEntries(movements: Movement[]): MovementEntry[] {
+  return movements.map((movement) => {
+    const item = movement.kind === "expense" ? movement.expense : movement.settlement;
+    return { id: `${movement.kind}:${item.id}`, date: item.date, movement };
+  });
 }
 
 /** Appends a page, dropping ids already loaded (an edited date can move one between pages). */
-export function mergePages(
-  existing: ExpenseListItem[],
-  page: ExpenseListItem[],
-): ExpenseListItem[] {
+export function mergePages<T extends Dated>(existing: T[], page: T[]): T[] {
   const seen = new Set(existing.map((item) => item.id));
   return [...existing, ...page.filter((item) => !seen.has(item.id))];
 }
 
 /** Groups by day keeping the API order; a day split across pages stays one group (FR-035). */
-export function groupByDay(items: ExpenseListItem[]): DayGroup[] {
-  const groups: DayGroup[] = [];
+export function groupByDay<T extends Dated>(items: T[]): DayGroup<T>[] {
+  const groups: DayGroup<T>[] = [];
   for (const item of items) {
     const last = groups.at(-1);
     if (last && last.date === item.date) last.items.push(item);

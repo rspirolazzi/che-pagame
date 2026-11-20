@@ -6,6 +6,8 @@ import { getLocale } from "next-intl/server";
 import { signIn, signOut } from "@/auth";
 import { apiFetch } from "@/lib/api/client";
 import { type ActionResult, type ApiErrorCode, failure } from "@/lib/api/errors";
+import type { ThemeName } from "@/lib/api/types";
+import { isTheme } from "@/lib/devicePreferences";
 import { safeCallbackUrl } from "@/lib/safeCallbackUrl";
 
 interface RegisterInput {
@@ -13,6 +15,10 @@ interface RegisterInput {
   password: string;
   firstName?: string;
   lastName?: string;
+  /** The theme chosen on this device before signing up (feature 014). */
+  theme?: ThemeName;
+  /** Cloudflare Turnstile token, required by the API in production (feature 017). */
+  turnstileToken?: string | null;
 }
 
 async function accepted(path: string, body: unknown): Promise<ActionResult> {
@@ -31,6 +37,8 @@ export async function registerAction(input: RegisterInput): Promise<ActionResult
     firstName: input.firstName || null,
     lastName: input.lastName || null,
     language: await getLocale(),
+    theme: isTheme(input.theme) ? input.theme : "system",
+    turnstileToken: input.turnstileToken ?? null,
   });
 }
 

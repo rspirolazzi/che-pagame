@@ -36,7 +36,8 @@
     "rights": "ChePagame. Para que la guita no sea un problema.",
     "privacy": "Privacidad",
     "terms": "Términos",
-    "deleteAccount": "Eliminar mi cuenta"
+    "deleteAccount": "Eliminar mi cuenta",
+    "faq": "Preguntas frecuentes"
   },
   "home": {
     "title": "Para que la guita no sea un problema",
@@ -61,12 +62,34 @@
     "preview": {
       "label": "Ejemplo",
       "title": "Vacaciones en Bariloche"
-    }
+    },
+    "faq": "Preguntas frecuentes"
   },
   "pages": {
     "howItWorks": {
-      "title": "Cómo funciona",
-      "intro": "Cuatro pasos para que nadie tenga que andar haciendo cuentas.",
+      "title": "Cómo dividir gastos en grupo con ChePagame",
+      "intro": "Cuatro pasos para hacer la vaca sin que nadie tenga que andar haciendo cuentas.",
+      "stepsTitle": "Paso a paso",
+      "usesTitle": "Para qué la usan",
+      "uses": {
+        "trip": {
+          "title": "Viajes en grupo",
+          "body": "Nafta, alojamiento y excursiones: cada uno carga lo que pagó y al volver saben quién le debe a quién."
+        },
+        "bbq": {
+          "title": "El asado del finde",
+          "body": "La carne, el carbón y las bebidas los pagan distintos; ChePagame calcula cuánto pone cada uno."
+        },
+        "flat": {
+          "title": "Departamento compartido",
+          "body": "Alquiler, expensas y servicios del mes, divididos entre los que viven juntos, con las cuentas claras."
+        },
+        "couple": {
+          "title": "En pareja",
+          "body": "Pagar a medias el súper o las salidas sin llevar la cuenta en la cabeza."
+        }
+      },
+      "faqLink": "¿Te quedó alguna duda? Mirá las preguntas frecuentes",
       "steps": {
         "create": {
           "title": "Creá una Cuenta e invitá",
@@ -82,23 +105,124 @@
         },
         "settle": {
           "title": "Saldá las cuentas",
-          "body": "Registrá los reembolsos cuando se paguen y todos quedan al día."
+          "body": "Registrá los pagos cuando se hagan y todos quedan al día."
         }
       }
     },
     "about": {
       "title": "Quiénes somos",
-      "body": "ChePagame nació para que dividir gastos entre amigos, familia o compañeros de casa sea simple y transparente. Cada gasto queda registrado, los saldos se calculan con exactitud en la moneda de cada Cuenta y tus datos son tuyos: sin publicidad y con la posibilidad de exportarlos cuando quieras.",
+      "whatTitle": "Qué es ChePagame",
+      "body": "ChePagame es una app gratuita para dividir gastos entre amigos, familia, pareja o compañeros de casa. Cada gasto queda registrado, los saldos se calculan con exactitud en la moneda de cada Cuenta y siempre sabés quién le debe a quién.",
+      "whyTitle": "Por qué existe",
+      "why": "Porque hacer la vaca no debería terminar en una discusión. Nació en Argentina para que pagar a medias sea simple y transparente, sin planillas ni cuentas en servilletas.",
+      "privacyTitle": "Tus datos son tuyos",
+      "privacy": "Sin publicidad y sin vender datos. Podés exportar todo cuando quieras y borrar tu cuenta en cualquier momento.",
       "version": "Versión {version}",
       "versionBuild": "Versión {version} · build {build}"
     },
     "contact": {
       "title": "Contacto",
-      "intro": "¿Tenés una consulta o una idea? Escribinos.",
+      "intro": "¿Tenés una consulta, encontraste un error o tenés una idea? Escribinos.",
+      "faq": "Para dudas comunes sobre cómo dividir gastos, mirá primero las preguntas frecuentes.",
       "copy": "Copiar",
       "copied": "Copiado.",
       "write": "Escribinos",
       "unavailable": "Pronto vas a poder escribirnos desde acá."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "intro": "Respuestas cortas sobre cómo dividir gastos, hacer la vaca y tener las cuentas claras con ChePagame.",
+      "groups": {
+        "basics": {
+          "title": "Lo básico",
+          "items": {
+            "what": {
+              "q": "¿Qué es ChePagame?",
+              "a": "Es una app para dividir gastos en grupo. Cargan lo que pagó cada uno y ChePagame calcula quién le debe a quién, al centavo."
+            },
+            "free": {
+              "q": "¿Es gratis?",
+              "a": "Sí. ChePagame es gratis y no tiene publicidad."
+            },
+            "app": {
+              "q": "¿Hay App para el celular?",
+              "a": "Estamos preparando la App para Android. Mientras tanto, la Web funciona en el navegador del celular y la podés agregar a la pantalla de inicio."
+            }
+          }
+        },
+        "accounts": {
+          "title": "Cuentas compartidas",
+          "items": {
+            "create": {
+              "q": "¿Cómo creo una cuenta compartida?",
+              "a": "Entrá a Cuentas, tocá Nueva Cuenta, ponele un nombre (por ejemplo, Viaje a Bariloche), elegí la moneda y sumá a los participantes."
+            },
+            "invite": {
+              "q": "¿Cómo invito al grupo?",
+              "a": "Desde la Cuenta, compartí el enlace de invitación por WhatsApp o donde quieras. Quien lo abre se une y elige qué participante es."
+            },
+            "currency": {
+              "q": "¿En qué moneda se cargan los gastos?",
+              "a": "Cada Cuenta tiene su moneda, que elegís al crearla. Todos los gastos y saldos de esa Cuenta usan esa moneda."
+            }
+          }
+        },
+        "expenses": {
+          "title": "Gastos",
+          "items": {
+            "split": {
+              "q": "¿Cómo se divide un gasto?",
+              "a": "Elegís quién pagó, el importe y entre quiénes se comparte. El importe se divide en partes iguales entre las personas elegidas."
+            },
+            "cents": {
+              "q": "¿Qué pasa con los centavos que sobran?",
+              "a": "Si el importe no se divide exacto, el centavo que sobra se asigna a una persona según el orden de la Cuenta, así la suma siempre da el total."
+            },
+            "who": {
+              "q": "¿Quién puede cargar gastos?",
+              "a": "Cualquier miembro de la Cuenta. Cada cambio queda registrado con quién lo hizo y cuándo."
+            }
+          }
+        },
+        "balances": {
+          "title": "Saldos y pagos",
+          "items": {
+            "owes": {
+              "q": "¿Cómo sé quién le debe a quién?",
+              "a": "En Saldos ves cuánto le deben o debe cada persona, y ChePagame sugiere la menor cantidad de pagos para que todos queden al día."
+            },
+            "settle": {
+              "q": "¿Qué es un pago entre miembros?",
+              "a": "Es cuando alguien le devuelve plata a otro del grupo. Al registrarlo, los saldos se actualizan y la deuda baja."
+            },
+            "income": {
+              "q": "¿Cómo registro que alguien me devolvió plata?",
+              "a": "En la lista de gastos de la Cuenta tocá Ingreso, elegí quién pagó y cuánto. Baja la deuda entre los dos y también aparece en Saldos."
+            },
+            "close": {
+              "q": "¿Puedo cerrar una Cuenta cuando termina el viaje?",
+              "a": "Sí. El Owner puede cerrarla: queda como solo lectura y se pueden seguir viendo los gastos y saldos."
+            }
+          }
+        },
+        "privacy": {
+          "title": "Privacidad y datos",
+          "items": {
+            "data": {
+              "q": "¿Qué datos guardan?",
+              "a": "Tu email, tu nombre si lo cargás, tus preferencias y lo que cargás en tus Cuentas. No vendemos datos ni usamos publicidad."
+            },
+            "export": {
+              "q": "¿Puedo exportar mis datos?",
+              "a": "Sí. Desde tu Perfil o desde cada Cuenta podés descargar tus datos en CSV o JSON."
+            },
+            "delete": {
+              "q": "¿Cómo borro mi cuenta?",
+              "a": "Desde Perfil, en Eliminar mi cuenta. Confirmás con un código que te llega por email y tus datos personales se borran."
+            }
+          }
+        }
+      }
     }
   },
   "auth": {
@@ -189,7 +313,9 @@
     "already_member": "Ya sos miembro de esta Cuenta.",
     "participant_taken": "Ese participante ya no está disponible. Elegí otro.",
     "expense_conflict": "Otro miembro cambió este gasto mientras lo editabas.",
-    "invalid_participant": "El pagador y los participantes tienen que ser participantes activos de la Cuenta."
+    "invalid_participant": "El pagador y los participantes tienen que ser participantes activos de la Cuenta.",
+    "bot_check_failed": "No pudimos verificar que no sos un robot. Reintentá.",
+    "contact_unavailable": "No pudimos enviar tu mensaje. Probá de nuevo en un rato."
   },
   "onboarding": {
     "title": "Elegí tu moneda",
@@ -367,7 +493,8 @@
       "description": "Descripción (opcional)",
       "save": "Guardar gasto",
       "saving": "Guardando…",
-      "choosePayer": "Elegí quién pagó"
+      "choosePayer": "Elegí quién pagó",
+      "notSharing": "No participa"
     },
     "validation": {
       "titleRequired": "Ingresá un concepto de 1 a 80 caracteres.",
@@ -410,6 +537,16 @@
       "party": "Fiesta",
       "shopping": "Compras",
       "sports": "Deportes"
+    },
+    "add": {
+      "label": "Agregar",
+      "expense": "Gasto",
+      "income": "Ingreso"
+    },
+    "income": {
+      "label": "Ingreso",
+      "row": "{from} le pagó a {to}",
+      "a11y": "Ingreso: {from} le pagó a {to}, {amount}"
     }
   },
   "history": {
@@ -491,6 +628,16 @@
       "toRequired": "Elegí quién recibió.",
       "sameParticipant": "Quien paga y quien recibe tienen que ser distintos.",
       "dateRequired": "Elegí una fecha."
+    },
+    "incomeTitle": "Nuevo ingreso",
+    "incomeHint": "Registrá que alguien le devolvió plata a otro del grupo. Baja la deuda entre los dos.",
+    "backToList": "Volver a Gastos",
+    "detail": {
+      "title": "Ingreso",
+      "recordedBy": "Registrado por {name} el {date}",
+      "recordedOn": "Registrado el {date}",
+      "noEdit": "Los ingresos no se editan: si se cargó mal, eliminalo y cargalo de nuevo.",
+      "gone": "Este ingreso ya no existe: lo eliminó otro miembro."
     }
   },
   "exports": {
@@ -507,7 +654,7 @@
     "mineButton": "Exportar mis datos"
   },
   "legal": {
-    "lastUpdated": "Última actualización: 18 de noviembre de 2026.",
+    "lastUpdated": "Última actualización: 20 de noviembre de 2026.",
     "privacy": {
       "title": "Privacidad",
       "intro": "Esta página explica qué datos guarda ChePagame y qué hace con ellos.",
@@ -539,6 +686,14 @@
         "delete": {
           "title": "Eliminar tus datos",
           "body": "Podés eliminar tu cuenta cuando quieras desde tu Perfil, en Eliminar mi cuenta, o siguiendo los pasos de chepagame.com.ar/delete-account. Se borran tu email, tu nombre, tus preferencias y tus sesiones. Lo que cargaste en Cuentas compartidas queda para el resto de los miembros, sin tu nombre."
+        },
+        "device": {
+          "title": "Preferencias en tu dispositivo",
+          "body": "Guardamos en tu navegador o en la App el idioma y el tema que elegís, para mostrarte el sitio como lo dejaste aunque no hayas iniciado sesión. Son datos estrictamente funcionales: no identifican a nadie ni se comparten con terceros."
+        },
+        "thirdParties": {
+          "title": "Contacto y verificación anti-bots",
+          "body": "Si nos escribís desde el formulario de contacto y lo aceptás, tu nombre, email y mensaje se envían por WhatsApp al responsable del proyecto mediante CallMeBot; no los guardamos. El registro y el formulario de contacto usan Cloudflare Turnstile para frenar bots: Cloudflare procesa datos técnicos de tu navegador solo para esa verificación."
         },
         "questions": {
           "title": "Consultas",
@@ -607,8 +762,6 @@
     "done": "Tu cuenta fue eliminada."
   },
   "deleteAccountPage": {
-    "metaTitle": "Eliminar tu cuenta de ChePagame",
-    "metaDescription": "Cómo eliminar tu cuenta de ChePagame y qué datos se borran.",
     "title": "Eliminar tu cuenta de ChePagame",
     "intro": "Podés eliminar tu cuenta desde la web, aunque ya no tengas la App instalada.",
     "stepsTitle": "Cómo hacerlo",
@@ -617,5 +770,75 @@
     "step3": "Ingresá el código que te llega por email. La cuenta se elimina en ese momento.",
     "button": "Eliminar mi cuenta",
     "noAccess": "¿Ya no tenés acceso a tu email? Escribinos desde la página de Contacto."
+  },
+  "seo": {
+    "home": {
+      "title": "ChePagame: dividí gastos con amigos y hacé la vaca",
+      "description": "App gratis para dividir gastos entre amigos, en viajes, el asado o el depto compartido. Cargá los gastos y mirá quién le debe a quién, al centavo."
+    },
+    "howItWorks": {
+      "title": "Cómo dividir gastos en grupo",
+      "description": "Creá una cuenta compartida, cargá los gastos y saldá las deudas. Así funciona ChePagame para viajes, asados, parejas y departamentos compartidos."
+    },
+    "about": {
+      "title": "Quiénes somos",
+      "description": "ChePagame es una app argentina y gratuita para dividir gastos entre amigos y pagar a medias sin hacer cuentas. Sin publicidad y con tus datos bajo tu control."
+    },
+    "contact": {
+      "title": "Contacto",
+      "description": "¿Tenés una duda o una idea para ChePagame? Escribinos. Antes, mirá las preguntas frecuentes sobre cómo dividir gastos y saldar deudas."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes sobre dividir gastos",
+      "description": "¿Es gratis? ¿Cómo se divide un gasto? ¿Quién le debe a quién? Respuestas cortas sobre cómo hacer la vaca y llevar las cuentas claras con ChePagame."
+    },
+    "privacy": {
+      "title": "Política de privacidad",
+      "description": "Qué datos guarda ChePagame, para qué los usa, cómo exportarlos y cómo borrar tu cuenta. Sin publicidad ni venta de datos."
+    },
+    "terms": {
+      "title": "Términos y condiciones",
+      "description": "Las condiciones de uso de ChePagame, la app gratuita para dividir gastos en grupo y saber quién le debe a quién."
+    },
+    "deleteAccount": {
+      "title": "Eliminar tu cuenta",
+      "description": "Cómo eliminar tu cuenta de ChePagame desde la Web o la App, qué datos se borran y qué se conserva para el resto del grupo."
+    }
+  },
+  "notFound": {
+    "title": "No encontramos esta página",
+    "body": "Puede que el enlace esté mal o que la página ya no exista.",
+    "home": "Ir al inicio",
+    "faq": "Ver preguntas frecuentes"
+  },
+  "preferences": {
+    "saveFailed": "Se aplicó en este dispositivo, pero no pudimos guardarlo en tu perfil.",
+    "open": "Idioma y tema"
+  },
+  "contact": {
+    "form": {
+      "title": "Escribinos",
+      "name": "Nombre",
+      "email": "Email",
+      "message": "Mensaje",
+      "remaining": "Te quedan {count} caracteres",
+      "consent": "Acepto que mi nombre, email y mensaje se envíen por WhatsApp al responsable del proyecto mediante el servicio CallMeBot.",
+      "send": "Enviar mensaje",
+      "sending": "Enviando…",
+      "sent": "¡Mensaje enviado! Te vamos a responder por email.",
+      "waitingCheck": "Esperando la verificación anti-bots…",
+      "fallback": "También podés escribirnos a",
+      "errors": {
+        "nameRequired": "Ingresá tu nombre.",
+        "emailInvalid": "Ingresá un email válido.",
+        "messageTooShort": "El mensaje tiene que tener al menos 10 caracteres.",
+        "consentRequired": "Para enviar el mensaje, aceptá que se envíe por WhatsApp."
+      }
+    }
+  },
+  "botCheck": {
+    "failed": "No pudimos cargar la verificación anti-bots.",
+    "retry": "Reintentar",
+    "disabled": "Verificación desactivada fuera de producción."
   }
 }

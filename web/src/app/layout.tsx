@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import { auth } from "@/auth";
 import { AppProviders } from "@/components/AppProviders";
@@ -10,6 +10,7 @@ import { PublicHeader } from "@/components/PublicHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SkipLink } from "@/components/SkipLink";
 import { parseDonationUrl } from "@/lib/donation";
+import { OG_IMAGE, SITE_NAME, siteUrl } from "@/lib/seo";
 
 import "@/styles/tokens.generated.css";
 import "./globals.css";
@@ -25,10 +26,15 @@ const sora = localFont({
   fallback: ["system-ui", "sans-serif"],
 });
 
-export const metadata: Metadata = {
-  title: "ChePagame",
-  description: "Split group expenses simply and transparently.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("seo.home");
+  return {
+    metadataBase: new URL(siteUrl()),
+    title: { default: SITE_NAME, template: `%s | ${SITE_NAME}` },
+    description: t("description"),
+    openGraph: { siteName: SITE_NAME, locale: "es_AR", type: "website", images: [OG_IMAGE] },
+  };
+}
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const [session, locale] = await Promise.all([auth(), getLocale()]);
@@ -39,7 +45,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang={locale} className={sora.variable} suppressHydrationWarning>
       <body>
         <NextIntlClientProvider>
-          <AppProviders theme={user?.preferences.theme}>
+          <AppProviders theme={user?.preferences.theme} language={user?.preferences.language}>
             <SkipLink />
             {user ? (
               // With a session, every page (information ones too) uses the sidebar (v4.6.0).

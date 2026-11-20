@@ -7,6 +7,7 @@ import { useTransition } from "react";
 
 import { signOutAction } from "@/app/actions/auth";
 
+import { PreferenceControls } from "./PreferenceControls";
 import { Icon, type IconName } from "./ui/Icon";
 
 const DESTINATIONS: [href: string, key: string, icon: IconName][] = [
@@ -60,6 +61,7 @@ export function NavDestinations() {
           </Link>
         ))}
       </div>
+      <PreferenceControls />
       <div className="nav-logout">
         <button
           type="button"
