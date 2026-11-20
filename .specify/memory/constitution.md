@@ -68,6 +68,15 @@ Rationale: un único idioma técnico mantiene el código consistente y accesible
 - Los datos de los usuarios MUST NOT enviarse a terceros (analytics, publicidad, telemetría,
   servicios de IA) sin consentimiento explícito (opt-in).
 - El usuario MUST poder exportar sus datos en formato abierto (CSV y/o JSON).
+- El usuario MUST poder eliminar su cuenta de usuario desde Web y desde Mobile, con confirmación
+  explícita. La eliminación MUST borrar o anonimizar de forma irreversible sus datos personales
+  (email, nombre, credenciales, sesiones y vínculos con proveedores de login) y MUST revocar todos
+  sus accesos. Lo que cargó en Cuentas compartidas PUEDE conservarse para el resto de los miembros,
+  pero sin datos que lo identifiquen. Esto no contradice el Principio IV: la auditoría conserva el
+  identificador interno, no los datos personales.
+- MUST existir una página web pública, sin necesidad de iniciar sesión ni de instalar la App, que
+  explique cómo eliminar la cuenta y qué datos se borran o se conservan. La política de privacidad
+  MUST explicar cómo borrar los datos y enlazar esa página.
 - Secretos (API keys, tokens, credenciales, contraseñas de base de datos, secretos de JWT) MUST
   NOT agregarse al código, commitearse al repositorio, loguearse ni compartirse en ningún chat
   (incluidos asistentes de IA). Solo MUST residir en: archivos `.env` locales de desarrollo, el
@@ -80,7 +89,9 @@ Rationale: un único idioma técnico mantiene el código consistente y accesible
 - Los logs de aplicación MUST NOT contener datos personales ni detalles completos de gastos o
   comprobantes.
 
-Rationale: los gastos compartidos revelan información personal sensible.
+Rationale: los gastos compartidos revelan información personal sensible. Poder irse borrando los
+datos es un derecho del usuario (Ley 25.326 de Protección de Datos Personales de Argentina) y un
+requisito de Google Play y del App Store para apps con registro.
 
 ### VII. Test-First para Lógica de Dominio
 
@@ -368,4 +379,4 @@ estados sin depender del color hacen que los saldos se lean bien para todos.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.8.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-18
+**Version**: 4.9.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-18
