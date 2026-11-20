@@ -186,7 +186,8 @@ Web.
 **Calidad**
 
 - **FR-017**: Las páginas públicas MUST cargar rápido y estables en teléfonos (buenas métricas de
-  Core Web Vitals) y MUST NOT cargar scripts de terceros.
+  Core Web Vitals) y MUST NOT cargar scripts de terceros, salvo la verificación anti-bots de la
+  feature 017 en Registro y Contacto (constitución 4.10.0, Principio VI).
 
 ### Key Entities
 

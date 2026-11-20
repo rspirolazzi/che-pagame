@@ -67,6 +67,15 @@ Rationale: un único idioma técnico mantiene el código consistente y accesible
 
 - Los datos de los usuarios MUST NOT enviarse a terceros (analytics, publicidad, telemetría,
   servicios de IA) sin consentimiento explícito (opt-in).
+- Excepciones acotadas, ambas informadas en la política de privacidad:
+  - **Verificación anti-bots**: PUEDE usarse un servicio de terceros (por ejemplo, Cloudflare
+    Turnstile) solo en los formularios que crean cuentas o envían mensajes al proyecto, solo en
+    producción, y su script MUST cargarse únicamente en esas páginas. El token MUST verificarse en
+    el servidor.
+  - **Formulario de contacto**: lo que la persona escribe PUEDE reenviarse al responsable del
+    proyecto mediante un servicio de mensajería de terceros (por ejemplo, CallMeBot/WhatsApp) solo
+    si la persona lo acepta de forma explícita en el formulario (casilla sin marcar por defecto).
+    Los mensajes MUST NOT guardarse ni loguearse con datos personales.
 - El usuario MUST poder exportar sus datos en formato abierto (CSV y/o JSON).
 - El usuario MUST poder eliminar su cuenta de usuario desde Web y desde Mobile, con confirmación
   explícita. La eliminación MUST borrar o anonimizar de forma irreversible sus datos personales
@@ -379,4 +388,4 @@ estados sin depender del color hacen que los saldos se lean bien para todos.
 - El cumplimiento se revisa en el Constitution Check de cada plan y en la revisión de cada cambio;
   toda complejidad adicional MUST justificarse por escrito.
 
-**Version**: 4.9.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-18
+**Version**: 4.10.0 | **Ratified**: 2026-11-04 | **Last Amended**: 2026-11-20
