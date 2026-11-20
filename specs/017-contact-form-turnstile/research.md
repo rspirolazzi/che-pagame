@@ -6,7 +6,7 @@
   - `callmebot_url` (por ejemplo `https://api.callmebot.com/whatsapp.php`), `callmebot_phone` y
     `callmebot_apikey`;
   - `cloudflare_turnstile_secret_key`;
-  - `next_public_turnstile_site_key`: la API lo lee del mismo `.env` para servirlo a la App.
+  - `cloudflare_turnstile_site_key`: la API lo lee del mismo `.env` para servirlo a la App.
 
   Un `model_validator` exige los cinco cuando `environment == "production"`. El mensaje de error
   nombra las variables que faltan y nunca sus valores (FR-007). La propiedad `bot_check_enabled`
@@ -59,7 +59,7 @@
   - `GET /api/v1/public-config` devuelve `{"turnstileSiteKey": "<key>" | null}`: `null` fuera de
     producción. Es público y se cachea 5 min.
   - La Web, en sus server components (`lib/turnstile.ts`), lee `ENVIRONMENT` y
-    `NEXT_PUBLIC_TURNSTILE_SITE_KEY` del entorno en tiempo de ejecución, sin llamar a la API, y le
+    `CLOUDFLARE_TURNSTILE_SITE_KEY` del entorno en tiempo de ejecución, sin llamar a la API, y le
     pasa la clave al widget como prop.
   - La App consulta `public-config` al abrir Registro o Contacto.
 - **Rationale**: la imagen de la Web se compila en GitHub sin `.env`, así que las variables

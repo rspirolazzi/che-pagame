@@ -183,7 +183,8 @@ registro del servidor sin datos personales.
 - Configuración, en el `.env` del servidor (gitignored):
   - CallMeBot: `CALLMEBOT_URL`, `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY` (solo servidor).
   - Cloudflare Turnstile: `CLOUDFLARE_TURNSTILE_SECRET_KEY` (solo servidor) y
-    `NEXT_PUBLIC_TURNSTILE_SITE_KEY` (pública, para la Web). La App recibe la misma clave pública
+    `CLOUDFLARE_TURNSTILE_SITE_KEY` (pública, para la Web; renombrada desde
+    `NEXT_PUBLIC_TURNSTILE_SITE_KEY` porque se lee en el servidor, no en el navegador). La App recibe la misma clave pública
     en su configuración de build, igual que las otras variables públicas.
 - El envío lo hace el servidor (la API), no el navegador ni la App, así las claves de CallMeBot no
   salen del servidor.

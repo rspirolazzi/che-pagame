@@ -48,7 +48,7 @@ class Settings(BaseSettings):
     callmebot_apikey: str = ""
     cloudflare_turnstile_secret_key: str = ""
     # Public: the App reads it from GET /public-config (the web reads it from its own env).
-    next_public_turnstile_site_key: str = ""
+    cloudflare_turnstile_site_key: str = ""
 
     @field_validator("environment", mode="before")
     @classmethod
@@ -82,7 +82,7 @@ class Settings(BaseSettings):
             "CALLMEBOT_PHONE": self.callmebot_phone,
             "CALLMEBOT_APIKEY": self.callmebot_apikey,
             "CLOUDFLARE_TURNSTILE_SECRET_KEY": self.cloudflare_turnstile_secret_key,
-            "NEXT_PUBLIC_TURNSTILE_SITE_KEY": self.next_public_turnstile_site_key,
+            "CLOUDFLARE_TURNSTILE_SITE_KEY": self.cloudflare_turnstile_site_key,
         }
         missing = [name for name, value in required.items() if not value.strip()]
         if missing:

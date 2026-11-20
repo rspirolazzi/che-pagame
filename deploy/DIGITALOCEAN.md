@@ -122,7 +122,7 @@ el archivo en el servidor**. Puntos que importan en este setup:
 | `FORWARDED_ALLOW_IPS` | `*` (seguro sólo porque el backend no publica puertos; ver §2) |
 | `JWT_SECRET`, `CODE_HASH_SECRET`, `AUTH_SECRET` | aleatorios, generados como abajo |
 | `CALLMEBOT_URL`, `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY` | los de tu cuenta de CallMeBot (URL con `https`) |
-| `CLOUDFLARE_TURNSTILE_SECRET_KEY`, `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | los del widget de Turnstile |
+| `CLOUDFLARE_TURNSTILE_SECRET_KEY`, `CLOUDFLARE_TURNSTILE_SITE_KEY` | los del widget de Turnstile |
 
 Generar un secreto faltante sin imprimirlo (repetir con cada nombre):
 
@@ -146,7 +146,7 @@ docker compose up -d --force-recreate chepagame-backend chepagame-frontend
 - En el panel de Cloudflare Turnstile, el widget tiene que permitir el hostname
   `chepagame.com.ar` (y `www.chepagame.com.ar` si se usa). La App muestra el widget desde
   `https://chepagame.com.ar/turnstile`, así que no hace falta otro hostname.
-- La Web lee `NEXT_PUBLIC_TURNSTILE_SITE_KEY` en tiempo de ejecución, del `.env` del servidor: no
+- La Web lee `CLOUDFLARE_TURNSTILE_SITE_KEY` en tiempo de ejecución, del `.env` del servidor: no
   hace falta un `build-arg` ni reconstruir la imagen. Alcanza con recrear los dos servicios.
 
 ## 4. MongoDB: primera vez

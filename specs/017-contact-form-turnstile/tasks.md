@@ -32,7 +32,7 @@ test llama a Cloudflare ni a CallMeBot: se usa `httpx.MockTransport` o mocks.
 - [X] T001 Enmienda de la constitución 4.10.0 con `/speckit-constitution`, según research R9: excepción en el Principio VI para la verificación anti-bots y el envío del formulario de contacto con consentimiento explícito. Ajustar la FR-017 de `specs/011-seo-public-pages/spec.md`. Aprobada por el usuario el 2026-11-20.
 - [X] T002 [P] (cambiado: se usa `urllib` de la biblioteca estándar en un hilo, sin dependencia nueva; ver research R2) Pasar `httpx` de `[dependency-groups].dev` a `dependencies` en `backend/pyproject.toml` y actualizar el lock (`uv lock`).
 - [X] T003 [P] Agregar `react-native-webview` con `npx expo install react-native-webview` en `mobile/`.
-- [X] T004 [P] Agregar a `.env.example`, con valores vacíos y un comentario que diga "solo en producción": `CALLMEBOT_URL`, `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY`, `CLOUDFLARE_TURNSTILE_SECRET_KEY` y `NEXT_PUBLIC_TURNSTILE_SITE_KEY`.
+- [X] T004 [P] Agregar a `.env.example`, con valores vacíos y un comentario que diga "solo en producción": `CALLMEBOT_URL`, `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY`, `CLOUDFLARE_TURNSTILE_SECRET_KEY` y `CLOUDFLARE_TURNSTILE_SITE_KEY`.
 
 ---
 

@@ -26,5 +26,5 @@
 |---|---|---|
 | `CALLMEBOT_URL`, `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY` | API | en producción |
 | `CLOUDFLARE_TURNSTILE_SECRET_KEY` | API | en producción |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Web (servidor) y API (`public-config`) | en producción |
+| `CLOUDFLARE_TURNSTILE_SITE_KEY` | Web (servidor) y API (`public-config`) | en producción |
 | `ENVIRONMENT` | API y Web | ya existe |

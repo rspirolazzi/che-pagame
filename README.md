@@ -135,7 +135,7 @@ only in the server `.env`):
 |----------|---------|
 | `CALLMEBOT_URL` (https), `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY` | API, WhatsApp relay |
 | `CLOUDFLARE_TURNSTILE_SECRET_KEY` | API, server-side token check |
-| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Web (read at runtime) and `GET /public-config` for the App |
+| `CLOUDFLARE_TURNSTILE_SITE_KEY` | Web (read at runtime) and `GET /public-config` for the App |
 
 - **Production:** the API refuses to start if any variable is missing and names it. The forms show
   the widget and the API rejects requests without a valid token (`403 bot_check_failed`). Contact

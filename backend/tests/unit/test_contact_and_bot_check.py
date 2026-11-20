@@ -25,7 +25,7 @@ PRODUCTION = {
     "callmebot_phone": "phone-value",
     "callmebot_apikey": "apikey-value",
     "cloudflare_turnstile_secret_key": "secret-value",
-    "next_public_turnstile_site_key": "site-key-value",
+    "cloudflare_turnstile_site_key": "site-key-value",
 }
 
 
@@ -53,7 +53,7 @@ def test_environment_is_case_insensitive():
         ("callmebot_phone", "CALLMEBOT_PHONE"),
         ("callmebot_apikey", "CALLMEBOT_APIKEY"),
         ("cloudflare_turnstile_secret_key", "CLOUDFLARE_TURNSTILE_SECRET_KEY"),
-        ("next_public_turnstile_site_key", "NEXT_PUBLIC_TURNSTILE_SITE_KEY"),
+        ("cloudflare_turnstile_site_key", "CLOUDFLARE_TURNSTILE_SITE_KEY"),
     ],
 )
 def test_production_names_the_missing_setting_without_values(field, name):

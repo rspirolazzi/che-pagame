@@ -30,7 +30,7 @@ docker compose up -d --build
 Antes del deploy, cargar en el `.env` del servidor estas variables y actualizar el contenedor:
 
 - `CALLMEBOT_URL`, `CALLMEBOT_PHONE`, `CALLMEBOT_APIKEY`;
-- `CLOUDFLARE_TURNSTILE_SECRET_KEY` y `NEXT_PUBLIC_TURNSTILE_SITE_KEY`.
+- `CLOUDFLARE_TURNSTILE_SECRET_KEY` y `CLOUDFLARE_TURNSTILE_SITE_KEY`.
 
 En Cloudflare, el widget tiene que tener `chepagame.com.ar` como hostname permitido.
 
