@@ -132,7 +132,7 @@ Privacidad y el footer.
 
 - [X] T026 [P] README: en la sección de privacidad o de la API, mencionar los endpoints de borrado y la URL `https://chepagame.com.ar/delete-account` para el formulario de Google Play.
 - [X] T027 Quality gates: `ruff check`, `ruff format --check` y `pytest` en `backend/`; `npm run lint`, `npx tsc --noEmit` y `npm test` en `web/` y `mobile/` (paridad de mensajes incluida).
-- [ ] T028 Validación manual del usuario: recorrer los 15 escenarios de [quickstart.md](quickstart.md) en local y, después del deploy, abrir `/delete-account` en producción sin sesión.
+- [X] T028 Validación manual del usuario: recorrer los 15 escenarios de [quickstart.md](quickstart.md) en local y, después del deploy, abrir `/delete-account` en producción sin sesión.
 
 ---
 

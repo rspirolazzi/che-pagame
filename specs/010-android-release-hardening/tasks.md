@@ -71,7 +71,7 @@ clave, el release falla con un mensaje claro y el debug sigue funcionando.
 ### Implementation for User Story 2
 
 - [X] T006 [US2] Implementar `applyReleaseSigning` en `mobile/plugins/withReleaseSigning.js` según [research.md](research.md) R1–R3 y las Implementation Notes de [plan.md](plan.md): parser de `.env` en Groovy (líneas `KEY=VALUE`, ignora vacías y `#`, quita comillas), prioridad de `System.getenv`, `signingConfigs.release` solo si las cuatro variables están y el archivo existe, lista de faltantes y error en `whenReady` sin imprimir valores. Conectarla en `withAppBuildGradle` (solo para `language === "groovy"`). Hacer pasar T005.
-- [ ] T007 [US2] Validación manual (usuario): crear la clave con `keytool` fuera del repositorio y completar `mobile/.env` (quickstart secciones 1 y 2). Yo no creo la clave ni veo sus valores.
+- [X] T007 [US2] Validación manual (usuario): crear la clave con `keytool` fuera del repositorio y completar `mobile/.env` (quickstart secciones 1 y 2). Yo no creo la clave ni veo sus valores.
 - [X] T008 [US2] Correr los escenarios 1, 2 y 3 de [quickstart.md](quickstart.md): release sin una variable falla con el mensaje del contrato; `npx expo run:android` (debug) funciona sin la clave; con la clave, `assembleRelease` genera un APK que `apksigner verify --print-certs` muestra firmado con el certificado propio (no `CN=Android Debug`).
 
 > T008: verificado con una clave descartable de prueba (fuera del repo): sin clave el release falla con el mensaje del contrato; `assembleDebug` no la pide; con clave, `apksigner` muestra el certificado propio. Falta repetir el escenario 3 con la clave real (después de T007).
@@ -96,8 +96,8 @@ pasa VirusTotal sin detecciones o con el falso positivo reportado.
 - [X] T010 [US1] Agregar `blockedPermissions` en `android` de `mobile/app.config.ts`, con un comentario en inglés que explique por qué cada permiso no se usa (R4). Hacer pasar T009.
 - [X] T011 [US1] Regenerar (`npx expo prebuild --platform android --clean`) y verificar en `mobile/android/app/src/main/AndroidManifest.xml` que los tres permisos aparecen con `tools:node="remove"`.
 - [X] T012 [US1] Escenario 5 de [quickstart.md](quickstart.md): `aapt2 dump permissions` sobre el APK release lista solo `INTERNET`, `VIBRATE` y los internos del contrato (garantía 3 de [contracts/release-build.md](contracts/release-build.md)).
-- [ ] T013 [US1] Validación manual (usuario): escenario 6 de [quickstart.md](quickstart.md). Obtener el SHA-1 release con `./gradlew signingReport`, registrarlo en un cliente OAuth Android (`com.chepagame.app`) en Google Cloud, desinstalar la App firmada con debug, instalar el APK y probar el login con Google.
-- [ ] T014 [US1] Validación manual (usuario): escenario 10 de [quickstart.md](quickstart.md). Subir el APK a VirusTotal; si queda una detección, reportar el falso positivo al proveedor con el SHA-256.
+- [X] T013 [US1] Validación manual (usuario): escenario 6 de [quickstart.md](quickstart.md). Obtener el SHA-1 release con `./gradlew signingReport`, registrarlo en un cliente OAuth Android (`com.chepagame.app`) en Google Cloud, desinstalar la App firmada con debug, instalar el APK y probar el login con Google.
+- [X] T014 [US1] Validación manual (usuario): escenario 10 de [quickstart.md](quickstart.md). Subir el APK a VirusTotal; si queda una detección, reportar el falso positivo al proveedor con el SHA-256.
 
 > T012: el primer APK de prueba mostró además `USE_BIOMETRIC` y `USE_FINGERPRINT` (de `expo-secure-store`); se bloquearon y el manifest release combinado quedó en `INTERNET`, `VIBRATE`, `ACCESS_NETWORK_STATE` y el permiso interno.
 
@@ -121,8 +121,8 @@ versión; todos los flujos funcionan en el release.
 
 - [X] T017 [US3] Implementar `setReleaseGradleProperties` en `mobile/plugins/withReleaseSigning.js` y conectarla en `withGradleProperties` (R5). Hacer pasar T015.
 - [X] T018 [US3] Crear `mobile/plugins/versionCode.js` con `versionCodeFrom(version)` (R7) e importarlo en `mobile/app.config.ts` para fijar `android.versionCode`. Hacer pasar T016.
-- [ ] T019 [US3] Regenerar y construir: `assembleRelease -PreactNativeArchitectures=arm64-v8a` y `bundleRelease`. Escenarios 4, 8 y 9 de [quickstart.md](quickstart.md): APK ≤ 50 MB, AAB firmado, `versionCode='10000' versionName='1.0.0'`.
-- [ ] T020 [US3] Escenario 7 de [quickstart.md](quickstart.md): recorrer todos los flujos en el APK release (login email y Google, cuentas, invitar, gastos, saldos, marcar pagado, exportar, perfil, cerrar sesión). Si R8 rompe algo, agregar la regla puntual en `extraProguardRules` desde el plugin, con su test, y repetir.
+- [X] T019 [US3] Regenerar y construir: `assembleRelease -PreactNativeArchitectures=arm64-v8a` y `bundleRelease`. Escenarios 4, 8 y 9 de [quickstart.md](quickstart.md): APK ≤ 50 MB, AAB firmado, `versionCode='10000' versionName='1.0.0'`.
+- [X] T020 [US3] Escenario 7 de [quickstart.md](quickstart.md): recorrer todos los flujos en el APK release (login email y Google, cuentas, invitar, gastos, saldos, marcar pagado, exportar, perfil, cerrar sesión). Si R8 rompe algo, agregar la regla puntual en `extraProguardRules` desde el plugin, con su test, y repetir.
 
 > T019 (parcial): APK arm64 de prueba de 36 MB (−64 %), `versionCode='10000' versionName='1.0.0'`, solo `arm64-v8a`. Falta generar el AAB (`bundleRelease`) con la clave real.
 
@@ -139,7 +139,7 @@ versión; todos los flujos funcionan en el release.
 - [X] T026 [US4] Crear `.github/workflows/release-android.yml` según [research.md](research.md) R10 y el contrato: `on` tags `mobile-v*` + `workflow_dispatch`, `permissions: contents: read` (y `contents: write` solo en `build`), `concurrency`; job `verify` (Node desde `.nvmrc`, `npm ci`, lint, `tsc`, `npm test -- --ci` en `mobile/`); job `build` con "Check configuration" (4 secrets + 3 variables requeridas), chequeo tag ↔ `version` con `npx expo config --type public --json`, Java 17 con caché de Gradle, keystore base64 → `$RUNNER_TEMP`, `expo prebuild`, `assembleRelease -PreactNativeArchitectures=arm64-v8a`, `bundleRelease`, renombrar, SHA-256, `gh release create` (tag) o `upload-artifact` (manual), y borrar el keystore con `if: always()`.
 - [X] T027 [US4] Validar el YAML (`actionlint` si está disponible; no lo está: estructura validada con un parser YAML y revisión manual) y que ningún paso imprima secrets (`set -x` prohibido, secrets solo por `env`).
 - [X] T028 [P] [US4] Agregar al `README.md`, en "Android release build", la subsección "Build on GitHub": secrets y variables, cómo codificar el `.jks` en base64 sin mostrarlo (PowerShell `Set-Clipboard`), y cómo publicar (subir `version`, commit, tag `mobile-v<version>`, push del tag).
-- [ ] T029 [US4] Validación manual (usuario): cargar secrets y variables en GitHub y correr los escenarios 12, 13 y 14 de [quickstart.md](quickstart.md).
+- [X] T029 [US4] Validación manual (usuario): cargar secrets y variables en GitHub y correr los escenarios 12, 13 y 14 de [quickstart.md](quickstart.md).
 
 **Checkpoint**: las cuatro historias funcionan.
 
@@ -151,7 +151,7 @@ versión; todos los flujos funcionan en el release.
 - [X] T022 Agregar en `README.md`, junto a `npx expo run:android` en la sección de desarrollo, una nota que diga que el build de desarrollo no necesita la clave de release y un link a "Android release build" (FR-004). Mismo archivo que T021: hacerlo después.
 - [X] T023 Quality gates en `mobile/`: `npm run lint`, `npx tsc --noEmit`, `npm test` (suite completa) y `npx prettier --check .`.
 - [X] T024 Escenario 11 de [quickstart.md](quickstart.md): `git status` sin `.jks` ni `.env`, y `git grep -n "ANDROID_UPLOAD_STORE_PASSWORD="` solo encuentra la línea vacía de `.env.example` (SC-006).
-- [ ] T025 Validación del usuario: recorrer los 11 escenarios de [quickstart.md](quickstart.md) y confirmar SC-001 a SC-006.
+- [X] T025 Validación del usuario: recorrer los 11 escenarios de [quickstart.md](quickstart.md) y confirmar SC-001 a SC-006.
 
 ---
 
